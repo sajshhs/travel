@@ -1,0 +1,27 @@
+{
+  "summary": "Iterasi 112 — pengujian penuh modul dokumen bisnis (mirip sipro). Backend: 44 pytest lolos 100% (/app/backend/tests/test_documents_i112.py) meliputi POST /api/invoices (dp/settlement/full, pajak 11%, pola nomor INV/DP/YYYY/MM/000x, booking cancelled→400, booking asing→400), export PDF/inline/excel, send-wa invoice + /api/bookings/{id}/send-invoice-wa, POST /api/payments dgn send_receipt_wa (receipt KWT/… + receipt_wa.status='sent' + invoice DP jadi partial/paid), GET/POST kwitansi (idempoten per payment, 404 utk id asing), GET /api/documents/booking/{id} (booking/invoices/receipts/payments/booking_docs/suggest), konfirmasi & SPJ PDF dgn nomor stabil (KONF/…, SPJ/… hanya sekali per booking), send-wa konfirmasi/SPJ, kind asing→404, konfigurasi (GET owner+ops, PATCH owner 200 & ops 403, tax_percent 150→400, caption placeholder asing→400), layout (7 kode, warisan accent_color dari __default__ ke INVOICE_DP, reset, preview PDF, naskah valid/invalid/reset, kode asing→404), penomoran (4 aturan+preview, preview pola romawi/{SEQ:5}, PUT pola baru dipakai kwitansi berikutnya KW-2026-00x, pola tanpa {SEQ}→400, token asing→400, DELETE reset, ops 403, key asing→404). Frontend: /app/documents lolos untuk seluruh 6 tab (invoice CRUD+filter+WA+PDF tab baru, kwitansi+WA, kop & tampilan (simpan+ttd+pratinjau), naskah (deteksi {{foo}}, chip placeholder, simpan, reset), rekening/pajak/WA (persist setelah reload), penomoran (preview debounce, simpan, validasi, reset)), read-only ops_admin, dialog dokumen booking (invoice DP preset, WA konfirmasi & SPJ, nomor dokumen tampil), PaymentDialog dgn switch pay-send-receipt-wa (toast 'kwitansi KWT/… terkirim via WhatsApp'). Tidak ditemukan bug fungsional; hanya catatan minor.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [
+      {"screen": "Dokumen · Kop & Tampilan / Naskah (pratinjau)", "issues": ["Panel pratinjau (doc-preview-pane/doc-preview-frame) tampil kosong/putih di chromium headless karena blob PDF di-abort — sesuai catatan main agent, bukan bug; tidak ada fallback teks 'pratinjau tidak dapat ditampilkan' bila browser gagal render blob (opsional untuk UX)"]},
+      {"screen": "Dokumen (mode ops_admin)", "issues": ["Tombol doc-bank-add dan field lain tetap terlihat aktif secara visual walau berada di <fieldset disabled> (klik memang tidak berefek) — bisa diberi opacity/cursor-not-allowed agar jelas read-only"]}
+    ]
+  },
+  "test_report_links": ["/app/backend/tests/test_documents_i112.py", "/app/test_reports/pytest/i112_documents.xml"],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "routers/documents.py preview_layout memakai fungsi privat dl._merge dari router — sebaiknya diekspor sebagai API publik (dl.merge_layout) agar batas modul jelas.",
+    "GET /api/documents/booking/{booking_id}/{kind}/pdf memakai path dinamis {kind}; sudah divalidasi via docs.BOOKING_DOC_KINDS (404 utk kind asing) — pastikan tidak menambah route statis lain di bawah prefix ini agar tidak tertutup route dinamis.",
+    "suggest.dp_amount di GET /api/documents/booking/{id} memakai booking.dp_amount bila ada (tanpa pajak) tetapi fallback-nya dihitung dari (total+pajak) — sedikit inkonsisten saat pajak aktif; konfirmasi apakah memang disengaja."
+  ],
+  "updated_files": ["/app/backend/tests/test_documents_i112.py"],
+  "success_rate": {"backend": "100% (44/44)", "frontend": "100% alur inti diuji lolos"},
+  "seed_data_creation": "Membuat invoice tambahan (INV/DP,PEL,FULL 2026/09/000x) pada BK-0002/BK-0003, pembayaran uji Rp 100.000 + Rp 50.000 (BK-0002) & Rp 75.000 (BK-0003) beserta kwitansi otomatis, serta dokumen KONF/2026/0001 & SPJ/2026/09/0002. Konfigurasi/layout/naskah/penomoran yang diubah selama uji SUDAH dipulihkan (layout __default__ & naskah INVOICE_DP di-reset, aturan nomor receipt di-reset ke {PREFIX}/{YYYY}/{MM}/{SEQ}, config: tax_enabled=true, tax_percent=11, dp_percent=30, bank_accounts=[]). Data seed tidak dihapus.",
+  "should_call_test_agent_after_fix": false,
+  "should_main_agent_self_test": true,
+  "test_credentials": "owner@demo.local / demo12345, ops@demo.local / demo12345",
+  "context_for_next_testing_agent": "Regression suite dokumen: `cd /app/backend && python -m pytest tests/test_documents_i112.py -n 0 -q` (pytest.ini memaksa -n 2 --dist loadscope; pakai -n 0 untuk serial). Catatan Playwright: setelah login WAJIB tunggu ~3s sebelum page.goto agar token tersimpan di localStorage (kalau tidak, akan kembali ke /app/login). Menu sidebar 'Dokumen' berada di grup 'CRM & KEUANGAN' yang tertutup di halaman dashboard — klik grupnya dulu, atau langsung goto /app/documents?tab=<invoices|receipts|layout|script|config|numbering>. Toast sonner hidup ~4s, jadi polling toast (loop 0.5s) bukan wait tunggal 8s. page.fill pada Textarea kadang tidak memicu state React tepat waktu — pakai click+Control+a+type.",
+  "rca_of_the_issue": "Tidak ada kegagalan produk. Tiga 'kegagalan' awal saat pengujian UI murni masalah skrip tes: (1) goto langsung setelah wait_for_url → token belum tersimpan sehingga redirect ke login; (2) pembacaan toast setelah 8s → toast sudah hilang; (3) page.fill pada Textarea naskah tidak memicu validasi placeholder — semuanya lolos setelah skrip diperbaiki (typing + polling toast)."
+}

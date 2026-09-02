@@ -1,0 +1,38 @@
+{
+  "summary": "Iteration 115 — IMPOR MASTER DATA (multi-sheet Excel migration) tested end-to-end. BACKEND: 22/22 pytest pass (/app/backend/tests/test_master_import_i115.py). Verified GET /api/data/import/template.xlsx (sheets Petunjuk+Pelanggan/Armada/Driver/Kota/Mitra/Add-on, header row 1, contoh row 2, correct filename+mime), GET /api/data/import/sheets (6 sheets, required fields name / name+plate_number). Built a workbook from the live template (contoh rows kept on purpose) with Pelanggan 5 rows (2 insert incl. Jenis 'Korporat'->corporate & new city 'Kota Uji X I115', 1 update of a seeded customer by phone with a new address, 1 blank-name error, 1 'vip' choice error), Armada 2, Driver 1, Kota 1, Mitra 1, Add-on 2. POST /preview returned customers {total 5, valid 3, insert 2, update 1, errors 2 with row numbers >=3} and insert counts for all other sheets; template contoh rows were silently skipped and collection counts were byte-identical before/after preview (no writes). POST /commit mode=upsert&snapshot=true -> totals {inserted 9, updated 1, skipped 0, errors 2}, snapshot_id set and the archive appears in GET /api/data/overview with kind 'pre_import'. DB verified: new customer has type=corporate, city auto-created, phone_normalized set, id prefix cus, total_trips 0; new vehicles got unique auto codes matching V-\\d\\d; KIR '15/03/2027' stored as 2027-03-15; driver fee/sim_expiry correct; addons active true/false from ya/tidak; seeded customer address updated + updated_at set and no duplicate created. Re-commit of the same file (upsert) -> inserted 0, updated 10, zero count change (idempotent); mode=insert_only -> skipped 10, inserted 0; sheets=cities processed only the Kota sheet. Negative: mode=replace_all 400, .zip/.txt upload 400 on both preview & commit, workbook without known sheets 400, workbook with 'Nama*' column deleted -> preview missing_columns ['Nama*'] with valid 0 and commit reports note 'kolom wajib hilang' with 0 writes. GET /api/data/import/history returns newest-first logs without _id. RBAC: ops_admin 200, marketing 403 on sheets/history/template/preview, unauthenticated 401/403. FRONTEND: owner login -> /app/data, master-import-panel visible; import-template downloads template_master_data_rahazatrans.xlsx; uploading a test workbook renders import-preview with all 6 import-sheet-{key} rows and columns Impor/Sheet/Baris/Akan ditambah/Akan diperbarui/Error/Keterangan; import-errors-customers expands import-errorlist-customers with 'Baris 5: Nama wajib diisi' and \"Baris 6: Jenis: nilai 'vip' tidak ada di pilihan individual/corporate\"; import-pick-addons check/uncheck changes import-summary (7 -> 6 -> 7 baris siap); import-mode-insert_only renders '0 (lewati)' in the update column; import-run showed toast 'Impor selesai · +7 baru, 0 diperbarui, 0 dilewati' and import-result with per-sheet breakdown, import-history grew 6 -> 7, export stat cards refreshed (Armada 6->7 baris, Driver 3->4), and the pre-import snapshot archive appeared in the backup section. No console errors, no backend 5xx.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_master_import_i115.py",
+    "/app/backend/tests/_gen_fe_import_i115.py",
+    "/app/backend/tests/_cleanup_i115.py",
+    "/app/test_reports/pytest/i115_master_import.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "master_import.py _is_example_row is only evaluated for rn == 2; if the user inserts a row above the contoh row (or leaves it lower down) the sample row will be imported as real data. Consider checking the example signature for any row, not only row 2.",
+    "routers/data_management.py import_commit does not validate the `sheets` form field against SHEETS keys: a typo (e.g. sheets=custommers) silently commits nothing while still creating a pre_import snapshot and an import_logs entry with an empty summary. Return 400 for unknown keys and/or skip the snapshot when no sheet will be processed.",
+    "services/master_import.py _existing_index loads every non-deleted document of the target collection into a Python dict for each sheet (3 keys per customer). For a real migration with tens of thousands of customers this is a large memory spike; consider projecting only the match fields (name/phone/email/plate).",
+    "commit() writes documents one-by-one with await per row and re-reads db.vehicles.distinct('code') inside the loop for every new vehicle without a code — O(n) extra round-trips. Compute the code counter once before the loop and use bulk_write for inserts.",
+    "commit() has no transaction/rollback: a failure halfway (e.g. Mongo error on sheet 5) leaves earlier sheets written and no import log; the pre_import snapshot is the only recovery path. Worth logging partial progress before re-raising."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_master_import_i115.py",
+    "/app/backend/tests/_gen_fe_import_i115.py",
+    "/app/backend/tests/_cleanup_i115.py"
+  ],
+  "success_rate": {"backend": "100% (22/22)", "frontend": "100% of tested flows"},
+  "seed_data_creation": "Temporary master rows prefixed TEST_I115 / TEST_FE115 plus cities 'Kota Uji X/Y I115' and 'Kota FE X/Y 115' were imported and then deleted; the seeded customer whose address was overwritten during the update test was restored to its original address. All pre_import snapshot archives created by this iteration were deleted (2 archives remain in the registry).",
+  "should_call_test_agent_after_fix": false,
+  "should_main_agent_self_test": false,
+  "test_credentials": "owner@demo.local / ops@demo.local / marketing@demo.local — demo12345",
+  "context_for_next_testing_agent": "Run the suite serially: `python -m pytest tests/test_master_import_i115.py -v -p no:randomly -n 0` from /app/backend (module-level STATE shared across classes; last class does cleanup). It builds its workbook from the live GET /api/data/import/template.xlsx and picks an arbitrary seeded customer with a phone as the 'update' target, so it is re-runnable. /tmp/import_fe_i115.xlsx (regenerate with tests/_gen_fe_import_i115.py) is the fixture used for the Playwright flow; tests/_cleanup_i115.py removes FE-test rows and pre_import archives. Iterations 112-114 already covered documents/backup/restore — not repeated here.",
+  "rca_of_the_issue": "No defects found; no fixes were required."
+}

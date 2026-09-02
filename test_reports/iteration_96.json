@@ -1,0 +1,25 @@
+{
+  "summary": "Iterasi 96 — SSOT Batch 3 (Master Data + Lead→Booking + destination_or_400) diverifikasi menyeluruh. Backend 15/15 pytest LULUS, Frontend 4/4 skenario LULUS: (1) form publik /quotation memakai <select> q-destination dari master (7 opsi termasuk Bali) → submit → /thank-you; (2) /app/masterdata sebagai owner menampilkan panel titik jemput (4 baris) + destinasi (6 baris); (3) marketing_admin dan driver ditolak oleh backend (403) dan FE me-redirect ke /app/login; (4) Lead→Booking flow: drawer lead terbuka → tombol lead-to-booking → BookingFormDialog terbuka dgn bf-customer & bf-destination='Bali' TER-PREFILL benar. Semua invarian batch 3 tegak: create/patch quotation menolak destinasi ngawur (400), menerima 'bali' huruf kecil dan menyimpannya sebagai kanonik 'Bali'; PATCH tanpa mengubah destination tetap sukses; /public/quotation lunak (menerima 'Kampung Halaman Nenek' apa adanya, menormalkan 'bali'→'Bali'); /api/public/destination-options TANPA auth mengembalikan value/label/slug; rename Bandung→Bandung Kota cascade ke bookings (verified via GET /api/bookings) lalu DIRESTORE ke 'Bandung'; toggle nonaktif menghilangkan opsi dari public + /api/bookings/destination-options dan menolak pemakaian baru di POST /api/quotations, lalu DIAKTIFKAN kembali. Tidak ada bug baru.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {"ui_bugs": [], "integration_issues": [], "design_issues": []},
+  "test_report_links": [
+    "/app/backend/tests/backend_test_ssot_batch3.py",
+    "/app/test_reports/pytest/ssot_batch3.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "routers/quotations.py PATCH: validasi destinasi 'hanya-bila-diubah' benar; namun jika payload kirim string kosong utk field destination, kode saat ini akan menyimpannya sebagai '' (menghapus nilai lama) tanpa validasi — mungkin desired, tetapi perlu didokumentasi.",
+    "services/refs.destination_or_400 mengambil semua destinasi (limit 500) tiap panggilan; utk skala kecil OK, tetapi cocok utk ditambah TTL cache di modul refs bila daftar bertumbuh.",
+    "routers/pickup_points._name_taken pakai `async for` seluruh koleksi — sudah diflag iterasi 95, tetap berlaku (skala kecil aman).",
+    "MasterData.jsx: tombol Ganti Nama tidak menampilkan konfirmasi eksplisit tentang jumlah cascade sebelum eksekusi — hanya toast setelahnya. Utk lingkungan produksi dgn banyak booking terkait, pertimbangkan preview cascade count sebelum submit.",
+    "Quotation.jsx: field hp (honeypot) memakai data-testid; sebaiknya tetap tersembunyi & tidak diberi data-testid utk mengurangi permukaan tes-otomasi jahat yang meniru form (minor)."
+  ],
+  "updated_files": ["/app/backend/tests/backend_test_ssot_batch3.py"],
+  "success_rate": {"backend": "100% (15/15)", "frontend": "100% (4/4 skenario)"},
+  "test_credentials": "owner/ops/marketing/driver @demo.local — demo12345",
+  "seed_data_creation": "Test leads (TEST_publik_legacy_b3, TEST_publik_bali_b3, TEST_FE_Batch3_Public) & quotations (TEST_QuoBali/notes=TEST_notes_only) dibiarkan — tidak ada endpoint delete lead dari luar. Akan hilang saat seed_reset. Semua rename/toggle master destinations SUDAH DIRESTORE (Bandung tetap 'Bandung', semua ops_active=True).",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Jalankan: cd /app/backend && REACT_APP_BACKEND_URL=<url> python -m pytest tests/backend_test_ssot_batch3.py -v -o addopts=''. Catatan: pytest.ini di /app/backend punya addopts pytest-xdist yg butuh override via -o addopts='' jika BASE_URL diinject via env inline. BASE_URL diambil dari REACT_APP_BACKEND_URL env; pastikan diekspor. Bila mau tes booking creation end-to-end dari Lead→Booking, dialog sudah prefill benar; tinggal isi armada/tanggal & submit. Frontend RBAC redirect: /app/masterdata untuk non-authorized role → /app/login (bukan 403 halaman); backend endpoint /api/master/destinations tetap 403 murni.",
+  "rca_of_the_issue": "N/A — tidak ada bug ditemukan pada scope batch 3."
+}

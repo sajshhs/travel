@@ -1,0 +1,45 @@
+{
+  "summary": "Completed comprehensive testing of SEO fixes (useSEO hook rules-of-hooks bug) and new Departure Calendar feature (/app/calendar). All public pages load without crash, Organization JSON-LD present on Home page. Calendar feature fully functional with monthly grid view, drill-down interactions, detail panel, action buttons, filters, and create booking dialog.",
+  "backend_issues": {
+    "critical_bugs": [],
+    "flaky_endpoints": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "passed_tests": [
+    "Public pages SEO regression: Home, Destinations, Fleet, Blog, About, Contact, Quotation all load without crash",
+    "Organization JSON-LD present on Home page with correct @type and name",
+    "BlogDetail page loads without crash (rules-of-hooks fix verified)",
+    "DestinationDetail page loads without crash (rules-of-hooks fix verified)",
+    "FleetDetail page loads without crash (rules-of-hooks fix verified)",
+    "ERP login successful with owner@demo.local / demo12345",
+    "Calendar menu item present in sidebar under Operasional group",
+    "Calendar page loads with all UI elements (grid, month label, navigation, filters, legend, create button)",
+    "5 events displayed in calendar for August 2026",
+    "Month navigation works (prev/next/today buttons change month correctly)",
+    "Drill-down: Clicking date cell (2026-08-04) shows day list with 2 items",
+    "Drill-down: Clicking day list item opens detail panel with all fields (customer, vehicle, driver, route, start, end)",
+    "Detail panel displays status pills, payment pills, and back button",
+    "Action buttons available for owner role (Bayar, Edit, Jadwal ulang, Selesai, Batal)",
+    "Back button returns from detail to day list",
+    "Search filter works (filtered events by 'Maju' keyword)",
+    "Status filter works (filtered by 'confirmed' status)",
+    "Vehicle filter works (filtered by vehicle name)",
+    "Create Keberangkatan button opens booking form dialog",
+    "Booking form dialog has all required fields (customer, vehicle, start, end, origin, destination)",
+    "Clicking event chip directly from calendar opens detail panel",
+    "Empty day (no events) shows empty state message with create button"
+  ],
+  "test_report_links": [],
+  "action_item_for_main_agent": "",
+  "updated_files": [],
+  "success_percentage": {
+    "backend": "N/A (frontend-only testing)",
+    "frontend": "100% (21/21 tests passed)"
+  },
+  "should_call_test_agent_after_fix": false,
+  "should_main_agent_test_itself": false
+}

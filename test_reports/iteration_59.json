@@ -1,0 +1,38 @@
+{
+  "summary": "Completed comprehensive backend testing of idempotency fix for POST /api/payments. PRIMARY TEST: 6 parallel payments with SAME idempotency_key correctly created exactly 1 payment record (not 6), with paid_amount = 300,000 (not 1,800,000). All regression tests passed including overpay guard, cancelled booking payment rejection, payment_status derivation, DP-gate, and negative add_on validation. Data integrity gate passed all 35 invariants (INV-1 through INV-26).",
+  "backend_issues": {
+    "critical_bugs": [],
+    "flaky_endpoints": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "passed_tests": [
+    "PRIMARY: 6 parallel POST /api/payments with SAME idempotency_key → exactly 1 payment record created, paid_amount = 300,000 (not 1,800,000)",
+    "Sequential replay with SAME idempotency_key → still 1 record, paid_amount unchanged",
+    "Backward compatibility: POST without idempotency_key creates distinct records (2 payments without keys → 2 records)",
+    "Distinct idempotency_keys: 2 payments with different keys → 2 records created",
+    "REGRESSION: Overpay guard returns 400 'melebihi sisa' when payment exceeds remaining amount",
+    "REGRESSION: Payment on cancelled booking returns 400 with 'dibatalkan' message",
+    "REGRESSION: Payment status derivation correct (belum_bayar → dp → lunas)",
+    "REGRESSION: DP-gate works (hold → confirmed after DP payment with require_dp=True)",
+    "REGRESSION: Negative add_on returns 422 validation error",
+    "Data integrity gate: All 35 invariants passed (INV-1 through INV-26)",
+    "All 28 test assertions passed successfully"
+  ],
+  "test_report_links": [
+    "/app/backend/backend_test_idempotency.py"
+  ],
+  "success_percentage": {
+    "backend": "100% (28/28 tests passed)",
+    "frontend": "N/A (backend-only testing as requested)"
+  },
+  "action_item_for_main_agent": "",
+  "updated_files": [
+    "/app/backend/backend_test_idempotency.py"
+  ],
+  "should_call_test_agent_after_fix": false,
+  "should_main_agent_test_itself": false
+}

@@ -1,0 +1,99 @@
+{
+  "summary": "Completed comprehensive testing of CMS CW2 features (CMS-05 through CMS-09 + defects A1, A2, A3). Backend API tests: 93.1% pass rate (27/29). UI tests: All 9 user stories verified successfully. RBAC working correctly. Minor cosmetic issues found but core functionality is solid.",
+  
+  "backend_issues": {
+    "critical_bugs": [],
+    "minor_issues": [
+      {
+        "endpoint": "/api/public/promos",
+        "issue": "Promo response structure uses different field names - expected 'discount_percent' or 'discount_amount' but found different structure",
+        "impact": "Backend test expects specific field names, but functionality works",
+        "fix_priority": "LOW"
+      },
+      {
+        "endpoint": "/api/content/analytics/top",
+        "issue": "Analytics response missing 'summary' field at root level - data is present but structure differs from test expectation",
+        "impact": "Analytics panel displays correctly, just response structure differs",
+        "fix_priority": "LOW"
+      }
+    ],
+    "flaky_endpoints": []
+  },
+  
+  "frontend_issues": {
+    "ui_bugs": [
+      {
+        "component": "PromoFormDialog",
+        "issue": "used_count field is not read-only/disabled - should be read-only as it's a system-managed counter",
+        "selector": "[data-testid='cf-used_count']",
+        "fix_priority": "LOW"
+      }
+    ],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  
+  "passed_tests": [
+    "Backend: CMS-05 draft status - articles can be set to draft and hidden from public",
+    "Backend: CMS-05 preview tokens - draft articles accessible via preview token",
+    "Backend: CMS-05 scheduled publishing - articles can be scheduled for future publish",
+    "Backend: CMS-06 bilingual - articles/destinations support ?lang=en parameter",
+    "Backend: A1 public packages - GET /api/public/packages and /api/public/packages/:slug work",
+    "Backend: A3 public promos - GET /api/public/promos returns active promos",
+    "Backend: CMS-07 reviews - review requests and pending reviews endpoints work",
+    "Backend: CMS-08 analytics - content analytics endpoint returns data",
+    "Backend: CMS-09 rich text - article body does not contain script tags (sanitized)",
+    "Backend: A2 promo rules - all rule fields present in promo response",
+    "Backend: RBAC - driver blocked from CMS (403), marketing can access CMS (200)",
+    "UI: Login and CMS access works for owner account",
+    "UI: CMS-05 draft status - can change article to draft, preview token button appears",
+    "UI: CMS-05 scheduled - can set future publish date with validation",
+    "UI: CMS-06 bilingual - English tab with EN fields (title, excerpt) and copy buttons",
+    "UI: CMS-06 language switch - homepage has lang-switch-en/id, URL updates with ?lang=en",
+    "UI: A1 packages page - /packages shows grid with 2 package cards",
+    "UI: A1 package detail - /packages/:slug shows title, price, includes, CTAs (book, quote)",
+    "UI: A3 promo page - /promo shows grid with 3 promo cards, terms, copy/use buttons",
+    "UI: A3 promo redirect - clicking 'use promo' redirects to /booking?promo=CODE",
+    "UI: CMS-07 reviews panel - shows KPIs (3 published, 4.67 avg rating, 0 pending)",
+    "UI: CMS-08 analytics panel - shows KPIs (11 views), table, kind filter, CSV export button",
+    "UI: CMS-09 rich text editor - editor with HTML toggle, can add HTML content",
+    "UI: A2 promo rules - all fields present (valid_from, valid_until, min_days, min_amount, max_uses, used_count, weekend_only, vehicle_types, services)",
+    "UI: RBAC driver - driver blocked from /app/cms, redirected to /app/driver-workspace",
+    "UI: Regression header - public header height 91px (within 100px limit), has packages and promo nav items"
+  ],
+  
+  "test_report_links": [
+    "/app/backend/backend_test_cms_cw2.py",
+    "/app/.screenshots/01_cms_dashboard.png",
+    "/app/.screenshots/04_articles_tab.png",
+    "/app/.screenshots/05_terbit_tab.png",
+    "/app/.screenshots/06_draft_saved.png",
+    "/app/.screenshots/07_preview_token_dialog.png",
+    "/app/.screenshots/08_homepage_lang.png",
+    "/app/.screenshots/09_package_detail.png",
+    "/app/.screenshots/10_promo_page.png",
+    "/app/.screenshots/11_en_tab.png",
+    "/app/.screenshots/12_reviews_panel.png",
+    "/app/.screenshots/13_analytics_panel.png",
+    "/app/.screenshots/14_rich_text_editor.png",
+    "/app/.screenshots/15_promo_rules.png",
+    "/app/.screenshots/16_rich_text_html.png",
+    "/app/.screenshots/17_promo_rules_full.png",
+    "/app/.screenshots/18_driver_blocked.png"
+  ],
+  
+  "success_percentage": {
+    "backend": "93.1% (27/29 tests passed)",
+    "frontend": "96.2% (25/26 tests passed - 1 minor UI issue)",
+    "overall": "94.5%"
+  },
+  
+  "updated_files": [
+    "/app/backend/backend_test_cms_cw2.py"
+  ],
+  
+  "action_item_for_main_agent": "Three minor cosmetic fixes recommended (not blocking): (1) Make promo used_count field read-only in UI, (2) Standardize promo API response field names if needed, (3) Verify analytics API response structure matches expected format. All core functionality is working correctly - CMS-05 through CMS-09 plus A1, A2, A3 defects are fully functional.",
+  
+  "should_call_test_agent_after_fix": false,
+  "should_main_agent_test_itself": true
+}

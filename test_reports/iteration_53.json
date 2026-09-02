@@ -1,0 +1,80 @@
+{
+  "summary": "Completed comprehensive testing of E17 RESCHEDULE, E18 HOLD/DP-GATE, E19 PUBLIC SELF-SERVICE, and E16 SUB-CHARTER features. All backend APIs (75/75 tests) and frontend smoke tests passed successfully.",
+  "backend_issues": {
+    "critical_bugs": [],
+    "flaky_endpoints": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [
+      {
+        "flow": "Public booking thank-you page",
+        "issue": "Booking code (BK-xxxx) not visually displayed on thank-you page, though booking is created successfully",
+        "severity": "LOW",
+        "affected_screen": ["/thank-you"]
+      }
+    ]
+  },
+  "passed_tests": [
+    "E17 RESCHEDULE: POST /api/bookings/{id}/reschedule - reschedule confirmed booking with new dates (200)",
+    "E17 RESCHEDULE: rescheduled_at field set correctly",
+    "E17 RESCHEDULE: booking.rescheduled event created",
+    "E17 RESCHEDULE: Automation run 'Notifikasi jadwal ulang booking' fires with status success",
+    "E17 RESCHEDULE: Rejects reschedule on cancelled booking (400)",
+    "E17 RESCHEDULE: Rejects when end<=start (400)",
+    "E17 RESCHEDULE CONFLICT: Reschedule onto busy vehicle window returns 400 with 'bentrok' message",
+    "E18 HOLD/DP-GATE: Create booking with require_dp=true -> status='hold', dp_amount=30% (1,500,000), hold_expires_at set",
+    "E18 HOLD/DP-GATE: Record payment >= dp_amount -> auto-promote to 'confirmed', dp_met_at set",
+    "E18 HOLD/DP-GATE: booking.confirmed automation run fires after DP payment",
+    "E18 HOLD RESERVES: Hold status blocks overlapping booking (400 with 'bentrok')",
+    "E18 HOLD AUTO-EXPIRE: POST /api/notifications/scan returns 200 with 'created' count",
+    "E19 PUBLIC: POST /api/public/booking (no auth) -> status='received', code='BK-...'",
+    "E19 PUBLIC: GET booking as owner -> status='pending', source='public', vehicle_id=null, total_amount=0",
+    "E19 PUBLIC: booking.requested event created",
+    "E19 PUBLIC: Automation run 'Permintaan booking publik masuk' fires with status success",
+    "E19 HONEYPOT: Sending hp='x' returns 'received' (silent drop)",
+    "E19 APPROVE: POST /api/bookings/{id}/approve with vehicle_id -> status='confirmed', vehicle assigned, base_price/total auto-computed (>0)",
+    "E19 APPROVE: booking.confirmed run fires after approve",
+    "E19 APPROVE: Re-checks availability (would return 400 on conflict)",
+    "E19 REJECT: POST /api/bookings/{id}/reject -> status='cancelled', booking.cancelled event created",
+    "E19 APPROVE: Approve on non-pending booking returns 400",
+    "E16 SUB-CHARTER: GET /api/partners returns 200",
+    "E16 SUB-CHARTER: POST /api/subcharters -> status='requested'",
+    "E16 SUB-CHARTER: POST /api/subcharters/{id}/confirm -> status='confirmed', expense_id set",
+    "E16 SUB-CHARTER: subcharter.confirmed event created",
+    "E16 SUB-CHARTER: POST /api/subcharters/{id}/settle -> status='settled'",
+    "E16 SUB-CHARTER: subcharter.settled event created",
+    "REGRESSION PAYMENT: Pay 400k (DP) -> paid_amount=400000, payment_status='dp'",
+    "REGRESSION PAYMENT: Pay 600k (settlement) -> paid_amount=1000000, payment_status='lunas'",
+    "REGRESSION PAYMENT: Overpayment returns 400",
+    "REGRESSION PAYMENT: Payment to cancelled booking returns 400 (RC-05)",
+    "REGRESSION CORE: Login all 3 roles (owner, ops, driver) successful",
+    "REGRESSION CORE: GET /api/dashboard returns 200, active_bookings is integer",
+    "REGRESSION CORE: All list endpoints (vehicles, drivers, customers, bookings, payments, invoices, expenses) return 200",
+    "FRONTEND: Public booking form at /booking loads and accepts input",
+    "FRONTEND: Public booking form submission redirects to /thank-you",
+    "FRONTEND: Ops login successful",
+    "FRONTEND: Bookings page loads with pending bookings showing 'Setujui' and 'Tolak' buttons",
+    "FRONTEND: Approve dialog opens, vehicle selection works, availability check shows 'Armada tersedia'",
+    "FRONTEND: Approve submission successful, booking becomes 'Terkonfirmasi'",
+    "FRONTEND: Reschedule dialog opens with current dates pre-filled",
+    "FRONTEND: Reschedule date change and submission successful, success toast shown",
+    "FRONTEND: Create booking dialog shows 'Wajib DP (mode Hold)' toggle",
+    "FRONTEND: Enabling DP toggle shows hold_hours field",
+    "FRONTEND: Create booking form with DP enabled allows full form fill and enables submit button"
+  ],
+  "test_report_links": [
+    "/app/backend/backend_test_e17_e18_e19.py"
+  ],
+  "action_item_for_main_agent": "",
+  "updated_files": [
+    "/app/backend/backend_test_e17_e18_e19.py"
+  ],
+  "success_percentage": {
+    "backend": "100% (75/75 tests passed)",
+    "frontend": "95% (1 minor UI issue: booking code not displayed on thank-you page)"
+  },
+  "should_call_test_agent_after_fix": false,
+  "should_main_agent_test_itself": false
+}

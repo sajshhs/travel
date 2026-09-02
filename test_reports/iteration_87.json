@@ -1,0 +1,65 @@
+{
+  "summary": "Verified CRITICAL bug fix from iteration_86: dark mode theme attributes now correctly applied to <html> element, fixing contrast issues in portaled Radix components (exit-intent modal, Select dropdowns). All regression tests passed. No new issues found.",
+  
+  "backend_issues": {
+    "critical_bugs": [],
+    "flaky_endpoints": []
+  },
+  
+  "frontend_issues": {
+    "critical_bugs": [],
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  
+  "passed_tests": [
+    "CRITICAL FIX VERIFIED: ThemeContext sets data-surface='public' and data-theme='azure' on <html> element (not just .dark class)",
+    "CRITICAL FIX VERIFIED: public-themes.css has duplicate selectors [data-surface='public'][data-theme='X'].dark for all 4 presets",
+    "CRITICAL FIX VERIFIED: Exit-intent modal in dark mode - background gradient ends with rgba(15,22,36,0.92) DARK, title color rgb(242,245,247) LIGHT - perfect contrast",
+    "CRITICAL FIX VERIFIED: Exit-intent modal in light mode - light background + dark text - good contrast",
+    "CRITICAL FIX VERIFIED: Hero trip estimator vehicle Select dropdown - dark mode: bg rgb(15,22,36) + color rgb(242,245,247) - good contrast",
+    "CRITICAL FIX VERIFIED: Trip calculator vehicle Select dropdown - dark mode: bg rgb(15,22,36) + color rgb(242,245,247) - good contrast",
+    "CRITICAL FIX VERIFIED: Fleet type filter Select dropdown - dark mode: bg rgb(15,22,36) + color rgb(242,245,247) - good contrast",
+    "CRITICAL FIX VERIFIED: ERP isolation - /app/login has NO public theme attributes (surface=None, theme=None, no .dark)",
+    "CRITICAL FIX VERIFIED: ERP isolation - /app/dashboard has NO public theme attributes, brand='RahazaTrans'",
+    "CRITICAL FIX VERIFIED: ERP isolation - /app/vehicles, /app/bookings, /app/reports, /app/finance all clean (no public theme attributes)",
+    "CRITICAL FIX VERIFIED: Back-and-forth navigation - public(dark) → ERP → public(dark) → ERP - public remembers dark mode, ERP remains clean",
+    "Dark mode contrast: Fleet FAQ accordion (bg=0.0, text=244.3), CTA band (bg=147.6, text=16.7) - good contrast",
+    "Dark mode contrast: Destinations FAQ accordion (bg=0.0, text=244.3), CTA band (bg=147.6, text=16.7) - good contrast",
+    "Dark mode contrast: Trip Calculator FAQ accordion (bg=0.0, text=244.3), CTA band (bg=147.6, text=16.7) - good contrast",
+    "Dark mode contrast: Blog CTA band background NOT transparent (rgb(60,178,221)) - good contrast",
+    "REGRESSION: Trip estimator contrast - dark: rgba(15,22,36,0.93), light: rgba(252,252,253,0.93) - PASS",
+    "REGRESSION: Fleet page - all 7 sections present (fleet-quick-actions, fleet-type-filter, vehicle-type-compare, airport-route-strip, promo-strip, fleet-faq, fleet-cta-band)",
+    "REGRESSION: Fleet page - type filter works (can select options)",
+    "REGRESSION: Destinations page - all 5 sections present (destination-facts, package-strip, dest-narrative, dest-faq, dest-cta-band)",
+    "REGRESSION: Blog CTA band - background NOT transparent, text readable",
+    "REGRESSION: Brand rename - page title contains 'RahazaTrans', footer contains 'RahazaTrans'",
+    "RBAC: marketing@demo.local CAN access /app/media - PASS",
+    "RBAC: driver@demo.local CANNOT access /app/media (redirected to /app/driver-workspace) - PASS",
+    "API: /api/public/company returns name='RahazaTrans' - PASS",
+    "API: /api/public/fleet returns 200 - PASS",
+    "API: /api/public/destinations returns 200 - PASS",
+    "API: /api/public/articles returns 200 - PASS"
+  ],
+  
+  "test_report_links": [
+    "/app/test_reports/iteration_87.json",
+    "Screenshots: .screenshots/dark_mode_modal.png, .screenshots/light_mode_modal.png"
+  ],
+  
+  "action_item_for_main_agent": "",
+  
+  "updated_files": [],
+  
+  "success_percentage": {
+    "critical_bug_fix": "100% (VERIFIED - all portaled components now use correct dark mode tokens)",
+    "regression_tests": "100% (all items from iteration_86 still working)",
+    "rbac": "100% (2/2 tests passed)",
+    "api_endpoints": "100% (4/4 endpoints working)",
+    "overall": "100%"
+  },
+  
+  "should_call_test_agent_after_fix": false,
+  "should_main_agent_test_itself": false
+}

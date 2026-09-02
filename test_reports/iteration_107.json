@@ -1,0 +1,21 @@
+{
+  "summary": "Full end-to-end verification of Landing Page Builder route_grid block (armada-bandara template). Backend: 7/7 pytest tests PASSED (routes[] source, template contains route_grid with canonical props, POST/PATCH preserves props without warnings, publish + public payload contains route_grid, regression template armada-konversi still works). Frontend: template->editor loads with 3 REAL routes from /api/public/booking/config (BDO-CGK Rp950.000, CGK-BDO Rp950.000, BDO-KJT Rp700.000), form fields (lp-prop-limit / lp-prop-showprice / lp-route-ids with 3 trt_* checkboxes) work, selecting checkbox filters preview to that route. Save + Publish succeeded, public /lp/{slug} rendered route_grid, clicking public 'Pesan rute ini' card navigated to /booking?service=airport_transfer&route=trt_83d216d8efa14331&lp=... and booking wizard's data-testid booking-route showed the preselected route label 'Bandung → Soekarno-Hatta (CGK) · dari Rp 950.000'. Regression /lp/sewa-hiace-jakarta renders normally. All test-created landing pages deleted (final list confirmed empty).",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {"ui_bugs": [], "integration_issues": [], "design_issues": []},
+  "test_report_links": [
+    "/app/backend/tests/test_landing_route_grid.py",
+    "/app/test_reports/pytest/landing_route_grid.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "lp-add-block is rendered as a shadcn Select (not native <select>), so playwright select_option cannot drive it directly; consider adding a data-testid on each option (e.g. lp-add-block-option-route_grid) to make QA scripts robust. Not a functional bug — manual add-block was confirmed working by main agent's smoke test."
+  ],
+  "updated_files": ["/app/backend/tests/test_landing_route_grid.py"],
+  "success_rate": {"backend": "100%", "frontend": "100%"},
+  "test_credentials": "marketing@demo.local / demo12345 (as per /app/memory/test_credentials.md)",
+  "seed_data_creation": "None — only ephemeral landing pages created and then deleted.",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "route_grid block ships with canonical props {title, subtitle, ids, limit, show_price, cta}. Data source: GET /api/public/booking/config → routes[] (fields id trt_*, from_label, to_label, from_price, code, duration_minutes). Public card renders as a <button data-testid=lp-route-{id}> (not <a>) — click it directly rather than looking for inner <a>. Login uses data-testid login-email-input / login-password-input / login-submit-button and stores JWT in localStorage key 'tf_token'. Seed public page /lp/sewa-hiace-jakarta must remain intact after cleanup.",
+  "rca of the issue": "N/A — feature verified end-to-end without defects."
+}

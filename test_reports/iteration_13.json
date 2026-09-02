@@ -1,0 +1,59 @@
+{
+  "summary": "PHASE 8 A5 User Onboarding + In-App Help testing completed. All onboarding API endpoints working correctly (7/7 tests passed). Frontend onboarding card, InfoTip tooltips, and all interactions working perfectly. Broad regression testing of A1-A4 features passed (16/17 backend tests, all frontend tests passed).",
+  "backend_issues": {
+    "critical_bugs": [],
+    "minor_bugs": [
+      {
+        "endpoint": "/api/invoices",
+        "issue": "Invoice field is named 'number' not 'invoice_number' - test was checking wrong field name",
+        "impact": "Test bug only, backend is correct. Invoices have proper format INV-2026-0001, INV-2026-0002",
+        "fix_priority": "LOW"
+      }
+    ],
+    "flaky_endpoints": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "passed_tests": [
+    "Onboarding API - Owner role shows 5/6 done on fresh seed (derived tasks auto-complete)",
+    "Onboarding API - Ops Admin role has different task list (5 tasks, no settings)",
+    "Onboarding API - Driver role has 2 manual tasks (all undone initially)",
+    "Onboarding API - Complete task endpoint works (POST /api/onboarding/complete)",
+    "Onboarding API - Dismiss endpoint works (POST /api/onboarding/dismiss)",
+    "Onboarding API - Reset endpoint works (POST /api/onboarding/reset)",
+    "Onboarding API - Auth protection (401 without token)",
+    "Frontend - Onboarding card visible on dashboard with correct progress (5/6)",
+    "Frontend - Complete button marks task done and updates progress to 6/6",
+    "Frontend - Buka link navigates to correct page (/app/inbox)",
+    "Frontend - Dismiss button hides card and persists after reload",
+    "Frontend - InfoTip tooltips present (4 icons) and show text on hover",
+    "Regression - All owner endpoints working (dashboard, vehicles, bookings, finance, reports, conversations, notifications, settings, audit-logs)",
+    "Regression - All ops_admin endpoints working",
+    "Regression - All driver endpoints working",
+    "Regression - Public track endpoint working",
+    "Regression - Anti-double-booking (INV-4) working (400 on overlap)",
+    "Regression - Maintenance blocks booking (INV-21) working (400)",
+    "Regression - Audit logs created (A1)",
+    "Regression - Booking codes valid format (BK-####)",
+    "Regression - Financial numbers accurate (A4)",
+    "Regression - All frontend pages render without errors (Finance, Reports, Inbox, Settings, Audit Logs)"
+  ],
+  "test_report_links": [
+    "/app/backend_test_phase8_a5.py",
+    "/root/.emergent/automation_output/20260628_224002/console_20260628_224002.log"
+  ],
+  "action_item_for_main_agent": "",
+  "updated_files": [
+    "/app/backend_test_phase8_a5.py"
+  ],
+  "success_percentage": {
+    "backend": "94.1% (16/17 tests passed - 1 test bug with field name)",
+    "frontend": "100% (all onboarding, tooltip, and regression tests passed)",
+    "overall": "97%"
+  },
+  "should_call_test_agent_after_fix": false,
+  "should_main_agent_test_itself": false
+}

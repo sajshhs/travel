@@ -1,0 +1,40 @@
+{
+  "summary": "Frontend E2E of CMS Page Builder split-screen upgrade (tab Halaman di /app/cms). Semua 11 skenario yang diminta LULUS. Iframe live preview terhubung via postMessage, click-to-select dua arah bekerja, drag&drop dnd-kit + panah pb-up/pb-down memindah section, device mode desktop/tablet/ponsel mengubah lebar iframe (1440/834/390 px), Media Library picker mengisi URL gambar + thumbnail + preview real-time, dan Simpan mem-PUT override ke /api/public/pages/home. Situs publik (tanpa ?pbPreview=1) tidak menampilkan wrapper data-pb-section dan ChatWidget tetap terlihat. Setelah verifikasi, override hero dikosongkan dan disimpan agar demo bersih (public API mengembalikan Hero data = {}).",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "PageBuilderPreview.jsx: useEffect kedua meng-post 'sections' setiap kali `sections` berubah TANPA memeriksa apakah iframe sudah `ready`. Jika sections berubah sebelum iframe siap, pesan awal hilang; saat ini masih aman karena handler 'ready' mengirim ulang sectionsRef.current. OK sebagai desain, cukup ditulis di komentar.",
+    "useSitePage.js: blockNav memanggil e.preventDefault() untuk SEMUA klik <a> di mode preview — termasuk link target=_blank / mailto. Cukup baik utk pratinjau, tapi klik middle-mouse atau ctrl+klik tetap membuka tab baru (event 'auxclick'). Minor, tidak menghalangi jalur normal.",
+    "BuilderSection.jsx: outline hanya ditampilkan saat class 'animate-pulse' aktif; state 'active' auto-off 1800ms — cukup singkat. Tak ada isu fungsional, sekadar catatan UX."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "n/a (skipped)", "frontend": "100%"},
+  "test_credentials": "owner@demo.local / demo12345",
+  "seed_data_creation": "Tidak ada. Media Library sudah punya 8 aset seed sebelumnya; tidak ada unggah baru. Override Hero home dikosongkan lagi setelah pengujian.",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Fitur Page Builder split-screen sudah stabil. Selectors kunci: pb-preview-frame (iframe), pb-preview-loading (indikator loading), pb-section-<id>, pb-edit-<id>, pb-field-<id>-<key>, pb-field-<id>-image-pick, pb-field-<id>-image-thumb, pb-title-<id>, pb-drag-<id>, pb-up-<id>/pb-down-<id>, pb-device-desktop/tablet/mobile, pb-preview-reload, pb-page-select + pb-page-opt-<slug>, pb-save. Selector Media Picker: media-picker-dialog → item media-item-open-<id> (klik utk buka detail) → tombol pakai media-detail-use. Untuk membaca isi iframe pakai page.frame_locator('[data-testid=\"pb-preview-frame\"]'). Drag&drop dnd-kit butuh mouse.down + beberapa mouse.move bertahap ≥60ms + mouse.up.",
+  "verified_flows": [
+    "Login owner + buka /app/cms → tab Halaman menampilkan panel split-screen",
+    "Iframe preview ready (~<0.5s setelah tab dibuka) dan menerima draft postMessage",
+    "Ketik judul hero → h1 di iframe berubah <1.5s; /api/public/pages/home TIDAK mengandung teks unik (belum disimpan)",
+    "Klik section di iframe → card di panel kiri dapat ring biru (class ring-1 ring-[#0A84FF]/35), editor auto-open",
+    "Klik pb-title di panel → wrapper section di iframe mendapat class animate-pulse (highlight)",
+    "Drag pb-drag section pertama ke posisi kedua → urutan berubah (drag_changed_order=True)",
+    "Klik pb-down section pertama → urutan bergeser (arrow_moved=True)",
+    "Device mode: iframe style.width mobile=390px, tablet=834px, desktop=1440px; pb-preview-reload memuat ulang iframe",
+    "Media Library picker: dialog terbuka, klik media-item-open lalu media-detail-use → input pb-field-<id>-image terisi /api/public/media/med_<id>, thumbnail tampil, gambar hero di iframe berubah",
+    "Simpan (pb-save) → toast sukses, /api/public/pages/home mengembalikan sections yang diperbarui",
+    "Ganti halaman via Radix Select ke About → iframe src berubah ke /about?pbPreview=1, 3 section dimuat",
+    "Regresi tab lain (Destinasi/Artikel/Pengaturan Situs/Tema) tetap dapat dibuka",
+    "Situs publik / tanpa pbPreview: 0 wrapper data-pb-section, public-chat-fab hadir (1)",
+    "Klik link navbar di dalam iframe preview TIDAK memindahkan URL parent (blockNav berfungsi)"
+  ],
+  "rca of the issue": "Tidak ada bug ditemukan pada fitur yang diminta."
+}

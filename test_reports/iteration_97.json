@@ -1,0 +1,29 @@
+{
+  "summary": "Iterasi 97 — SSOT Batch 4 (Normalisasi LUNAK jalur publik + Preview Cascade) diverifikasi menyeluruh. Backend 7/7 pytest LULUS, Frontend 2/2 skenario LULUS. Backend: (a) POST /api/public/booking dgn origin='bandung'&destination='bali' → tersimpan kanonik 'Bandung'/'Bali'; (b) dgn destination='Kampung Antah Berantah' (di luar master) → DITERIMA & tersimpan apa adanya (lunak, publik tidak ditolak); (c) POST /api/public/lead-ads/meta dgn destination='bromo' → lead tersimpan 'Gunung Bromo'; (d) POST /api/public/landing/sewa-hiace-jakarta/lead dgn origin='bandung'&destination='yogyakarta'&marketing_consent=true → lead 'Bandung'/'Yogyakarta'; (e) GET /api/master/destinations kini menyertakan field 'used_by_quotations' (int) di setiap baris; (f) REGRESI: POST /api/bookings ERP dgn destination di luar master tetap 400 (validasi keras tidak melunak); (g) GET /api/public/destination-options tetap 200 tanpa auth. Frontend: (1) DEST Yogyakarta rename→'Yogyakarta Kota B4' → panel konfirmasi md-confirm-{id} muncul MENAMPILKAN '1 booking · 2 lead · 0 penawaran', klik Batal → tidak ada perubahan, ulangi & klik 'Ya, Ganti Nama' → rename tereksekusi + cascade, RESTORE ke 'Yogyakarta' via alur konfirmasi yang sama; (2) PICKUP Bandung rename→'Bandung Titik B4' → panel konfirmasi menampilkan '10 booking yang memakai nama lama' (HANYA booking, tidak ada lead/penawaran) → Batal → tidak berubah → ulangi & konfirmasi → rename + cascade → RESTORE. Guard artifacts (Penjaga INV-* + phone 0800000xxx) dibersihkan lewat purge_guard_artifacts() = 53 dokumen. Tidak ada bug ditemukan.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {"ui_bugs": [], "integration_issues": [], "design_issues": []},
+  "test_report_links": [
+    "/app/backend/tests/backend_test_ssot_batch4.py",
+    "/app/test_reports/pytest/ssot_batch4.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "services/refs.origin_normalize & destination_normalize: setiap panggilan menarik seluruh koleksi pickup_points/destinations (limit 500). Utk publik/inbound berskala, sebaiknya di-cache TTL (mis. 30s) di modul refs — sekarang tiap POST publik = 2× find full-collection.",
+    "routers/pickup_points.master_destinations: per baris menjalankan 3× count_documents (bookings/leads/quotations). Utk 6 destinasi = 18 count query per GET. Cukup untuk sekarang, tetapi cocok dijadikan aggregation $facet bila daftar bertumbuh.",
+    "MasterData.jsx: tombol X di edit-mode sebelumnya tidak menutup panel konfirmasi jika sudah terbuka. Ditambahkan data-testid md-rename-abort-{id} + closing setConfirming(false) untuk konsistensi UX (minor; sudah diperbaiki).",
+    "MasterData.jsx: label usage pickup hanya '{n} booking' — bila pickup dipakai di lead/quotation (belum sekarang, tapi future), copy 'X booking' bisa menyesatkan. Cukup untuk batch 4.",
+    "schemas.PublicBookingCreate: tidak ada honeypot 'hp' field? Sudah ada (line 298). OK.",
+    "services/booking_public.py line 196-197: pemakaian `str(...)[:160]` sebelum normalize memotong sebelum lookup — jika master name > 160 char, tidak akan match. Praktis aman (nama master pendek)."
+  ],
+  "updated_files": [
+    "/app/backend/tests/backend_test_ssot_batch4.py",
+    "/app/frontend/src/features/app/MasterData.jsx"
+  ],
+  "success_rate": {"backend": "100% (7/7)", "frontend": "100% (2/2 skenario)"},
+  "test_credentials": "owner/ops/marketing/driver @demo.local — demo12345",
+  "seed_data_creation": "Semua data uji publik menggunakan prefix nama 'Penjaga INV-' + phone 0800000xxx sebagaimana konvensi guard. Dibersihkan via purge_guard_artifacts() = 53 doc terhapus. Semua rename master SUDAH DIRESTORE (Yogyakarta, Bandung kembali ke nama semula).",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Jalankan: cd /app/backend && REACT_APP_BACKEND_URL=<url> python -m pytest tests/backend_test_ssot_batch4.py -v -o addopts=''. Rate limit /api/public/booking = 6/menit — antar-test menyisipkan sleep 1s. Endpoint /api/public/lead-ads/{provider} mem-parse root-level fields (name/phone/destination/campaign_name) atau envelope field_data Meta; jangan bungkus dalam 'answers'. Guard cleanup wajib dijalankan sebelum finish. Frontend: MasterData.jsx sudah punya data-testid lengkap: md-row-{id}, md-name-{id}, md-rename-{id}, md-rename-input-{id}, md-rename-save-{id}, md-rename-abort-{id} (BARU), md-confirm-{id}, md-rename-confirm-{id}, md-rename-cancel-{id}, md-toggle-{id}, panel wrapper md-pickup-panel/md-dest-panel. Navigasi ke /app/masterdata via sidebar link (page.goto langsung bisa kehilangan sesi cookie di container).",
+  "rca_of_the_issue": "N/A — tidak ada bug ditemukan pada scope batch 4. Satu penyesuaian minor UX (X abort tidak menutup panel confirm) sudah diperbaiki dengan penambahan data-testid md-rename-abort-{id} + closing state confirming di tombol X. Ini murni robustness testing, bukan bug fungsional."
+}

@@ -1,0 +1,3485 @@
+{
+ "db_name": "test_database",
+ "collections": {
+  "articles": {
+   "count": 6,
+   "keys": [
+    "author",
+    "body",
+    "category",
+    "cover_image",
+    "created_at",
+    "excerpt",
+    "featured",
+    "id",
+    "published",
+    "published_at",
+    "read_minutes",
+    "slug",
+    "tags",
+    "title"
+   ]
+  },
+  "audit_logs": {
+   "count": 8,
+   "keys": [
+    "action",
+    "actor_id",
+    "actor_name",
+    "actor_role",
+    "after",
+    "before",
+    "entity_id",
+    "entity_type",
+    "id",
+    "summary",
+    "timestamp"
+   ]
+  },
+  "automation_rules": {
+   "count": 16,
+   "keys": [
+    "actions",
+    "conditions",
+    "created_at",
+    "description",
+    "enabled",
+    "event_type",
+    "id",
+    "last_run_at",
+    "name",
+    "run_count",
+    "system",
+    "updated_at"
+   ]
+  },
+  "automation_runs": {
+   "count": 7,
+   "keys": [
+    "actions",
+    "created_at",
+    "dedupe_key",
+    "event_id",
+    "event_type",
+    "id",
+    "message",
+    "rule_id",
+    "rule_name",
+    "status"
+   ]
+  },
+  "bookings": {
+   "count": 6,
+   "keys": [
+    "add_ons",
+    "base_price",
+    "code",
+    "created_at",
+    "customer_id",
+    "customer_name",
+    "destination",
+    "driver_id",
+    "driver_name",
+    "end_datetime",
+    "id",
+    "notes",
+    "origin",
+    "paid_amount",
+    "payment_status",
+    "start_datetime",
+    "status",
+    "total_amount",
+    "vehicle_id",
+    "vehicle_name"
+   ]
+  },
+  "broadcasts": {
+   "count": 1,
+   "keys": [
+    "created_at",
+    "created_by",
+    "id",
+    "message",
+    "recipients_count",
+    "scheduled_at",
+    "segment",
+    "status",
+    "title"
+   ]
+  },
+  "campaign_recipients": {
+   "count": 3,
+   "keys": [
+    "campaign_id",
+    "conversation_id",
+    "cost",
+    "created_at",
+    "error",
+    "id",
+    "message_id",
+    "name",
+    "phone",
+    "status",
+    "target_id"
+   ]
+  },
+  "campaigns": {
+   "count": 1,
+   "keys": [
+    "audience",
+    "channel",
+    "created_at",
+    "created_by",
+    "id",
+    "message",
+    "name",
+    "scheduled_at",
+    "segment_id",
+    "segment_snapshot",
+    "sent_at",
+    "stats",
+    "status",
+    "template_key"
+   ]
+  },
+  "conversations": {
+   "count": 8,
+   "keys": [
+    "assigned_to",
+    "channel",
+    "chat_token",
+    "contact_name",
+    "contact_phone",
+    "created_at",
+    "customer_id",
+    "id",
+    "labels",
+    "last_message_at",
+    "last_message_preview",
+    "lead_id",
+    "snooze_until",
+    "status",
+    "subject",
+    "unread"
+   ]
+  },
+  "counters": {
+   "count": 4,
+   "keys": [
+    "id",
+    "seq"
+   ]
+  },
+  "customers": {
+   "count": 4,
+   "keys": [
+    "address",
+    "city",
+    "created_at",
+    "email",
+    "frequency",
+    "id",
+    "lifecycle",
+    "lifetime_value",
+    "name",
+    "notes",
+    "phone",
+    "phone_normalized",
+    "recency_days",
+    "rfm_segment",
+    "total_trips",
+    "type"
+   ]
+  },
+  "destinations": {
+   "count": 4,
+   "keys": [
+    "best_time",
+    "created_at",
+    "description",
+    "faqs",
+    "gallery",
+    "hero_image",
+    "highlights",
+    "hotel_recommendations",
+    "id",
+    "intro",
+    "itinerary",
+    "lat",
+    "lng",
+    "name",
+    "popular",
+    "region",
+    "route_points",
+    "slug",
+    "tour_scenes"
+   ]
+  },
+  "driver_payouts": {
+   "count": 2,
+   "keys": [
+    "allowance_km",
+    "approved_at",
+    "approver_id",
+    "approver_name",
+    "base_salary",
+    "bonus_total",
+    "bonuses",
+    "commission_pct",
+    "commission_trip",
+    "created_at",
+    "deduction_total",
+    "deductions",
+    "driver_id",
+    "driver_name",
+    "expense_id",
+    "gross",
+    "id",
+    "notes",
+    "paid_at",
+    "period_end",
+    "period_start",
+    "period_type",
+    "revenue_base",
+    "snapshot_comp",
+    "status",
+    "total",
+    "total_km",
+    "total_revenue",
+    "trips_count",
+    "updated_at"
+   ]
+  },
+  "drivers": {
+   "count": 2,
+   "keys": [
+    "comp",
+    "created_at",
+    "current_vehicle_id",
+    "id",
+    "name",
+    "phone",
+    "rating",
+    "sim_expiry",
+    "sim_number",
+    "status",
+    "user_id"
+   ]
+  },
+  "events": {
+   "count": 13,
+   "keys": [
+    "created_at",
+    "dedupe_key",
+    "id",
+    "payload",
+    "processed",
+    "ref_id",
+    "ref_type",
+    "runs_created",
+    "source",
+    "type"
+   ]
+  },
+  "expenses": {
+   "count": 7,
+   "keys": [
+    "amount",
+    "booking_id",
+    "category",
+    "created_at",
+    "id",
+    "note",
+    "recorded_by",
+    "subcharter_id",
+    "trip_id"
+   ]
+  },
+  "invoices": {
+   "count": 2,
+   "keys": [
+    "amount",
+    "booking_code",
+    "booking_id",
+    "created_at",
+    "created_by",
+    "customer_id",
+    "customer_name",
+    "due_at",
+    "id",
+    "issued_at",
+    "notes",
+    "number",
+    "status"
+   ]
+  },
+  "lead_activities": {
+   "count": 5,
+   "keys": [
+    "created_at",
+    "from_stage",
+    "id",
+    "lead_id",
+    "text",
+    "to_stage",
+    "type",
+    "user_id"
+   ]
+  },
+  "leads": {
+   "count": 7,
+   "keys": [
+    "assigned_to",
+    "converted_customer_id",
+    "created_at",
+    "customer_name",
+    "destination",
+    "email",
+    "first_response_due_at",
+    "id",
+    "last_activity_at",
+    "linked_customer_id",
+    "message",
+    "pax",
+    "phone",
+    "phone_normalized",
+    "quotation_amount",
+    "score",
+    "score_band",
+    "score_factors",
+    "sla_status",
+    "source",
+    "stage",
+    "trip_date",
+    "value"
+   ]
+  },
+  "locations": {
+   "count": 5,
+   "keys": [
+    "driver_id",
+    "heading",
+    "id",
+    "lat",
+    "lng",
+    "speed",
+    "timestamp",
+    "trip_id",
+    "vehicle_id"
+   ]
+  },
+  "maintenance_records": {
+   "count": 3,
+   "keys": [
+    "completed_at",
+    "cost",
+    "created_at",
+    "created_by",
+    "description",
+    "end_date",
+    "id",
+    "note",
+    "odometer",
+    "scheduled_date",
+    "start_date",
+    "status",
+    "title",
+    "type",
+    "vehicle_id",
+    "vehicle_name",
+    "workshop",
+    "workshop_id"
+   ]
+  },
+  "messages": {
+   "count": 15,
+   "keys": [
+    "author_id",
+    "body",
+    "conversation_id",
+    "created_at",
+    "id",
+    "internal",
+    "sender",
+    "status"
+   ]
+  },
+  "notification_tasks": {
+   "count": 18,
+   "keys": [
+    "body",
+    "booking_id",
+    "channel",
+    "created_at",
+    "dedupe_key",
+    "due_at",
+    "id",
+    "lead_id",
+    "read_at",
+    "ref_id",
+    "ref_type",
+    "scheduled_at",
+    "status",
+    "target_role",
+    "target_user_id",
+    "title",
+    "type"
+   ]
+  },
+  "packages": {
+   "count": 2,
+   "keys": [
+    "active",
+    "created_at",
+    "days",
+    "description",
+    "destination",
+    "id",
+    "image_url",
+    "includes",
+    "name",
+    "price_from",
+    "slug"
+   ]
+  },
+  "partners": {
+   "count": 2,
+   "keys": [
+    "address",
+    "city",
+    "created_at",
+    "email",
+    "id",
+    "name",
+    "notes",
+    "phone",
+    "pic",
+    "rating",
+    "status"
+   ]
+  },
+  "payments": {
+   "count": 5,
+   "keys": [
+    "amount",
+    "booking_id",
+    "id",
+    "method",
+    "paid_at",
+    "recorded_by",
+    "type"
+   ]
+  },
+  "promos": {
+   "count": 2,
+   "keys": [
+    "active",
+    "code",
+    "created_at",
+    "description",
+    "discount_type",
+    "discount_value",
+    "id",
+    "title",
+    "valid_until"
+   ]
+  },
+  "quotations": {
+   "count": 1,
+   "keys": [
+    "booking_id",
+    "created_at",
+    "created_by",
+    "customer_id",
+    "customer_name",
+    "destination",
+    "email",
+    "id",
+    "items",
+    "lead_id",
+    "notes",
+    "number",
+    "pax",
+    "phone",
+    "phone_normalized",
+    "sent_at",
+    "status",
+    "subtotal",
+    "total",
+    "trip_date",
+    "updated_at",
+    "valid_until"
+   ]
+  },
+  "segments": {
+   "count": 3,
+   "keys": [
+    "audience",
+    "created_at",
+    "criteria",
+    "description",
+    "id",
+    "name",
+    "system",
+    "updated_at"
+   ]
+  },
+  "sequence_enrollments": {
+   "count": 0,
+   "keys": []
+  },
+  "sequences": {
+   "count": 1,
+   "keys": [
+    "audience",
+    "created_at",
+    "description",
+    "enabled",
+    "id",
+    "name",
+    "stats",
+    "steps",
+    "updated_at"
+   ]
+  },
+  "service_types": {
+   "count": 3,
+   "keys": [
+    "active",
+    "created_at",
+    "default_interval_days",
+    "default_interval_km",
+    "id",
+    "key",
+    "name"
+   ]
+  },
+  "sessions": {
+   "count": 3,
+   "keys": [
+    "created_at",
+    "expires_at",
+    "token",
+    "user_id"
+   ]
+  },
+  "settings": {
+   "count": 9,
+   "keys": [
+    "key",
+    "value"
+   ]
+  },
+  "subcharters": {
+   "count": 1,
+   "keys": [
+    "booking_code",
+    "booking_id",
+    "code",
+    "confirmed_at",
+    "cost",
+    "created_at",
+    "end_datetime",
+    "expense_id",
+    "id",
+    "note",
+    "partner_id",
+    "partner_name",
+    "settled_at",
+    "start_datetime",
+    "status",
+    "vehicle_id",
+    "vehicle_label"
+   ]
+  },
+  "testimonials": {
+   "count": 3,
+   "keys": [
+    "avatar",
+    "created_at",
+    "id",
+    "name",
+    "quote",
+    "rating",
+    "role"
+   ]
+  },
+  "trip_shares": {
+   "count": 1,
+   "keys": [
+    "access_count",
+    "created_at",
+    "created_by",
+    "expires_at",
+    "id",
+    "label",
+    "last_accessed_at",
+    "revoked",
+    "revoked_at",
+    "token",
+    "trip_id",
+    "vehicle_id",
+    "vehicle_name"
+   ]
+  },
+  "trips": {
+   "count": 4,
+   "keys": [
+    "booking_id",
+    "created_at",
+    "dest_lat",
+    "dest_lng",
+    "dest_name",
+    "distance_km",
+    "driver_id",
+    "end_at",
+    "id",
+    "origin_lat",
+    "origin_lng",
+    "pod",
+    "profit",
+    "revenue",
+    "start_at",
+    "status",
+    "vehicle_id"
+   ]
+  },
+  "users": {
+   "count": 3,
+   "keys": [
+    "created_at",
+    "email",
+    "id",
+    "name",
+    "password_hash",
+    "phone",
+    "role",
+    "status"
+   ]
+  },
+  "vehicles": {
+   "count": 5,
+   "keys": [
+    "capacity",
+    "code",
+    "color",
+    "created_at",
+    "features",
+    "gallery",
+    "highlights",
+    "id",
+    "kir_expiry",
+    "last_service_date",
+    "last_service_odometer",
+    "name",
+    "next_service_date",
+    "odometer",
+    "photos",
+    "plate_number",
+    "price_from",
+    "publish_to_web",
+    "service_interval_days",
+    "service_interval_km",
+    "specs",
+    "status",
+    "tax_expiry",
+    "tour_scenes",
+    "type",
+    "year"
+   ]
+  },
+  "workshops": {
+   "count": 3,
+   "keys": [
+    "active",
+    "address",
+    "city",
+    "created_at",
+    "id",
+    "name",
+    "note",
+    "phone",
+    "specialties"
+   ]
+  }
+ },
+ "endpoints": [
+  {
+   "path": "/openapi.json",
+   "methods": [
+    "GET"
+   ],
+   "name": "openapi"
+  },
+  {
+   "path": "/docs",
+   "methods": [
+    "GET"
+   ],
+   "name": "swagger_ui_html"
+  },
+  {
+   "path": "/docs/oauth2-redirect",
+   "methods": [
+    "GET"
+   ],
+   "name": "swagger_ui_redirect"
+  },
+  {
+   "path": "/redoc",
+   "methods": [
+    "GET"
+   ],
+   "name": "redoc_html"
+  },
+  {
+   "path": "/api/",
+   "methods": [
+    "GET"
+   ],
+   "name": "root"
+  },
+  {
+   "path": "/api/auth/login",
+   "methods": [
+    "POST"
+   ],
+   "name": "login"
+  },
+  {
+   "path": "/api/auth/me",
+   "methods": [
+    "GET"
+   ],
+   "name": "me"
+  },
+  {
+   "path": "/api/auth/logout",
+   "methods": [
+    "POST"
+   ],
+   "name": "logout"
+  },
+  {
+   "path": "/api/users",
+   "methods": [
+    "GET"
+   ],
+   "name": "list_users"
+  },
+  {
+   "path": "/api/users",
+   "methods": [
+    "POST"
+   ],
+   "name": "create_user"
+  },
+  {
+   "path": "/api/users/{user_id}",
+   "methods": [
+    "GET"
+   ],
+   "name": "get_user"
+  },
+  {
+   "path": "/api/users/{user_id}",
+   "methods": [
+    "PATCH"
+   ],
+   "name": "update_user"
+  },
+  {
+   "path": "/api/dashboard",
+   "methods": [
+    "GET"
+   ],
+   "name": "dashboard"
+  },
+  {
+   "path": "/api/vehicles",
+   "methods": [
+    "GET"
+   ],
+   "name": "list_vehicles"
+  },
+  {
+   "path": "/api/vehicles",
+   "methods": [
+    "POST"
+   ],
+   "name": "create_vehicle"
+  },
+  {
+   "path": "/api/vehicles/{vehicle_id}",
+   "methods": [
+    "GET"
+   ],
+   "name": "get_vehicle"
+  },
+  {
+   "path": "/api/vehicles/{vehicle_id}/trips",
+   "methods": [
+    "GET"
+   ],
+   "name": "vehicle_trips"
+  },
+  {
+   "path": "/api/vehicles/{vehicle_id}/maintenance",
+   "methods": [
+    "GET"
+   ],
+   "name": "vehicle_maintenance"
+  },
+  {
+   "path": "/api/vehicles/{vehicle_id}",
+   "methods": [
+    "PATCH"
+   ],
+   "name": "update_vehicle"
+  },
+  {
+   "path": "/api/vehicles/{vehicle_id}",
+   "methods": [
+    "DELETE"
+   ],
+   "name": "delete_vehicle"
+  },
+  {
+   "path": "/api/drivers",
+   "methods": [
+    "GET"
+   ],
+   "name": "list_drivers"
+  },
+  {
+   "path": "/api/drivers",
+   "methods": [
+    "POST"
+   ],
+   "name": "create_driver"
+  },
+  {
+   "path": "/api/drivers/{driver_id}",
+   "methods": [
+    "GET"
+   ],
+   "name": "get_driver"
+  },
+  {
+   "path": "/api/drivers/{driver_id}/performance",
+   "methods": [
+    "GET"
+   ],
+   "name": "driver_performance"
+  },
+  {
+   "path": "/api/drivers/{driver_id}",
+   "methods": [
+    "PATCH"
+   ],
+   "name": "update_driver"
+  },
+  {
+   "path": "/api/drivers/{driver_id}",
+   "methods": [
+    "DELETE"
+   ],
+   "name": "delete_driver"
+  },
+  {
+   "path": "/api/customers",
+   "methods": [
+    "GET"
+   ],
+   "name": "list_customers"
+  },
+  {
+   "path": "/api/customers",
+   "methods": [
+    "POST"
+   ],
+   "name": "create_customer"
+  },
+  {
+   "path": "/api/customers/{customer_id}",
+   "methods": [
+    "GET"
+   ],
+   "name": "get_customer"
+  },
+  {
+   "path": "/api/customers/{customer_id}",
+   "methods": [
+    "PATCH"
+   ],
+   "name": "update_customer"
+  },
+  {
+   "path": "/api/customers/{customer_id}",
+   "methods": [
+    "DELETE"
+   ],
+   "name": "delete_customer"
+  },
+  {
+   "path": "/api/bookings",
+   "methods": [
+    "GET"
+   ],
+   "name": "list_bookings"
+  },
+  {
+   "path": "/api/bookings/calendar",
+   "methods": [
+    "GET"
+   ],
+   "name": "bookings_calendar"
+  },
+  {
+   "path": "/api/bookings/availability",
+   "methods": [
+    "GET"
+   ],
+   "name": "check_availability"
+  },
+  {
+   "path": "/api/bookings",
+   "methods": [
+    "POST"
+   ],
+   "name": "create_booking"
+  },
+  {
+   "path": "/api/bookings/{booking_id}",
+   "methods": [
+    "GET"
+   ],
+   "name": "get_booking"
+  },
+  {
+   "path": "/api/bookings/{booking_id}",
+   "methods": [
+    "PATCH"
+   ],
+   "name": "update_booking"
+  },
+  {
+   "path": "/api/bookings/{booking_id}/confirm",
+   "methods": [
+    "POST"
+   ],
+   "name": "confirm_booking"
+  },
+  {
+   "path": "/api/bookings/{booking_id}/cancel",
+   "methods": [
+    "POST"
+   ],
+   "name": "cancel_booking"
+  },
+  {
+   "path": "/api/bookings/{booking_id}/complete",
+   "methods": [
+    "POST"
+   ],
+   "name": "complete_booking"
+  },
+  {
+   "path": "/api/payments",
+   "methods": [
+    "GET"
+   ],
+   "name": "list_payments"
+  },
+  {
+   "path": "/api/payments",
+   "methods": [
+    "POST"
+   ],
+   "name": "create_payment"
+  },
+  {
+   "path": "/api/expenses",
+   "methods": [
+    "GET"
+   ],
+   "name": "list_expenses"
+  },
+  {
+   "path": "/api/expenses",
+   "methods": [
+    "POST"
+   ],
+   "name": "create_expense"
+  },
+  {
+   "path": "/api/invoices",
+   "methods": [
+    "GET"
+   ],
+   "name": "list_invoices"
+  },
+  {
+   "path": "/api/invoices",
+   "methods": [
+    "POST"
+   ],
+   "name": "create_invoice"
+  },
+  {
+   "path": "/api/invoices/{invoice_id}/export",
+   "methods": [
+    "GET"
+   ],
+   "name": "export_invoice"
+  },
+  {
+   "path": "/api/invoices/{invoice_id}",
+   "methods": [
+    "PATCH"
+   ],
+   "name": "update_invoice_status"
+  },
+  {
+   "path": "/api/invoices/{invoice_id}",
+   "methods": [
+    "GET"
+   ],
+   "name": "get_invoice"
+  },
+  {
+   "path": "/api/finance/profit-loss",
+   "methods": [
+    "GET"
+   ],
+   "name": "get_profit_loss"
+  },
+  {
+   "path": "/api/finance/ar",
+   "methods": [
+    "GET"
+   ],
+   "name": "get_ar"
+  },
+  {
+   "path": "/api/finance/pl-full",
+   "methods": [
+    "GET"
+   ],
+   "name": "get_pl_full"
+  },
+  {
+   "path": "/api/finance/reconciliation",
+   "methods": [
+    "GET"
+   ],
+   "name": "get_reconciliation"
+  },
+  {
+   "path": "/api/finance/reconciliation/sync",
+   "methods": [
+    "POST"
+   ],
+   "name": "post_reconciliation_sync"
+  },
+  {
+   "path": "/api/finance/cashflow",
+   "methods": [
+    "GET"
+   ],
+   "name": "get_cashflow"
+  },
+  {
+   "path": "/api/finance/ar/overdue",
+   "methods": [
+    "GET"
+   ],
+   "name": "get_ar_overdue"
+  },
+  {
+   "path": "/api/finance/ar/{booking_id}/remind",
+   "methods": [
+    "POST"
+   ],
+   "name": "post_ar_remind"
+  },
+  {
+   "path": "/api/finance/ar/remind-all",
+   "methods": [
+    "POST"
+   ],
+   "name": "post_ar_remind_all"
+  },
+  {
+   "path": "/api/finance/export",
+   "methods": [
+    "GET"
+   ],
+   "name": "export_finance"
+  },
+  {
+   "path": "/api/finance/summary",
+   "methods": [
+    "GET"
+   ],
+   "name": "get_summary"
+  },
+  {
+   "path": "/api/reports/summary",
+   "methods": [
+    "GET"
+   ],
+   "name": "get_reports_summary"
+  },
+  {
+   "path": "/api/reports/export",
+   "methods": [
+    "GET"
+   ],
+   "name": "export_reports"
+  },
+  {
+   "path": "/api/reports/payroll",
+   "methods": [
+    "GET"
+   ],
+   "name": "get_payroll_report"
+  },
+  {
+   "path": "/api/reports/payroll/export",
+   "methods": [
+    "GET"
+   ],
+   "name": "export_payroll_report"
+  },
+  {
+   "path": "/api/reports/drivers",
+   "methods": [
+    "GET"
+   ],
+   "name": "get_drivers_report"
+  },
+  {
+   "path": "/api/reports/drivers/export",
+   "methods": [
+    "GET"
+   ],
+   "name": "export_drivers_report"
+  },
+  {
+   "path": "/api/leads",
+   "methods": [
+    "GET"
+   ],
+   "name": "list_leads"
+  },
+  {
+   "path": "/api/leads/pipeline",
+   "methods": [
+    "GET"
+   ],
+   "name": "lead_pipeline"
+  },
+  {
+   "path": "/api/leads/agents",
+   "methods": [
+    "GET"
+   ],
+   "name": "lead_agents"
+  },
+  {
+   "path": "/api/leads/reminders",
+   "methods": [
+    "GET"
+   ],
+   "name": "lead_reminders"
+  },
+  {
+   "path": "/api/leads",
+   "methods": [
+    "POST"
+   ],
+   "name": "create_lead"
+  },
+  {
+   "path": "/api/leads/{lead_id}",
+   "methods": [
+    "GET"
+   ],
+   "name": "get_lead"
+  },
+  {
+   "path": "/api/leads/{lead_id}",
+   "methods": [
+    "PATCH"
+   ],
+   "name": "update_lead"
+  },
+  {
+   "path": "/api/leads/{lead_id}/stage",
+   "methods": [
+    "POST"
+   ],
+   "name": "move_stage"
+  },
+  {
+   "path": "/api/leads/{lead_id}/assign",
+   "methods": [
+    "POST"
+   ],
+   "name": "assign_lead"
+  },
+  {
+   "path": "/api/leads/{lead_id}/activities",
+   "methods": [
+    "POST"
+   ],
+   "name": "add_activity"
+  },
+  {
+   "path": "/api/leads/{lead_id}/convert",
+   "methods": [
+    "POST"
+   ],
+   "name": "convert_lead"
+  },
+  {
+   "path": "/api/broadcasts",
+   "methods": [
+    "GET"
+   ],
+   "name": "list_broadcasts"
+  },
+  {
+   "path": "/api/broadcasts",
+   "methods": [
+    "POST"
+   ],
+   "name": "create_broadcast"
+  },
+  {
+   "path": "/api/broadcasts/{broadcast_id}/send",
+   "methods": [
+    "POST"
+   ],
+   "name": "send_broadcast"
+  },
+  {
+   "path": "/api/locations",
+   "methods": [
+    "POST"
+   ],
+   "name": "ingest_location"
+  },
+  {
+   "path": "/api/locations/live",
+   "methods": [
+    "GET"
+   ],
+   "name": "live_locations"
+  },
+  {
+   "path": "/api/locations/history",
+   "methods": [
+    "GET"
+   ],
+   "name": "location_history"
+  },
+  {
+   "path": "/api/gps/webhook",
+   "methods": [
+    "POST"
+   ],
+   "name": "gps_webhook"
+  },
+  {
+   "path": "/api/gps/live",
+   "methods": [
+    "GET"
+   ],
+   "name": "gps_live"
+  },
+  {
+   "path": "/api/gps/devices",
+   "methods": [
+    "GET"
+   ],
+   "name": "gps_devices"
+  },
+  {
+   "path": "/api/gps/summary",
+   "methods": [
+    "GET"
+   ],
+   "name": "gps_summary"
+  },
+  {
+   "path": "/api/gps/devices/{vehicle_id}/assign",
+   "methods": [
+    "POST"
+   ],
+   "name": "gps_assign"
+  },
+  {
+   "path": "/api/gps/devices/{vehicle_id}",
+   "methods": [
+    "DELETE"
+   ],
+   "name": "gps_unassign"
+  },
+  {
+   "path": "/api/trips",
+   "methods": [
+    "GET"
+   ],
+   "name": "list_trips"
+  },
+  {
+   "path": "/api/trips/{trip_id}/track",
+   "methods": [
+    "GET"
+   ],
+   "name": "trip_track"
+  },
+  {
+   "path": "/api/trips/{trip_id}/eta",
+   "methods": [
+    "GET"
+   ],
+   "name": "trip_eta"
+  },
+  {
+   "path": "/api/trips/{trip_id}",
+   "methods": [
+    "GET"
+   ],
+   "name": "get_trip"
+  },
+  {
+   "path": "/api/trips/{trip_id}/status",
+   "methods": [
+    "POST"
+   ],
+   "name": "update_trip_status"
+  },
+  {
+   "path": "/api/driver/my-trips",
+   "methods": [
+    "GET"
+   ],
+   "name": "my_trips"
+  },
+  {
+   "path": "/api/driver/checkin",
+   "methods": [
+    "POST"
+   ],
+   "name": "checkin"
+  },
+  {
+   "path": "/api/driver/checkout",
+   "methods": [
+    "POST"
+   ],
+   "name": "checkout"
+  },
+  {
+   "path": "/api/driver/tasks",
+   "methods": [
+    "GET"
+   ],
+   "name": "my_tasks"
+  },
+  {
+   "path": "/api/driver/summary",
+   "methods": [
+    "GET"
+   ],
+   "name": "my_summary"
+  },
+  {
+   "path": "/api/driver/tasks/{trip_id}/ack",
+   "methods": [
+    "POST"
+   ],
+   "name": "ack_task"
+  },
+  {
+   "path": "/api/driver/tasks/{trip_id}/arrived",
+   "methods": [
+    "POST"
+   ],
+   "name": "arrived_task"
+  },
+  {
+   "path": "/api/driver/tasks/{trip_id}/pod",
+   "methods": [
+    "POST"
+   ],
+   "name": "upload_pod"
+  },
+  {
+   "path": "/api/dispatch/today",
+   "methods": [
+    "GET"
+   ],
+   "name": "dispatch_today"
+  },
+  {
+   "path": "/api/dispatch/{booking_id}/assign",
+   "methods": [
+    "POST"
+   ],
+   "name": "assign_trip"
+  },
+  {
+   "path": "/api/dispatch/{booking_id}/confirm-departure",
+   "methods": [
+    "POST"
+   ],
+   "name": "confirm_departure"
+  },
+  {
+   "path": "/api/dispatch/trips/{trip_id}/enroute",
+   "methods": [
+    "POST"
+   ],
+   "name": "trip_enroute"
+  },
+  {
+   "path": "/api/dispatch/trips/{trip_id}/arrived",
+   "methods": [
+    "POST"
+   ],
+   "name": "trip_arrived"
+  },
+  {
+   "path": "/api/dispatch/trips/{trip_id}/pod",
+   "methods": [
+    "POST"
+   ],
+   "name": "upload_pod"
+  },
+  {
+   "path": "/api/analytics/summary",
+   "methods": [
+    "GET"
+   ],
+   "name": "get_summary"
+  },
+  {
+   "path": "/api/analytics/funnel",
+   "methods": [
+    "GET"
+   ],
+   "name": "get_funnel"
+  },
+  {
+   "path": "/api/analytics/channels",
+   "methods": [
+    "GET"
+   ],
+   "name": "get_channels"
+  },
+  {
+   "path": "/api/analytics/fleet",
+   "methods": [
+    "GET"
+   ],
+   "name": "get_fleet"
+  },
+  {
+   "path": "/api/analytics/drivers",
+   "methods": [
+    "GET"
+   ],
+   "name": "get_drivers"
+  },
+  {
+   "path": "/api/analytics/ar-aging",
+   "methods": [
+    "GET"
+   ],
+   "name": "get_ar_aging"
+  },
+  {
+   "path": "/api/analytics/retention",
+   "methods": [
+    "GET"
+   ],
+   "name": "get_retention"
+  },
+  {
+   "path": "/api/analytics/forecast",
+   "methods": [
+    "GET"
+   ],
+   "name": "get_forecast"
+  },
+  {
+   "path": "/api/analytics/ad-spend",
+   "methods": [
+    "GET"
+   ],
+   "name": "get_ad_spend"
+  },
+  {
+   "path": "/api/analytics/ad-spend",
+   "methods": [
+    "PUT"
+   ],
+   "name": "put_ad_spend"
+  },
+  {
+   "path": "/api/analytics/export",
+   "methods": [
+    "GET"
+   ],
+   "name": "export_cockpit"
+  },
+  {
+   "path": "/api/maintenance",
+   "methods": [
+    "GET"
+   ],
+   "name": "list_maintenance"
+  },
+  {
+   "path": "/api/maintenance/reminders",
+   "methods": [
+    "GET"
+   ],
+   "name": "maintenance_reminders"
+  },
+  {
+   "path": "/api/maintenance/summary",
+   "methods": [
+    "GET"
+   ],
+   "name": "maintenance_summary"
+  },
+  {
+   "path": "/api/maintenance/preventive",
+   "methods": [
+    "GET"
+   ],
+   "name": "preventive_list"
+  },
+  {
+   "path": "/api/maintenance/preventive/{vehicle_id}/schedule",
+   "methods": [
+    "POST"
+   ],
+   "name": "preventive_schedule"
+  },
+  {
+   "path": "/api/maintenance",
+   "methods": [
+    "POST"
+   ],
+   "name": "create_maintenance"
+  },
+  {
+   "path": "/api/maintenance/{maintenance_id}",
+   "methods": [
+    "GET"
+   ],
+   "name": "get_maintenance"
+  },
+  {
+   "path": "/api/maintenance/{maintenance_id}",
+   "methods": [
+    "PATCH"
+   ],
+   "name": "update_maintenance"
+  },
+  {
+   "path": "/api/maintenance/{maintenance_id}/complete",
+   "methods": [
+    "POST"
+   ],
+   "name": "complete_maintenance"
+  },
+  {
+   "path": "/api/maintenance/{maintenance_id}",
+   "methods": [
+    "DELETE"
+   ],
+   "name": "delete_maintenance"
+  },
+  {
+   "path": "/api/workshops",
+   "methods": [
+    "GET"
+   ],
+   "name": "list_workshops"
+  },
+  {
+   "path": "/api/workshops",
+   "methods": [
+    "POST"
+   ],
+   "name": "create_workshop"
+  },
+  {
+   "path": "/api/workshops/{workshop_id}",
+   "methods": [
+    "PATCH"
+   ],
+   "name": "update_workshop"
+  },
+  {
+   "path": "/api/workshops/{workshop_id}",
+   "methods": [
+    "DELETE"
+   ],
+   "name": "delete_workshop"
+  },
+  {
+   "path": "/api/service-types",
+   "methods": [
+    "GET"
+   ],
+   "name": "list_service_types"
+  },
+  {
+   "path": "/api/service-types",
+   "methods": [
+    "POST"
+   ],
+   "name": "create_service_type"
+  },
+  {
+   "path": "/api/service-types/{type_id}",
+   "methods": [
+    "PATCH"
+   ],
+   "name": "update_service_type"
+  },
+  {
+   "path": "/api/service-types/{type_id}",
+   "methods": [
+    "DELETE"
+   ],
+   "name": "delete_service_type"
+  },
+  {
+   "path": "/api/drivers/{driver_id}/compensation",
+   "methods": [
+    "GET"
+   ],
+   "name": "get_compensation"
+  },
+  {
+   "path": "/api/drivers/{driver_id}/compensation",
+   "methods": [
+    "PATCH"
+   ],
+   "name": "update_compensation"
+  },
+  {
+   "path": "/api/payroll/summary",
+   "methods": [
+    "GET"
+   ],
+   "name": "payroll_summary"
+  },
+  {
+   "path": "/api/payroll/payouts",
+   "methods": [
+    "GET"
+   ],
+   "name": "list_payouts"
+  },
+  {
+   "path": "/api/payroll/payouts/generate",
+   "methods": [
+    "POST"
+   ],
+   "name": "generate_payout"
+  },
+  {
+   "path": "/api/payroll/payouts/generate-bulk",
+   "methods": [
+    "POST"
+   ],
+   "name": "generate_bulk"
+  },
+  {
+   "path": "/api/payroll/payouts/{payout_id}",
+   "methods": [
+    "GET"
+   ],
+   "name": "get_payout"
+  },
+  {
+   "path": "/api/payroll/payouts/{payout_id}",
+   "methods": [
+    "PATCH"
+   ],
+   "name": "update_payout"
+  },
+  {
+   "path": "/api/payroll/payouts/{payout_id}/approve",
+   "methods": [
+    "POST"
+   ],
+   "name": "approve_payout"
+  },
+  {
+   "path": "/api/payroll/payouts/{payout_id}/pay",
+   "methods": [
+    "POST"
+   ],
+   "name": "pay_payout"
+  },
+  {
+   "path": "/api/payroll/payouts/{payout_id}",
+   "methods": [
+    "DELETE"
+   ],
+   "name": "delete_payout"
+  },
+  {
+   "path": "/api/payroll/payouts/{payout_id}/slip",
+   "methods": [
+    "GET"
+   ],
+   "name": "payout_slip"
+  },
+  {
+   "path": "/api/partners",
+   "methods": [
+    "GET"
+   ],
+   "name": "list_partners"
+  },
+  {
+   "path": "/api/partners",
+   "methods": [
+    "POST"
+   ],
+   "name": "create_partner"
+  },
+  {
+   "path": "/api/partners/{partner_id}",
+   "methods": [
+    "GET"
+   ],
+   "name": "get_partner"
+  },
+  {
+   "path": "/api/partners/{partner_id}",
+   "methods": [
+    "PATCH"
+   ],
+   "name": "update_partner"
+  },
+  {
+   "path": "/api/partners/{partner_id}",
+   "methods": [
+    "DELETE"
+   ],
+   "name": "delete_partner"
+  },
+  {
+   "path": "/api/partners/{partner_id}/settlements",
+   "methods": [
+    "GET"
+   ],
+   "name": "list_settlements"
+  },
+  {
+   "path": "/api/partners/{partner_id}/settlements",
+   "methods": [
+    "POST"
+   ],
+   "name": "create_settlement"
+  },
+  {
+   "path": "/api/subcharters",
+   "methods": [
+    "GET"
+   ],
+   "name": "list_subcharters"
+  },
+  {
+   "path": "/api/subcharters/available-partners",
+   "methods": [
+    "GET"
+   ],
+   "name": "available_partner_vehicles"
+  },
+  {
+   "path": "/api/subcharters",
+   "methods": [
+    "POST"
+   ],
+   "name": "create_subcharter"
+  },
+  {
+   "path": "/api/subcharters/{subcharter_id}",
+   "methods": [
+    "GET"
+   ],
+   "name": "get_subcharter"
+  },
+  {
+   "path": "/api/subcharters/{subcharter_id}",
+   "methods": [
+    "PATCH"
+   ],
+   "name": "update_subcharter"
+  },
+  {
+   "path": "/api/subcharters/{subcharter_id}/confirm",
+   "methods": [
+    "POST"
+   ],
+   "name": "confirm_subcharter"
+  },
+  {
+   "path": "/api/subcharters/{subcharter_id}/settle",
+   "methods": [
+    "POST"
+   ],
+   "name": "settle_subcharter"
+  },
+  {
+   "path": "/api/subcharters/{subcharter_id}/cancel",
+   "methods": [
+    "POST"
+   ],
+   "name": "cancel_subcharter"
+  },
+  {
+   "path": "/api/shares",
+   "methods": [
+    "GET"
+   ],
+   "name": "list_shares"
+  },
+  {
+   "path": "/api/shares",
+   "methods": [
+    "POST"
+   ],
+   "name": "create_share"
+  },
+  {
+   "path": "/api/shares/{share_id}/revoke",
+   "methods": [
+    "POST"
+   ],
+   "name": "revoke_share"
+  },
+  {
+   "path": "/api/shares/{share_id}",
+   "methods": [
+    "DELETE"
+   ],
+   "name": "delete_share"
+  },
+  {
+   "path": "/api/notifications",
+   "methods": [
+    "GET"
+   ],
+   "name": "list_notifications"
+  },
+  {
+   "path": "/api/notifications/unread_count",
+   "methods": [
+    "GET"
+   ],
+   "name": "unread_count"
+  },
+  {
+   "path": "/api/notifications/scan",
+   "methods": [
+    "POST"
+   ],
+   "name": "trigger_scan"
+  },
+  {
+   "path": "/api/notifications/read_all",
+   "methods": [
+    "POST"
+   ],
+   "name": "read_all"
+  },
+  {
+   "path": "/api/notifications/{notification_id}/read",
+   "methods": [
+    "POST"
+   ],
+   "name": "mark_read"
+  },
+  {
+   "path": "/api/notifications/{notification_id}/dismiss",
+   "methods": [
+    "POST"
+   ],
+   "name": "dismiss"
+  },
+  {
+   "path": "/api/conversations",
+   "methods": [
+    "GET"
+   ],
+   "name": "list_conversations"
+  },
+  {
+   "path": "/api/conversations",
+   "methods": [
+    "POST"
+   ],
+   "name": "create_conversation"
+  },
+  {
+   "path": "/api/conversations/{conversation_id}",
+   "methods": [
+    "GET"
+   ],
+   "name": "get_conversation"
+  },
+  {
+   "path": "/api/conversations/{conversation_id}",
+   "methods": [
+    "PATCH"
+   ],
+   "name": "update_conversation"
+  },
+  {
+   "path": "/api/conversations/{conversation_id}/messages",
+   "methods": [
+    "POST"
+   ],
+   "name": "post_message"
+  },
+  {
+   "path": "/api/conversations/{conversation_id}/wa-optout",
+   "methods": [
+    "POST"
+   ],
+   "name": "wa_optout"
+  },
+  {
+   "path": "/api/conversations/{conversation_id}/wa-optin",
+   "methods": [
+    "POST"
+   ],
+   "name": "wa_optin"
+  },
+  {
+   "path": "/api/conversations/{conversation_id}/read",
+   "methods": [
+    "POST"
+   ],
+   "name": "mark_conversation_read"
+  },
+  {
+   "path": "/api/settings",
+   "methods": [
+    "GET"
+   ],
+   "name": "get_settings"
+  },
+  {
+   "path": "/api/settings",
+   "methods": [
+    "PATCH"
+   ],
+   "name": "update_settings"
+  },
+  {
+   "path": "/api/pricing/rules",
+   "methods": [
+    "GET"
+   ],
+   "name": "get_rules"
+  },
+  {
+   "path": "/api/pricing/quote",
+   "methods": [
+    "POST"
+   ],
+   "name": "quote"
+  },
+  {
+   "path": "/api/quotations",
+   "methods": [
+    "GET"
+   ],
+   "name": "list_quotations"
+  },
+  {
+   "path": "/api/quotations",
+   "methods": [
+    "POST"
+   ],
+   "name": "create_quotation"
+  },
+  {
+   "path": "/api/quotations/{quotation_id}/pdf",
+   "methods": [
+    "GET"
+   ],
+   "name": "quotation_pdf_export"
+  },
+  {
+   "path": "/api/quotations/{quotation_id}",
+   "methods": [
+    "GET"
+   ],
+   "name": "get_quotation"
+  },
+  {
+   "path": "/api/quotations/{quotation_id}",
+   "methods": [
+    "PATCH"
+   ],
+   "name": "update_quotation"
+  },
+  {
+   "path": "/api/quotations/{quotation_id}/send",
+   "methods": [
+    "POST"
+   ],
+   "name": "send_quotation"
+  },
+  {
+   "path": "/api/quotations/{quotation_id}/accept",
+   "methods": [
+    "POST"
+   ],
+   "name": "accept_quotation"
+  },
+  {
+   "path": "/api/quotations/{quotation_id}/reject",
+   "methods": [
+    "POST"
+   ],
+   "name": "reject_quotation"
+  },
+  {
+   "path": "/api/quotations/{quotation_id}/convert",
+   "methods": [
+    "POST"
+   ],
+   "name": "convert_quotation"
+  },
+  {
+   "path": "/api/content/{resource}",
+   "methods": [
+    "GET"
+   ],
+   "name": "list_content"
+  },
+  {
+   "path": "/api/content/{resource}",
+   "methods": [
+    "POST"
+   ],
+   "name": "create_content"
+  },
+  {
+   "path": "/api/content/{resource}/{item_id}",
+   "methods": [
+    "PUT"
+   ],
+   "name": "update_content"
+  },
+  {
+   "path": "/api/content/{resource}/{item_id}",
+   "methods": [
+    "DELETE"
+   ],
+   "name": "delete_content"
+  },
+  {
+   "path": "/api/audit-logs",
+   "methods": [
+    "GET"
+   ],
+   "name": "list_audit_logs"
+  },
+  {
+   "path": "/api/onboarding",
+   "methods": [
+    "GET"
+   ],
+   "name": "get_onboarding"
+  },
+  {
+   "path": "/api/onboarding/complete",
+   "methods": [
+    "POST"
+   ],
+   "name": "complete_task"
+  },
+  {
+   "path": "/api/onboarding/dismiss",
+   "methods": [
+    "POST"
+   ],
+   "name": "dismiss"
+  },
+  {
+   "path": "/api/onboarding/reset",
+   "methods": [
+    "POST"
+   ],
+   "name": "reset"
+  },
+  {
+   "path": "/api/automation/event-types",
+   "methods": [
+    "GET"
+   ],
+   "name": "list_event_types"
+  },
+  {
+   "path": "/api/automation/stats",
+   "methods": [
+    "GET"
+   ],
+   "name": "automation_stats"
+  },
+  {
+   "path": "/api/automation/runs",
+   "methods": [
+    "GET"
+   ],
+   "name": "list_runs"
+  },
+  {
+   "path": "/api/automation/events",
+   "methods": [
+    "GET"
+   ],
+   "name": "list_events"
+  },
+  {
+   "path": "/api/automation/rules/reset-defaults",
+   "methods": [
+    "POST"
+   ],
+   "name": "reset_defaults"
+  },
+  {
+   "path": "/api/automation/rules",
+   "methods": [
+    "GET"
+   ],
+   "name": "list_rules"
+  },
+  {
+   "path": "/api/automation/rules",
+   "methods": [
+    "POST"
+   ],
+   "name": "create_rule"
+  },
+  {
+   "path": "/api/automation/rules/{rule_id}",
+   "methods": [
+    "GET"
+   ],
+   "name": "get_rule"
+  },
+  {
+   "path": "/api/automation/rules/{rule_id}",
+   "methods": [
+    "PATCH"
+   ],
+   "name": "update_rule"
+  },
+  {
+   "path": "/api/automation/rules/{rule_id}",
+   "methods": [
+    "DELETE"
+   ],
+   "name": "delete_rule"
+  },
+  {
+   "path": "/api/wa/config",
+   "methods": [
+    "GET"
+   ],
+   "name": "get_wa_config"
+  },
+  {
+   "path": "/api/wa/config",
+   "methods": [
+    "PATCH"
+   ],
+   "name": "update_wa_config"
+  },
+  {
+   "path": "/api/wa/templates",
+   "methods": [
+    "GET"
+   ],
+   "name": "list_templates"
+  },
+  {
+   "path": "/api/wa/templates/{key}",
+   "methods": [
+    "PUT"
+   ],
+   "name": "upsert_template"
+  },
+  {
+   "path": "/api/wa/templates/{key}",
+   "methods": [
+    "DELETE"
+   ],
+   "name": "delete_template"
+  },
+  {
+   "path": "/api/wa/simulate-inbound",
+   "methods": [
+    "POST"
+   ],
+   "name": "simulate_inbound"
+  },
+  {
+   "path": "/api/wa/test-send",
+   "methods": [
+    "POST"
+   ],
+   "name": "wa_test_send"
+  },
+  {
+   "path": "/api/wa/webhook",
+   "methods": [
+    "GET"
+   ],
+   "name": "wa_webhook_verify"
+  },
+  {
+   "path": "/api/wa/webhook",
+   "methods": [
+    "POST"
+   ],
+   "name": "wa_webhook_receive"
+  },
+  {
+   "path": "/api/crm/scoreboard",
+   "methods": [
+    "GET"
+   ],
+   "name": "scoreboard"
+  },
+  {
+   "path": "/api/crm/aging",
+   "methods": [
+    "GET"
+   ],
+   "name": "aging"
+  },
+  {
+   "path": "/api/crm/rfm",
+   "methods": [
+    "GET"
+   ],
+   "name": "rfm"
+  },
+  {
+   "path": "/api/crm/recompute",
+   "methods": [
+    "POST"
+   ],
+   "name": "recompute"
+  },
+  {
+   "path": "/api/crm/growth-config",
+   "methods": [
+    "GET"
+   ],
+   "name": "get_growth_config"
+  },
+  {
+   "path": "/api/crm/growth-config",
+   "methods": [
+    "PATCH"
+   ],
+   "name": "update_growth_config"
+  },
+  {
+   "path": "/api/crm/segments",
+   "methods": [
+    "GET"
+   ],
+   "name": "list_segments"
+  },
+  {
+   "path": "/api/crm/segments",
+   "methods": [
+    "POST"
+   ],
+   "name": "create_segment"
+  },
+  {
+   "path": "/api/crm/segments/{segment_id}/preview",
+   "methods": [
+    "GET"
+   ],
+   "name": "preview_segment"
+  },
+  {
+   "path": "/api/crm/segments/{segment_id}",
+   "methods": [
+    "PATCH"
+   ],
+   "name": "update_segment"
+  },
+  {
+   "path": "/api/crm/segments/{segment_id}",
+   "methods": [
+    "DELETE"
+   ],
+   "name": "delete_segment"
+  },
+  {
+   "path": "/api/crm/sequences",
+   "methods": [
+    "GET"
+   ],
+   "name": "list_sequences"
+  },
+  {
+   "path": "/api/crm/sequences",
+   "methods": [
+    "POST"
+   ],
+   "name": "create_sequence"
+  },
+  {
+   "path": "/api/crm/sequences/{sequence_id}/enrollments",
+   "methods": [
+    "GET"
+   ],
+   "name": "list_enrollments"
+  },
+  {
+   "path": "/api/crm/sequences/{sequence_id}/enroll",
+   "methods": [
+    "POST"
+   ],
+   "name": "enroll_sequence"
+  },
+  {
+   "path": "/api/crm/sequences/{sequence_id}",
+   "methods": [
+    "PATCH"
+   ],
+   "name": "update_sequence"
+  },
+  {
+   "path": "/api/crm/sequences/{sequence_id}",
+   "methods": [
+    "DELETE"
+   ],
+   "name": "delete_sequence"
+  },
+  {
+   "path": "/api/crm/enrollments/{enrollment_id}/stop",
+   "methods": [
+    "POST"
+   ],
+   "name": "stop_enrollment"
+  },
+  {
+   "path": "/api/crm/campaigns",
+   "methods": [
+    "GET"
+   ],
+   "name": "list_campaigns"
+  },
+  {
+   "path": "/api/crm/campaigns",
+   "methods": [
+    "POST"
+   ],
+   "name": "create_campaign"
+  },
+  {
+   "path": "/api/crm/campaigns/{campaign_id}",
+   "methods": [
+    "GET"
+   ],
+   "name": "get_campaign"
+  },
+  {
+   "path": "/api/crm/campaigns/{campaign_id}",
+   "methods": [
+    "PATCH"
+   ],
+   "name": "update_campaign"
+  },
+  {
+   "path": "/api/crm/campaigns/{campaign_id}",
+   "methods": [
+    "DELETE"
+   ],
+   "name": "delete_campaign"
+  },
+  {
+   "path": "/api/crm/campaigns/{campaign_id}/send",
+   "methods": [
+    "POST"
+   ],
+   "name": "send_campaign"
+  },
+  {
+   "path": "/api/public/fleet",
+   "methods": [
+    "GET"
+   ],
+   "name": "public_fleet"
+  },
+  {
+   "path": "/api/public/fleet/{vehicle_id}",
+   "methods": [
+    "GET"
+   ],
+   "name": "public_fleet_detail"
+  },
+  {
+   "path": "/api/public/destinations",
+   "methods": [
+    "GET"
+   ],
+   "name": "public_destinations"
+  },
+  {
+   "path": "/api/public/destinations/{slug}",
+   "methods": [
+    "GET"
+   ],
+   "name": "public_destination"
+  },
+  {
+   "path": "/api/public/articles",
+   "methods": [
+    "GET"
+   ],
+   "name": "public_articles"
+  },
+  {
+   "path": "/api/public/articles/{slug}",
+   "methods": [
+    "GET"
+   ],
+   "name": "public_article"
+  },
+  {
+   "path": "/api/public/testimonials",
+   "methods": [
+    "GET"
+   ],
+   "name": "public_testimonials"
+  },
+  {
+   "path": "/api/public/packages",
+   "methods": [
+    "GET"
+   ],
+   "name": "public_packages"
+  },
+  {
+   "path": "/api/public/promos",
+   "methods": [
+    "GET"
+   ],
+   "name": "public_promos"
+  },
+  {
+   "path": "/api/public/company",
+   "methods": [
+    "GET"
+   ],
+   "name": "public_company"
+  },
+  {
+   "path": "/api/public/theme",
+   "methods": [
+    "GET"
+   ],
+   "name": "public_theme"
+  },
+  {
+   "path": "/api/public/stats",
+   "methods": [
+    "GET"
+   ],
+   "name": "public_stats"
+  },
+  {
+   "path": "/api/public/quotation",
+   "methods": [
+    "POST"
+   ],
+   "name": "public_quotation"
+  },
+  {
+   "path": "/api/public/lead-ads/{provider}",
+   "methods": [
+    "POST"
+   ],
+   "name": "public_lead_ads"
+  },
+  {
+   "path": "/api/public/trip-estimate",
+   "methods": [
+    "POST"
+   ],
+   "name": "public_trip_estimate"
+  },
+  {
+   "path": "/api/public/track/{token}",
+   "methods": [
+    "GET"
+   ],
+   "name": "public_track"
+  },
+  {
+   "path": "/api/public/chat",
+   "methods": [
+    "POST"
+   ],
+   "name": "public_chat"
+  },
+  {
+   "path": "/api/public/chat/{token}",
+   "methods": [
+    "GET"
+   ],
+   "name": "public_chat_thread"
+  }
+ ],
+ "code_access": {
+  "articles": {
+   "read": [
+    "routers/public.py:77",
+    "routers/public.py:83"
+   ],
+   "write": []
+  },
+  "audit_logs": {
+   "read": [
+    "routers/audit_logs.py:37"
+   ],
+   "write": [
+    "services/audit.py:65"
+   ]
+  },
+  "automation_rules": {
+   "read": [
+    "routers/automation.py:36",
+    "routers/automation.py:37",
+    "routers/automation.py:102",
+    "routers/automation.py:127",
+    "routers/automation.py:136",
+    "routers/automation.py:159",
+    "routers/automation.py:165",
+    "services/automation.py:202"
+   ],
+   "write": [
+    "routers/automation.py:86",
+    "routers/automation.py:88",
+    "routers/automation.py:119",
+    "routers/automation.py:156",
+    "routers/automation.py:168",
+    "services/automation.py:233"
+   ]
+  },
+  "automation_runs": {
+   "read": [
+    "routers/automation.py:38",
+    "routers/automation.py:39",
+    "routers/automation.py:40",
+    "routers/automation.py:68",
+    "services/automation.py:207"
+   ],
+   "write": [
+    "services/automation.py:210",
+    "services/automation.py:227"
+   ]
+  },
+  "bookings": {
+   "read": [
+    "routers/subcharters.py:76",
+    "routers/finance.py:65",
+    "routers/bookings.py:68",
+    "routers/bookings.py:77",
+    "routers/bookings.py:164",
+    "routers/bookings.py:176",
+    "routers/bookings.py:196",
+    "routers/bookings.py:202",
+    "routers/bookings.py:209",
+    "routers/bookings.py:216",
+    "routers/drivers.py:84",
+    "routers/dispatch.py:96",
+    "routers/dispatch.py:111",
+    "routers/dispatch.py:168",
+    "routers/dispatch.py:181",
+    "routers/dispatch.py:187",
+    "routers/dispatch.py:204",
+    "routers/expenses.py:39",
+    "routers/driver.py:44",
+    "routers/driver.py:93",
+    "routers/driver.py:189",
+    "routers/invoices.py:39",
+    "routers/payments.py:34",
+    "routers/vehicles.py:135",
+    "routers/customers.py:58",
+    "routers/customers.py:139",
+    "routers/dashboard.py:48",
+    "routers/dashboard.py:49",
+    "routers/dashboard.py:63",
+    "routers/dashboard.py:71",
+    "services/finance.py:38",
+    "services/finance.py:151",
+    "services/trips.py:40",
+    "services/finance_automation.py:150",
+    "services/finance_automation.py:260",
+    "services/payroll.py:76",
+    "services/analytics.py:356",
+    "services/reports.py:54",
+    "services/reports.py:63",
+    "services/growth.py:158",
+    "services/notifications.py:145",
+    "services/onboarding.py:53",
+    "services/availability.py:35",
+    "services/subcharter.py:69"
+   ],
+   "write": [
+    "routers/bookings.py:156",
+    "routers/bookings.py:195",
+    "routers/bookings.py:208",
+    "routers/quotations.py:267",
+    "routers/dispatch.py:140",
+    "routers/dispatch.py:186",
+    "routers/driver.py:120",
+    "routers/driver.py:165",
+    "services/finance.py:44"
+   ]
+  },
+  "broadcasts": {
+   "read": [
+    "routers/broadcasts.py:31",
+    "routers/broadcasts.py:54",
+    "routers/broadcasts.py:65"
+   ],
+   "write": [
+    "routers/broadcasts.py:45",
+    "routers/broadcasts.py:61"
+   ]
+  },
+  "campaign_recipients": {
+   "read": [
+    "routers/campaigns.py:147"
+   ],
+   "write": [
+    "routers/campaigns.py:177",
+    "services/campaigns.py:54"
+   ]
+  },
+  "campaigns": {
+   "read": [
+    "routers/campaigns.py:117",
+    "routers/campaigns.py:144",
+    "routers/campaigns.py:156",
+    "routers/campaigns.py:168",
+    "routers/campaigns.py:174",
+    "routers/campaigns.py:184",
+    "services/campaigns.py:66"
+   ],
+   "write": [
+    "routers/campaigns.py:135",
+    "routers/campaigns.py:167",
+    "routers/campaigns.py:176",
+    "services/campaigns.py:30",
+    "services/campaigns.py:58"
+   ]
+  },
+  "conversations": {
+   "read": [
+    "routers/public.py:292",
+    "routers/public.py:321",
+    "routers/inbox.py:54",
+    "routers/inbox.py:76",
+    "routers/inbox.py:82",
+    "routers/inbox.py:97",
+    "routers/inbox.py:114",
+    "routers/inbox.py:136",
+    "routers/inbox.py:168",
+    "routers/inbox.py:177",
+    "routers/inbox.py:186",
+    "routers/customers.py:73",
+    "services/whatsapp.py:224",
+    "services/whatsapp.py:269"
+   ],
+   "write": [
+    "routers/public.py:303",
+    "routers/public.py:311",
+    "routers/inbox.py:72",
+    "routers/inbox.py:113",
+    "routers/inbox.py:129",
+    "routers/inbox.py:170",
+    "routers/inbox.py:179",
+    "routers/inbox.py:191",
+    "services/whatsapp.py:233",
+    "services/whatsapp.py:244",
+    "services/whatsapp.py:295",
+    "services/whatsapp.py:355",
+    "services/whatsapp.py:367"
+   ]
+  },
+  "counters": {
+   "read": [],
+   "write": [
+    "services/counters.py:20"
+   ]
+  },
+  "customers": {
+   "read": [
+    "routers/bookings.py:29",
+    "routers/bookings.py:101",
+    "routers/quotations.py:73",
+    "routers/quotations.py:249",
+    "routers/leads.py:178",
+    "routers/growth.py:67",
+    "routers/growth.py:89",
+    "routers/driver.py:192",
+    "routers/payments.py:55",
+    "routers/customers.py:25",
+    "routers/customers.py:53",
+    "routers/customers.py:119",
+    "routers/customers.py:127",
+    "routers/customers.py:136",
+    "routers/dashboard.py:47",
+    "services/finance_automation.py:263",
+    "services/analytics.py:301",
+    "services/analytics.py:304",
+    "services/reports.py:83",
+    "services/identity.py:38",
+    "services/identity.py:42",
+    "services/identity.py:46",
+    "services/growth.py:189",
+    "services/notifications.py:147",
+    "services/wa_payload.py:15",
+    "services/whatsapp.py:334"
+   ],
+   "write": [
+    "routers/customers.py:44",
+    "routers/customers.py:126",
+    "routers/customers.py:141",
+    "services/identity.py:68",
+    "services/identity.py:79",
+    "services/growth.py:193"
+   ]
+  },
+  "destinations": {
+   "read": [
+    "routers/public.py:63",
+    "routers/public.py:69",
+    "routers/public.py:128"
+   ],
+   "write": []
+  },
+  "driver_payouts": {
+   "read": [
+    "routers/payroll.py:65",
+    "routers/payroll.py:80",
+    "routers/payroll.py:107",
+    "routers/payroll.py:116",
+    "routers/payroll.py:141",
+    "routers/payroll.py:162",
+    "routers/payroll.py:182",
+    "routers/payroll.py:196",
+    "services/payroll_report.py:30",
+    "services/payroll.py:155",
+    "services/payroll.py:180",
+    "services/notifications.py:208"
+   ],
+   "write": [
+    "routers/payroll.py:85",
+    "routers/payroll.py:130",
+    "routers/payroll.py:152",
+    "routers/payroll.py:172",
+    "routers/payroll.py:187",
+    "services/payroll.py:186"
+   ]
+  },
+  "drivers": {
+   "read": [
+    "routers/trips.py:98",
+    "routers/bookings.py:109",
+    "routers/bookings.py:186",
+    "routers/payroll.py:28",
+    "routers/payroll.py:37",
+    "routers/payroll.py:76",
+    "routers/drivers.py:25",
+    "routers/drivers.py:46",
+    "routers/drivers.py:56",
+    "routers/drivers.py:65",
+    "routers/drivers.py:73",
+    "routers/drivers.py:82",
+    "routers/drivers.py:89",
+    "routers/quotations.py:228",
+    "routers/dispatch.py:73",
+    "routers/dispatch.py:116",
+    "routers/driver.py:54",
+    "routers/driver.py:56",
+    "routers/driver.py:58",
+    "routers/locations.py:47",
+    "routers/dashboard.py:46",
+    "services/driver_report.py:54",
+    "services/trips.py:32",
+    "services/payroll.py:177",
+    "services/analytics.py:243",
+    "services/notifications.py:120",
+    "services/notifications.py:149",
+    "services/wa_payload.py:23",
+    "services/onboarding.py:52",
+    "services/gps.py:272"
+   ],
+   "write": [
+    "routers/payroll.py:45",
+    "routers/drivers.py:38",
+    "routers/drivers.py:72",
+    "routers/drivers.py:90",
+    "routers/driver.py:117"
+   ]
+  },
+  "events": {
+   "read": [
+    "routers/automation.py:41",
+    "routers/automation.py:78",
+    "services/events.py:77"
+   ],
+   "write": [
+    "services/events.py:85",
+    "services/events.py:92"
+   ]
+  },
+  "expenses": {
+   "read": [
+    "routers/expenses.py:30",
+    "services/payroll_report.py:71",
+    "services/finance.py:96",
+    "services/finance.py:114",
+    "services/finance_automation.py:52",
+    "services/finance_automation.py:92",
+    "services/finance_automation.py:201",
+    "services/analytics.py:203",
+    "services/reports.py:41",
+    "services/reports.py:73",
+    "services/subcharter.py:116"
+   ],
+   "write": [
+    "routers/payroll.py:170",
+    "routers/expenses.py:58",
+    "services/payroll.py:149",
+    "services/subcharter.py:105",
+    "services/subcharter.py:117"
+   ]
+  },
+  "geocode_cache": {
+   "read": [
+    "services/geocode.py:55"
+   ],
+   "write": [
+    "services/geocode.py:63"
+   ]
+  },
+  "invoices": {
+   "read": [
+    "routers/finance.py:97",
+    "routers/finance.py:98",
+    "routers/invoices.py:32",
+    "routers/invoices.py:69",
+    "routers/invoices.py:93",
+    "routers/invoices.py:102",
+    "services/finance_automation.py:149",
+    "services/finance_automation.py:179",
+    "services/finance_automation.py:265",
+    "services/reports.py:93",
+    "services/notifications.py:173",
+    "services/onboarding.py:54"
+   ],
+   "write": [
+    "routers/invoices.py:60",
+    "routers/invoices.py:90",
+    "services/finance_automation.py:186"
+   ]
+  },
+  "lead_activities": {
+   "read": [
+    "routers/leads.py:172",
+    "services/growth.py:88"
+   ],
+   "write": [
+    "services/crm.py:49"
+   ]
+  },
+  "leads": {
+   "read": [
+    "routers/quotations.py:69",
+    "routers/leads.py:57",
+    "routers/leads.py:65",
+    "routers/leads.py:93",
+    "routers/leads.py:159",
+    "routers/leads.py:167",
+    "routers/leads.py:185",
+    "routers/leads.py:201",
+    "routers/leads.py:208",
+    "routers/leads.py:227",
+    "routers/leads.py:234",
+    "routers/leads.py:247",
+    "routers/leads.py:254",
+    "routers/leads.py:266",
+    "routers/growth.py:35",
+    "routers/growth.py:49",
+    "routers/broadcasts.py:38",
+    "routers/broadcasts.py:60",
+    "routers/customers.py:71",
+    "routers/dashboard.py:50",
+    "routers/dashboard.py:51",
+    "services/analytics.py:115",
+    "services/analytics.py:139",
+    "services/growth.py:80",
+    "services/growth.py:103",
+    "services/growth.py:114",
+    "services/automation.py:132",
+    "services/notifications.py:89",
+    "services/crm.py:36",
+    "services/whatsapp.py:336"
+   ],
+   "write": [
+    "routers/quotations.py:115",
+    "routers/quotations.py:275",
+    "routers/public.py:166",
+    "routers/leads.py:147",
+    "routers/leads.py:195",
+    "routers/leads.py:222",
+    "routers/leads.py:243",
+    "routers/leads.py:257",
+    "routers/leads.py:277",
+    "services/growth.py:93",
+    "services/growth.py:121",
+    "services/automation.py:138",
+    "services/whatsapp.py:353",
+    "services/ads.py:101"
+   ]
+  },
+  "locations": {
+   "read": [
+    "routers/trips.py:26",
+    "routers/trips.py:46",
+    "routers/public.py:246",
+    "routers/locations.py:121",
+    "services/gps.py:226"
+   ],
+   "write": [
+    "routers/locations.py:66",
+    "services/gps.py:142"
+   ]
+  },
+  "maintenance_records": {
+   "read": [
+    "routers/maintenance.py:46",
+    "routers/maintenance.py:136",
+    "routers/maintenance.py:145",
+    "routers/maintenance.py:159",
+    "routers/maintenance.py:175",
+    "routers/maintenance.py:196",
+    "routers/maintenance.py:205",
+    "routers/vehicles.py:91",
+    "services/finance_automation.py:64",
+    "services/finance_automation.py:207",
+    "services/maintenance.py:74",
+    "services/maintenance.py:88",
+    "services/availability.py:57"
+   ],
+   "write": [
+    "routers/maintenance.py:95",
+    "routers/maintenance.py:125",
+    "routers/maintenance.py:158",
+    "routers/maintenance.py:184",
+    "routers/maintenance.py:208"
+   ]
+  },
+  "messages": {
+   "read": [
+    "routers/public.py:324",
+    "routers/automation.py:42",
+    "routers/automation.py:43",
+    "routers/automation.py:44",
+    "routers/inbox.py:87",
+    "routers/inbox.py:152"
+   ],
+   "write": [
+    "routers/public.py:310",
+    "routers/inbox.py:123",
+    "routers/inbox.py:188",
+    "services/whatsapp.py:294",
+    "services/whatsapp.py:365"
+   ]
+  },
+  "notification_tasks": {
+   "read": [
+    "routers/notifications.py:24",
+    "routers/notifications.py:31",
+    "routers/notifications.py:53",
+    "routers/notifications.py:58",
+    "routers/notifications.py:66",
+    "services/notifications.py:38"
+   ],
+   "write": [
+    "routers/notifications.py:43",
+    "routers/notifications.py:56",
+    "routers/notifications.py:68",
+    "services/notifications.py:46"
+   ]
+  },
+  "packages": {
+   "read": [
+    "routers/public.py:97"
+   ],
+   "write": []
+  },
+  "partner_settlements": {
+   "read": [
+    "routers/partners.py:54",
+    "routers/partners.py:101"
+   ],
+   "write": [
+    "routers/subcharters.py:191",
+    "routers/partners.py:125"
+   ]
+  },
+  "partners": {
+   "read": [
+    "routers/subcharters.py:66",
+    "routers/subcharters.py:79",
+    "routers/partners.py:27",
+    "routers/partners.py:50",
+    "routers/partners.py:66",
+    "routers/partners.py:74",
+    "routers/partners.py:83",
+    "routers/partners.py:99",
+    "routers/partners.py:110",
+    "routers/vehicles.py:43",
+    "routers/vehicles.py:115",
+    "services/subcharter.py:67"
+   ],
+   "write": [
+    "routers/partners.py:41",
+    "routers/partners.py:73",
+    "routers/partners.py:90"
+   ]
+  },
+  "payments": {
+   "read": [
+    "routers/bookings.py:167",
+    "routers/payments.py:27",
+    "services/payroll_report.py:77",
+    "services/finance_automation.py:34",
+    "services/finance_automation.py:46",
+    "services/finance_automation.py:196",
+    "services/analytics.py:350",
+    "services/reports.py:37"
+   ],
+   "write": [
+    "routers/payments.py:50"
+   ]
+  },
+  "promos": {
+   "read": [
+    "routers/public.py:103"
+   ],
+   "write": []
+  },
+  "quotations": {
+   "read": [
+    "routers/quotations.py:60",
+    "routers/quotations.py:121",
+    "routers/quotations.py:132",
+    "routers/quotations.py:141",
+    "routers/quotations.py:163",
+    "routers/quotations.py:168",
+    "routers/quotations.py:184",
+    "routers/quotations.py:215",
+    "routers/quotations.py:288",
+    "routers/customers.py:72"
+   ],
+   "write": [
+    "routers/quotations.py:107",
+    "routers/quotations.py:162",
+    "routers/quotations.py:178",
+    "routers/quotations.py:268"
+   ]
+  },
+  "segments": {
+   "read": [
+    "routers/growth.py:118",
+    "routers/growth.py:139",
+    "routers/growth.py:150",
+    "routers/growth.py:157",
+    "routers/growth.py:163",
+    "routers/campaigns.py:62",
+    "services/campaigns.py:18"
+   ],
+   "write": [
+    "routers/growth.py:130",
+    "routers/growth.py:156",
+    "routers/growth.py:166"
+   ]
+  },
+  "sequence_enrollments": {
+   "read": [
+    "routers/campaigns.py:51",
+    "routers/campaigns.py:108",
+    "services/sequences.py:19",
+    "services/sequences.py:85"
+   ],
+   "write": [
+    "routers/campaigns.py:100",
+    "routers/campaigns.py:110",
+    "services/sequences.py:30",
+    "services/sequences.py:93",
+    "services/sequences.py:108"
+   ]
+  },
+  "sequences": {
+   "read": [
+    "routers/campaigns.py:27",
+    "routers/campaigns.py:58",
+    "routers/campaigns.py:82",
+    "routers/campaigns.py:91",
+    "routers/campaigns.py:97",
+    "services/sequences.py:89",
+    "services/automation.py:166"
+   ],
+   "write": [
+    "routers/campaigns.py:39",
+    "routers/campaigns.py:90",
+    "routers/campaigns.py:99",
+    "services/sequences.py:31",
+    "services/sequences.py:103"
+   ]
+  },
+  "service_types": {
+   "read": [
+    "routers/service_types.py:32",
+    "routers/service_types.py:40",
+    "routers/service_types.py:58",
+    "routers/service_types.py:64",
+    "routers/service_types.py:73",
+    "routers/maintenance.py:108"
+   ],
+   "write": [
+    "routers/service_types.py:49",
+    "routers/service_types.py:63",
+    "routers/service_types.py:76"
+   ]
+  },
+  "sessions": {
+   "read": [
+    "dependencies.py:33",
+    "routers/auth.py:86"
+   ],
+   "write": [
+    "dependencies.py:37",
+    "routers/auth.py:67",
+    "routers/auth.py:87"
+   ]
+  },
+  "settings": {
+   "read": [
+    "routers/bookings.py:30",
+    "routers/bookings.py:138",
+    "routers/settings.py:29",
+    "routers/payroll.py:199",
+    "routers/quotations.py:36",
+    "routers/reports.py:55",
+    "routers/reports.py:79",
+    "routers/pricing.py:17",
+    "routers/public.py:109",
+    "routers/public.py:116",
+    "routers/public.py:203",
+    "services/analytics.py:398",
+    "services/pricing.py:61",
+    "services/growth.py:32",
+    "services/wa_payload.py:25",
+    "services/whatsapp.py:181",
+    "services/whatsapp.py:192",
+    "services/whatsapp.py:206",
+    "services/whatsapp.py:310",
+    "services/onboarding.py:48",
+    "services/subcharter.py:71"
+   ],
+   "write": [
+    "routers/settings.py:48",
+    "routers/growth.py:108",
+    "routers/whatsapp.py:57",
+    "routers/whatsapp.py:75",
+    "routers/whatsapp.py:88",
+    "services/analytics.py:414"
+   ]
+  },
+  "subcharters": {
+   "read": [
+    "routers/subcharters.py:47",
+    "routers/subcharters.py:122",
+    "routers/subcharters.py:131",
+    "routers/subcharters.py:152",
+    "routers/subcharters.py:159",
+    "routers/subcharters.py:167",
+    "routers/subcharters.py:180",
+    "routers/subcharters.py:194",
+    "routers/subcharters.py:206",
+    "routers/subcharters.py:216",
+    "routers/partners.py:53",
+    "routers/partners.py:86",
+    "routers/partners.py:116",
+    "services/subcharter.py:39",
+    "services/subcharter.py:60"
+   ],
+   "write": [
+    "routers/subcharters.py:111",
+    "routers/subcharters.py:151",
+    "routers/subcharters.py:165",
+    "routers/subcharters.py:192",
+    "routers/subcharters.py:214"
+   ]
+  },
+  "testimonials": {
+   "read": [
+    "routers/public.py:91",
+    "routers/public.py:129"
+   ],
+   "write": []
+  },
+  "trip_shares": {
+   "read": [
+    "routers/shares.py:39",
+    "routers/shares.py:73",
+    "routers/shares.py:78",
+    "routers/shares.py:85",
+    "routers/public.py:229"
+   ],
+   "write": [
+    "routers/shares.py:66",
+    "routers/shares.py:76",
+    "routers/shares.py:87",
+    "routers/public.py:241"
+   ]
+  },
+  "trips": {
+   "read": [
+    "routers/trips.py:39",
+    "routers/trips.py:54",
+    "routers/trips.py:82",
+    "routers/trips.py:93",
+    "routers/trips.py:109",
+    "routers/dispatch.py:66",
+    "routers/dispatch.py:174",
+    "routers/dispatch.py:197",
+    "routers/dispatch.py:220",
+    "routers/dispatch.py:231",
+    "routers/dispatch.py:258",
+    "routers/expenses.py:43",
+    "routers/shares.py:49",
+    "routers/public.py:237",
+    "routers/driver.py:69",
+    "routers/driver.py:85",
+    "routers/driver.py:91",
+    "routers/driver.py:128",
+    "routers/driver.py:142",
+    "routers/driver.py:173",
+    "routers/driver.py:180",
+    "routers/driver.py:222",
+    "routers/driver.py:232",
+    "routers/driver.py:256",
+    "routers/driver.py:271",
+    "routers/driver.py:301",
+    "routers/locations.py:39",
+    "services/driver_report.py:49",
+    "services/finance.py:76",
+    "services/finance.py:111",
+    "services/trips.py:68",
+    "services/trips.py:76",
+    "services/finance_automation.py:81",
+    "services/payroll.py:65",
+    "services/analytics.py:185",
+    "services/analytics.py:232",
+    "services/gps.py:110",
+    "services/subcharter.py:95"
+   ],
+   "write": [
+    "routers/trips.py:108",
+    "routers/dispatch.py:155",
+    "routers/dispatch.py:164",
+    "routers/dispatch.py:216",
+    "routers/dispatch.py:227",
+    "routers/dispatch.py:255",
+    "routers/driver.py:106",
+    "routers/driver.py:111",
+    "routers/driver.py:113",
+    "routers/driver.py:155",
+    "routers/driver.py:253",
+    "routers/driver.py:266",
+    "routers/driver.py:298",
+    "routers/locations.py:78",
+    "services/finance.py:82",
+    "services/gps.py:165"
+   ]
+  },
+  "user_onboarding": {
+   "read": [
+    "services/onboarding.py:63"
+   ],
+   "write": [
+    "routers/onboarding.py:32",
+    "routers/onboarding.py:45",
+    "routers/onboarding.py:57"
+   ]
+  },
+  "users": {
+   "read": [
+    "dependencies.py:39",
+    "routers/users.py:26",
+    "routers/users.py:36",
+    "routers/users.py:56",
+    "routers/users.py:65",
+    "routers/users.py:86",
+    "routers/users.py:105",
+    "routers/leads.py:29",
+    "routers/leads.py:129",
+    "routers/leads.py:189",
+    "routers/leads.py:239",
+    "routers/growth.py:21",
+    "routers/inbox.py:22",
+    "routers/inbox.py:107",
+    "routers/auth.py:44",
+    "routers/auth.py:89",
+    "services/growth.py:117",
+    "services/crm.py:19",
+    "services/crm.py:29",
+    "services/crm.py:31"
+   ],
+   "write": [
+    "routers/users.py:48",
+    "routers/users.py:104",
+    "routers/auth.py:59"
+   ]
+  },
+  "vehicles": {
+   "read": [
+    "routers/subcharters.py:59",
+    "routers/subcharters.py:87",
+    "routers/subcharters.py:147",
+    "routers/bookings.py:104",
+    "routers/quotations.py:223",
+    "routers/dispatch.py:119",
+    "routers/pricing.py:36",
+    "routers/shares.py:55",
+    "routers/maintenance.py:29",
+    "routers/maintenance.py:164",
+    "routers/maintenance.py:187",
+    "routers/maintenance.py:210",
+    "routers/public.py:49",
+    "routers/public.py:55",
+    "routers/public.py:127",
+    "routers/public.py:250",
+    "routers/driver.py:159",
+    "routers/driver.py:195",
+    "routers/locations.py:80",
+    "routers/partners.py:55",
+    "routers/partners.py:88",
+    "routers/vehicles.py:20",
+    "routers/vehicles.py:33",
+    "routers/vehicles.py:41",
+    "routers/vehicles.py:68",
+    "routers/vehicles.py:78",
+    "routers/vehicles.py:88",
+    "routers/vehicles.py:105",
+    "routers/vehicles.py:111",
+    "routers/vehicles.py:123",
+    "routers/vehicles.py:132",
+    "routers/dashboard.py:24",
+    "routers/dashboard.py:45",
+    "services/trips.py:31",
+    "services/finance_automation.py:100",
+    "services/preventive.py:82",
+    "services/analytics.py:210",
+    "services/maintenance.py:52",
+    "services/onboarding.py:51",
+    "services/gps.py:106",
+    "services/gps.py:233",
+    "services/gps.py:284",
+    "services/gps.py:321",
+    "services/gps.py:327",
+    "services/gps.py:336",
+    "services/gps.py:340",
+    "services/subcharter.py:41"
+   ],
+   "write": [
+    "routers/dispatch.py:167",
+    "routers/maintenance.py:128",
+    "routers/maintenance.py:162",
+    "routers/maintenance.py:166",
+    "routers/maintenance.py:195",
+    "routers/maintenance.py:212",
+    "routers/driver.py:115",
+    "routers/driver.py:162",
+    "routers/locations.py:82",
+    "routers/vehicles.py:60",
+    "routers/vehicles.py:122",
+    "routers/vehicles.py:137",
+    "services/gps.py:151",
+    "services/gps.py:335",
+    "services/gps.py:343"
+   ]
+  },
+  "workshops": {
+   "read": [
+    "routers/workshops.py:31",
+    "routers/workshops.py:58",
+    "routers/workshops.py:64",
+    "routers/workshops.py:73",
+    "routers/maintenance.py:114"
+   ],
+   "write": [
+    "routers/workshops.py:49",
+    "routers/workshops.py:63",
+    "routers/workshops.py:76"
+   ]
+  }
+ },
+ "classification": {
+  "phantom_reads_code_only": [
+   "geocode_cache",
+   "partner_settlements",
+   "user_onboarding"
+  ],
+  "written_never_read": [
+   "audit_logs",
+   "counters"
+  ],
+  "db_only_not_in_code": [
+   "articles",
+   "packages",
+   "promos"
+  ],
+  "empty_collections": [
+   "sequence_enrollments"
+  ]
+ }
+}

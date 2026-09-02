@@ -1,0 +1,19 @@
+{
+  "summary": "Iterasi 111: uji 2 fitur baru (rate fee default per driver + kelola master Add-on) end-to-end. Backend: 18/18 pytest LULUS (/app/backend/tests/test_i111_fee_default_addon_master.py) — PATCH drivers.default_fee_rate=175000 persist, 0 -> null, negatif 422, GET /api/drivers memuat field, create driver dgn default_fee_rate; addons create/duplikat 409/patch label+nominal/nonaktif hilang dari GET /addons tapi ada di ?include_inactive=true/aktifkan/delete + 404 ulang; RBAC marketing 403 pada PATCH /api/drivers/{id}, PATCH & DELETE /api/addons/{id}. Frontend (Playwright, owner@demo.local): df-default-fee terlihat + nilai 175000 bertahan setelah dialog dibuka ulang; PREFILL Assign pada BK-0073 (trip belum ada fee) otomatis 175000 + estimasi 'Rp 350.000 (Rp 175.000 x 2 hari)' dan tetap bisa diubah manual (133000); PRIORITAS rate trip pada BK-0074 tampil 120000 (bukan default 175000); panel md-addon-panel: tambah/edit nominal (48.000)/nonaktifkan (badge Nonaktif) -> hilang dari bf-addon-select-0, aktifkan kembali -> muncul lagi + prefill label+nominal ke form, hapus (konfirmasi) -> baris hilang. Regresi: assign rate manual 99000 tersimpan sesuai ketikan (lalu dipulihkan 120000); form booking multi add-on subtotal Rp 75.000 benar. TIDAK ada error konsol/500.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {"ui_bugs": [], "integration_issues": [], "design_issues": []},
+  "test_report_links": ["/app/backend/tests/test_i111_fee_default_addon_master.py", "/app/test_reports/pytest/i111.xml"],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "addons.py PATCH memakai filter `if v is not None` sehingga tidak ada jalan mengosongkan default_amount ke 0 lewat PATCH parsial-null; saat ini aman karena UI selalu mengirim angka, tapi catat sebagai batasan.",
+    "AssignTripDialog memuat /dispatch/{id}/detail setiap dialog dibuka tanpa flag loading; bila jaringan lambat, prefill default driver bisa terisi lebih dulu lalu ditimpa rate trip (urutan sudah benar karena tripHasFee menang), namun user bisa melihat nilai berkedip sebentar — kosmetik saja."
+  ],
+  "updated_files": ["/app/backend/tests/test_i111_fee_default_addon_master.py"],
+  "success_rate": {"backend": "100% (18/18)", "frontend": "100% (semua flow yang diminta lulus)"},
+  "seed_data_creation": "Booking BK-0073 (tanpa fee, kemudian di-assign?) dan BK-0074 pada 2026-12-08 (Bandung->Yogyakarta, driver 'Driver Dua', rate trip 120000). BK-0073 dibiarkan BELUM di-assign untuk uji prefill. Driver Satu & Driver Dua default_fee_rate=175000. Master add-on uji sudah dibersihkan (UITEST Tol Cipali dihapus); masih ada sisa 'TEST_Parkir Bandara *' dari iterasi sebelumnya.",
+  "should_call_test_agent_after_fix": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Jalankan test_i111_fee_default_addon_master.py SERIAL (-n 0) karena STATE dibagi antar kelas; tanggal booking diacak Des 2026 agar tidak bentrok armada. Destinasi booking WAJIB dari master (Bali/Bandung/Jakarta/Yogyakarta/Gunung Bromo/Dataran Tinggi Dieng) — 'Pangandaran' ditolak 400. Board dispatch: set input dispatch-date. Untuk cek badge 'Nonaktif' pada baris add-on, jangan pakai inner_text baris (tombol 'Nonaktifkan' mengandung substring yang sama) — periksa label tombol toggle.",
+  "test_credentials": "owner@demo.local / demo12345, marketing@demo.local / demo12345",
+  "rca_of_the_issue": "Tidak ada defect produk ditemukan. Dua kegagalan awal murni masalah data uji milik saya sendiri (destinasi non-master 400, bentrok armada/driver pada tanggal berulang) dan satu asersi Playwright yang keliru (substring 'Nonaktif' pada label tombol) — semuanya sudah diperbaiki di sisi test."
+}

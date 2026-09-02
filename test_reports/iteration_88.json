@@ -1,0 +1,94 @@
+{
+  "summary": "Completed focused regression testing of 3 critical flows (iteration_86 & 87 had 0 bugs): (1) Public booking flow end-to-end with glass CSS, promo application, and payment instructions; (2) Vehicle publish_to_web toggle with API verification; (3) Hold expired report panel with KPI validation. All flows passed successfully with 0 bugs found.",
+  
+  "backend_issues": {
+    "critical_bugs": [],
+    "flaky_endpoints": []
+  },
+  
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  
+  "passed_tests": [
+    "✓ PUBLIC BOOKING FLOW (/booking) - Complete end-to-end flow: date selection (50-52 days out), unit search (3 units found), unit selection, promo list display, promo application (GATHERING500: Rp 5,850,000 → Rp 5,350,000), customer details form, booking submission → Generated booking code BK-0068, payment instructions displayed with 'PT RahazaTrans' as account holder",
+    "✓ PROMO SYSTEM - Promo list [data-testid='booking-promo-list'] displayed correctly, promo button clickable, total amount decreased by Rp 500,000 after applying GATHERING500 promo",
+    "✓ GLASS CSS SYSTEM - Glass morphism effects visible throughout booking wizard, text readable in both light and dark modes (tested via [data-testid='nav-theme-switch'])",
+    "✓ BRAND RENAME - 'RahazaTrans' displayed correctly in: login page title, navigation header, payment instructions bank account holder ('PT RahazaTrans')",
+    "✓ VEHICLE PUBLISH TOGGLE (Story H) - Login as owner@demo.local successful, vehicles page loaded, vehicle veh_8674306bdf2a43ac tested: (1) Turned OFF publish_to_web → vehicle disappeared from GET /api/public/fleet, (2) Turned ON publish_to_web → vehicle reappeared in GET /api/public/fleet, (3) Restored to original published state",
+    "✓ HOLD EXPIRED REPORT - Reports page [data-testid='reports-hold-expired'] displayed with all KPIs containing valid numbers (no NaN/empty): Hold Hangus: 2, Potensi Hilang: Rp 4,200,000, Sudah Unggah Bukti: 1, Tingkat Hangus: 66.7%",
+    "✓ HOLD REPORT API MATCH - UI values match GET /api/reports/hold-expired: count=2, potential_value=4200000, with_proof=1, expiry_rate=66.7",
+    "✓ HOLD REPORT CSV EXPORT - CSV export button [data-testid='hold-export'] present and functional",
+    "✓ NO ERRORS - No 5xx errors, no console errors, no page errors during all 3 test flows",
+    "✓ DARK MODE - Theme toggle working, text readable in dark mode on booking page"
+  ],
+  
+  "test_report_links": [
+    "/app/test_reports/iteration_88.json",
+    "Screenshots: .screenshots/booking_*.png, .screenshots/test2_*.png, .screenshots/test3_*.png"
+  ],
+  
+  "action_item_for_main_agent": "",
+  
+  "updated_files": [],
+  
+  "success_percentage": {
+    "backend": "100% (3/3 flows tested: booking submission API, vehicle update API, hold-expired report API)",
+    "frontend": "100% (3/3 flows tested: booking wizard UI, vehicle form dialog, reports page)",
+    "integration": "100% (All backend-frontend integrations working: booking flow, promo application, vehicle publish toggle, report data display)"
+  },
+  
+  "should_call_test_agent_after_fix": false,
+  "should_main_agent_test_itself": false,
+  
+  "detailed_test_results": {
+    "test_1_booking_flow": {
+      "status": "PASSED",
+      "booking_code_generated": "BK-0068",
+      "promo_applied": "GATHERING500",
+      "discount_amount": "Rp 500,000",
+      "total_before_promo": "Rp 5,850,000",
+      "total_after_promo": "Rp 5,350,000",
+      "payment_instructions": "Displayed with PT RahazaTrans as account holder",
+      "glass_css": "Visible and working",
+      "dark_mode": "Tested and working"
+    },
+    "test_2_vehicle_publish": {
+      "status": "PASSED",
+      "vehicle_id": "veh_8674306bdf2a43ac",
+      "initial_state": "published",
+      "toggle_off_result": "Vehicle disappeared from public fleet API",
+      "toggle_on_result": "Vehicle reappeared in public fleet API",
+      "final_state": "published (restored)"
+    },
+    "test_3_hold_report": {
+      "status": "PASSED",
+      "ui_kpis": {
+        "count": "2",
+        "potential_value": "Rp 4,200,000",
+        "with_proof": "1",
+        "expiry_rate": "66.7%"
+      },
+      "api_kpis": {
+        "count": 2,
+        "potential_value": 4200000,
+        "with_proof": 1,
+        "expiry_rate": 66.7
+      },
+      "csv_export_button": "Present",
+      "data_match": "UI matches API perfectly"
+    }
+  },
+  
+  "notes": [
+    "All 3 critical flows that were NOT tested in iterations 86 & 87 have now been tested and passed",
+    "Seed data note confirmed: Aug 10-17, 2026 dates are intentionally full (BK-0003/BK-0004 using V-01/V-02), so test used Oct 1-3, 2026 dates",
+    "BK-0009/BK-0010 in seed are intentionally hold-expired status as documented",
+    "Date inputs use datetime-local type without name attribute as documented",
+    "All Radix Select components working correctly (click trigger then click option)",
+    "WhatsApp provider is MOCKED as documented (booking confirmation WA not actually sent)",
+    "Test booking BK-0068 created during testing - can be left in system or cleaned up"
+  ]
+}

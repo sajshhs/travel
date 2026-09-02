@@ -1,0 +1,42 @@
+{
+  "summary": "Iteration 108 — tested the redesigned public fleet detail page (/fleet/:id) 360° features + new backend fields (exterior_frames, rental_terms) + CMS Exterior-360 editor. Backend: 9/9 pytest passed (public fleet list/detail contain 36 frames & 6 terms for Hiace, empty frames for Elf, static frame assets 200 image/jpeg, owner PATCH round-trip persisted and restored to original 36 frames + 6 terms, unauthenticated PATCH blocked, no _id leakage, 404 for unknown id). Frontend: hero 'Interior 360°' + fleet-hero-360-start opens photo-sphere-tour with 3 scene tabs; gallery thumbnails/prev/next/lightbox work; facilities (9 items) & terms (6 items) tabs work; WA/booking/quotation CTAs have correct hrefs; Exterior360 fully functional (initial 1/36, drag 1->16, slider scrub, prev/next ±1, wrap-around 1->36, auto-rotate runs and pause stops, aria-label switches Jeda/Putar otomatis, 36 frames preloaded with progress overlay); Elf unit correctly hides fleet-exterior-360 while hero tour still works; catalog /fleet regression OK (3 cards, click navigates to detail). CMS: owner login -> /app/vehicles -> edit Hiace -> Konten Web panel (open by default for units with media) shows vf-ext360-pattern/count/start/generate, generator produced 8 frames (f-1..f-8 visible in GalleryManager + toast '8 frame dibuat dari pola') and vf-ext360-count-info says '8 frame'; vf-rental-terms prefilled with 6 lines; cancelled without saving — demo data verified intact (36 frames + 6 terms). No console errors on any page. Only one real defect found: unreadable active scene-tab label in the hero tour (contrast).",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [
+      {
+        "screen": "FleetDetail hero Interior 360° (PhotoSphereTour scene tabs)",
+        "issues": [
+          "Active scene tab label is invisible: FleetDetail passes className '[&_button]:text-white/80' to PhotoSphereTour, which overrides the active tab's dark text. Computed style on [data-testid='tour-scene-depan'] = color rgba(255,255,255,0.8) on background rgb(239,242,245) (~1.1:1 contrast) — 'Kabin Depan' is unreadable on desktop and mobile. Suggested fix: scope the override to inactive tabs only (e.g. use data-[state]/aria-selected variants) or drop the [&_button] override.",
+          "Minor: on mobile (390px) the ext360-counter badge sits above the image on the card background; readable but visually detached from the frame."
+        ]
+      }
+    ]
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_fleet_360_i108.py",
+    "/app/test_reports/pytest/i108_results.xml"
+  ],
+  "action_items": [
+    "Fix hero tour scene-tab contrast in /app/frontend/src/features/public/FleetDetail.jsx line ~112 ([&_button]:text-white/80 makes the ACTIVE tab label white-on-white)."
+  ],
+  "critical_code_review_comments": [
+    "VehicleFormDialog useEffect depends on the `initial` object identity (line 56-82); if the vehicles list refetches/polls while the dialog is open, form state and showWeb are reset and in-progress edits (e.g. generated 360 frames) would be silently discarded. Consider keying on initial.id only.",
+    "Exterior360 preloads ALL frames before enabling interaction (ready flag). 36 frames is fine, but the editor allows up to 120 — consider progressive readiness (enable after first N frames) to avoid a long loading overlay for large sets.",
+    "Exterior360 img.onerror = img.onload means broken frame URLs still count as 'loaded' and render as broken images with no user-visible warning; acceptable but worth a fallback."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_fleet_360_i108.py (new test file only; no application code changed)"
+  ],
+  "success_rate": {"backend": "100% (9/9)", "frontend": "100% functional (1 design/contrast defect)"},
+  "seed_data_creation": "None. PATCH round-trip test used the existing Hiace Premio 01 and restored the original 36 exterior_frames + 6 rental_terms (verified via GET /api/public/fleet). CMS dialog changes were cancelled, not saved. INV-CLEAN-01 respected; gate.sh and seeding were NOT run.",
+  "should_call_test_agent_after_fix": false,
+  "should_main_agent_self_test": true,
+  "test_credentials": "/app/memory/test_credentials.md is MISSING (only BUG_REGISTRY/INVARIANTS/PRD etc. exist in /app/memory). Used credentials from the review request: owner@demo.local / demo12345 at /app/login is NOT a route — the ERP login route is /app/login (page testid login-page, inputs login-email-input / login-password-input / login-submit-button). Login succeeded and redirected to /app/dashboard.",
+  "context_for_next_testing_agent": "Vehicle IDs this session: Hiace Premio 01 = veh_3642e9b74f8f4e09 (36 frames), Hiace Premio 02 = veh_53347bab80da418e, Isuzu Elf Long 01 = veh_a09be8838c564b11 (0 frames). Always re-fetch IDs from GET /api/public/fleet. Notes for Playwright: the CMS 'Konten Web' section is ALREADY EXPANDED by default for units that have media (VehicleFormDialog line 77) — do not click vf-toggle-web blindly or you collapse it. GalleryManager renders generated frames as thumbnails with filename labels (not input values), so assert on vf-ext360-count-info text instead of input values. Slider scrub is testable via clicking the [role='slider'] thumb then ArrowRight.",
+  "rca_of_the_issue": "Hero scene-tab contrast: FleetDetail applies a Tailwind arbitrary-variant class '[&_button]:text-white/80' to PhotoSphereTour so that controls read well on the dark hero; this selector also hits the active scene tab, whose own light background (rgb(239,242,245)) is meant for dark text, producing white-on-white text."
+}

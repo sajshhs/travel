@@ -1,0 +1,28 @@
+{
+  "summary": "E2E testing wiring CMS Page Builder + Site Settings pada /app/cms. Backend 17/17 pytest passed (public/private guards, RBAC driver, invalid section type 400, all-disabled 400, roundtrip PUT->GET->public). Frontend: login owner OK -> /app/dashboard; /app/cms menampilkan tab baru 'Halaman' (content-tab-pages), 'Pengaturan Situs' (content-tab-site), 'Tema Situs', 'Pengalihan'. Page Builder render 10 section untuk Beranda dengan pb-toggle-*, pb-up-*, pb-down-*, pb-edit-*, pb-save; Radix pb-page-select ke pb-page-opt-about memuat 3 section halaman Tentang. Save hero title override 'Uji Page Builder E2E' -> toast sukses -> muncul di situs publik / dan API /api/public/pages/home. Site Settings ss-name/phone/email/tagline + ss-save toast OK, PUT /api/site/settings persisten. RBAC driver: akses /app/cms otomatis redirect ke /app/driver-workspace (denied). Regresi publik: /, /fleet, /destinations, /packages, /promo, /blog, /contact, /about semua render tanpa halaman blank.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_site_pages_e2e.py",
+    "/app/test_reports/pytest/site_pages_e2e.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "PageBuilderPanel: label toggle memakai state current ('Tampil' vs 'Disembunyikan'). Pertimbangkan menambah atribut data-enabled untuk memudahkan asserstion otomatis.",
+    "SitePageUpdate: total jumlah section per halaman tidak dibatasi (items dalam field data sudah dibatasi 30 lewat _clean_data). Rekomendasi tambah cap sections<=30 di schema untuk cegah payload berlebihan."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_site_pages_e2e.py"
+  ],
+  "success_rate": {"backend": "100% (17/17)", "frontend": "100% (semua flow inti terpenuhi)"},
+  "test_credentials": "owner@demo.local / demo12345 (owner); driver@demo.local / demo12345 (denied)",
+  "seed_data_creation": "Tidak ada. Semua override test (hero title, tagline, section disabled) direstore di akhir. Verifikasi akhir GET /api/public/pages/home -> 10 section (default).",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Fitur Page Builder + Site Settings sudah wired end-to-end. data-testid tersedia di PageBuilderPanel: page-builder-panel, pb-page-select, pb-page-opt-{slug}, pb-preview, pb-save, pb-empty, pb-add-type, pb-add-opt-{type}, pb-add-btn, pb-section-{id}, pb-up-{id}, pb-down-{id}, pb-toggle-{id}, pb-edit-{id}, pb-delete-{id}, pb-field-{sectionId}-{fieldKey} (perhatikan pattern lengkap dengan sectionId — bukan hanya pb-field-title). Untuk toggle+save di UI, tambahkan wait 800-1200ms setelah click Halaman tab agar load() async selesai sebelum interaksi berikutnya (race condition dapat menyebabkan klik pada DOM yang segera diremount).",
+  "rca of the issue": "Tidak ada bug produk. Test awal sempat memperlihatkan 'toggle off tidak persisten di public'; root cause = race condition skrip Playwright: click pb-toggle dilakukan segera setelah tab-switch sebelum PageBuilderPanel selesai reload state dari backend (load() async). Verifikasi standalone dengan wait cukup + observasi label 'Tampil'/'Disembunyikan' -> toggle+save berfungsi normal. Backend pytest test_put_home_roundtrip_and_public_reflects PASS mengkonfirmasi lapisan API bekerja benar (section yang enabled=false hilang dari /api/public/pages/home)."
+}

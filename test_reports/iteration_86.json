@@ -1,0 +1,52 @@
+{
+  "summary": "Comprehensive testing of UI/UX improvements (glass modal contrast, trip estimator, new page sections) and brand rename to RahazaTrans. Found 1 CRITICAL bug in dark mode theme implementation.",
+  
+  "backend_issues": {
+    "critical_bugs": [],
+    "flaky_endpoints": []
+  },
+  
+  "frontend_issues": {
+    "critical_bugs": [
+      {
+        "component": "ThemeContext + Exit Intent Modal",
+        "issue": "Dark mode CSS variables not applied to portaled modals - ThemeContext only sets .dark class but NOT data-surface='public' and data-theme='azure' attributes on <html>. This causes .glass-modal to use light mode colors in dark mode (dark text on transparent/light background = UNREADABLE).",
+        "affected_files": ["/app/frontend/src/context/ThemeContext.js", "/app/frontend/src/components/public/ExitIntentModal.jsx"],
+        "evidence": "Modal background: rgba(0,0,0,0) (transparent), text: rgb(10,10,10) (dark) in dark mode. CSS var --glass-bg-strong is EMPTY because selector .dark [data-surface='public'][data-theme='azure'] doesn't match.",
+        "fix_required": "ThemeContext must set document.documentElement.setAttribute('data-surface', 'public') and setAttribute('data-theme', preset) in addition to adding .dark class",
+        "fix_priority": "CRITICAL",
+        "user_reported": true
+      }
+    ],
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  
+  "passed_tests": [
+    "Backend: All 11 API tests passed (100%) - company name, fleet, booking config, destinations, packages, promos, trip estimate, articles, auth & RBAC",
+    "ITEM 1b: Trip estimator contrast on hero - PASSED (dark: rgba(15,22,36,0.93) bg + light text; light: rgba(252,252,253,0.93) bg + dark text)",
+    "ITEM 2: Fleet page sections - PASSED (quick actions with real data: 3 units, 2 types, 30% DP; filter works; VehicleTypeCompare with correct prices; AirportRouteStrip; PromoStrip with GATHERING500; FAQ; CTA band; standards; trip estimator)",
+    "ITEM 2b: Deep link airport route - PASSED (clicking BDO-CGK navigates to /booking?service=airport_transfer&route=trt_30e4b30c919f45da)",
+    "ITEM 3: Destinations page - PASSED (DestinationFacts with Bali best_time 'April – Oktober'; PackageStrip with Bromo 4,500,000; Narrative; FAQ accordion works; CTA band; region filter)",
+    "ITEM 4: Trip calculator - PASSED (HowItWorks; empty state with rate cards; VehicleTypeCompare; AirportRouteStrip; PromoStrip; FAQ; CTA band; calculation works: 3 days Bromo = 5,850,000 total, 1,755,000 DP 30%)",
+    "ITEM 5: Blog CTA band - PASSED (background NOT transparent: rgb(20,30,52) in light, rgb(60,178,221) in dark; buttons work)",
+    "ITEM 6: Chat widget positioning - PASSED (desktop 1920x800: panel y=264px > header bottom 91px, fits viewport; mobile 390x640: FAB above sticky CTA, panel doesn't overlap header or FAB)",
+    "ITEM 7: Brand rename - PASSED (navbar 'RahazaTrans', page title contains 'RahazaTrans', footer contains 'RahazaTrans', API /public/company returns name='RahazaTrans', chat header 'Chat dengan RahazaTrans')"
+  ],
+  
+  "test_report_links": ["/app/backend_test.py"],
+  
+  "action_item_for_main_agent": "CRITICAL FIX REQUIRED: ThemeContext.js must set data-surface='public' and data-theme='{preset}' attributes on <html> element (in addition to .dark class) so that dark mode CSS variables from public-themes.css are applied to portaled modals. Current bug: Exit intent modal has dark text on transparent/light background in dark mode because --glass-bg-strong is empty. Fix: In ThemeContext useEffect (line 40-45), add: root.setAttribute('data-surface', 'public'); root.setAttribute('data-theme', preset); and in cleanup (line 48), add: root.removeAttribute('data-surface'); root.removeAttribute('data-theme');",
+  
+  "updated_files": ["/app/backend_test.py"],
+  
+  "success_percentage": {
+    "backend": "100% (11/11 tests passed)",
+    "frontend_ui": "88% (7/8 items passed, 1 critical dark mode bug)",
+    "overall": "94%"
+  },
+  
+  "should_call_test_agent_after_fix": true,
+  "should_main_agent_test_itself": false
+}

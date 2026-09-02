@@ -1,0 +1,38 @@
+{
+  "summary": "Iteration 105 — uji Broadcast WA nyata (backend routers/broadcasts.py + UI tab CRM Broadcast) & regresi INV-BOOK-02. Backend: 12/12 pytest lulus (RBAC owner/ops boleh, driver 403, tanpa token 401/403; create+persist; validasi 422; send via provider mock; progres sent_count=1; klaim atomik → 400 'Broadcast sudah/sedang dikirim'; 404 broadcast tak dikenal; pesan tercatat di Inbox channel whatsapp dgn {customer_name}/{company} SUDAH dirender + source='broadcast'; POST /api/public/booking/submit dengan total_amount=1 → diabaikan, total = hitungan server). Frontend: login owner → /app/crm → tab-crm-broadcast tampil & broadcast-panel muncul dgn seed 'Promo Akhir Pekan' (draft); buat broadcast via broadcast-new → dialog → bc-title/bc-message ({customer_name}) → segmen Hilang+Manual → bc-submit → tampil draft '1 penerima'; klik broadcast-send-{id} → toast 'Broadcast dimulai — 1 penerima', status 'sent', broadcast-progress-{id} '1 terkirim', tombol Kirim hilang; tab Pipeline & Reminder render normal tanpa error. Data uji dibersihkan (DB kembali 7 leads, 1 broadcast seed).",
+  "backend_issues": {
+    "critical": [],
+    "minor": [
+      {"endpoint": "POST /api/broadcasts/{id}/send", "issue": "Worker via asyncio.create_task tanpa recovery: bila backend restart/reload saat status 'sending', dokumen tetap 'sending' selamanya (tombol Kirim Ulang tidak muncul, UI polling 4s jalan terus). Perlu reaper startup: sending + send_started_at basi → failed."},
+      {"endpoint": "/api/broadcasts", "issue": "Tidak ada endpoint DELETE/PATCH broadcast — draft salah ketik tidak bisa dihapus/diedit dari UI."},
+      {"endpoint": "/api/leads/{id}", "issue": "Tidak ada DELETE lead (pembersihan data uji harus lewat Mongo). Bukan regresi sesi ini."}
+    ]
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [
+      {"screen": "CRM · tab Broadcast", "issues": ["Label status tidak konsisten bahasa: pill menampilkan 'Draft' dan 'sent' (Inggris mentah) sementara 'sending' sudah dilokalkan jadi 'mengirim…'. Map sent→'Terkirim', failed→'Gagal'.", "Heading halaman tetap 'CRM · Pipeline Lead' saat tab Broadcast aktif (heading tidak mengikuti tab aktif)."]}
+    ]
+  },
+  "test_report_links": ["/app/backend/tests/test_broadcast_wa_i104.py", "/app/test_reports/pytest/i104.xml"],
+  "action_items": [
+    "Lokalkan label status broadcast (sent/draft/failed) di CrmBroadcast.jsx agar konsisten dengan 'mengirim…'",
+    "Tambahkan recovery broadcast 'sending' basi saat startup backend agar tidak macet permanen",
+    "Opsional: endpoint hapus/edit broadcast draft",
+    "Isi /app/memory/test_credentials.md dengan kredensial demo (masih template kosong)"
+  ],
+  "critical_code_review_comments": [
+    "routers/broadcasts.py: job background tidak persisten — restart proses = broadcast 'sending' menggantung; tambah reaper/resume idempoten (lacak indeks penerima terakhir agar resume tidak dobel kirim).",
+    "schemas_booking.py PublicBookingSubmit terverifikasi tanpa field harga: submit dgn total_amount=1 diabaikan, total = hitungan server (INV-BOOK-02 aman).",
+    "File test di /app/backend/tests memicu reload uvicorn (WatchFiles) saat diedit — pertimbangkan --reload-exclude tests/ supaya pengujian tidak me-restart backend di tengah kiriman broadcast."
+  ],
+  "updated_files": ["/app/backend/tests/test_broadcast_wa_i104.py"],
+  "success_rate": {"backend": "100% (12/12)", "frontend": "100% (semua alur broadcast + regresi tab)"},
+  "seed_data_creation": "Sementara: lead 'Penjaga INV-BC/UI Lead' (0800000xxxx), broadcast 'Penjaga INV-*', percakapan/pesan WA terkait — SEMUA sudah dihapus setelah uji.",
+  "should_call_test_agent_after_fix": false,
+  "should_main_agent_self_test": true,
+  "test_credentials": "/app/memory/test_credentials.md KOSONG (hanya template). Dipakai kredensial dari review request: owner@demo.local / ops@demo.local / driver@demo.local + demo12345 — semuanya valid.",
+  "context_for_next_testing_agent": "Provider WA aktif = mock (instan, tanpa jeda) → status 'sent' EXPECTED. Segmen terisolasi untuk uji: stage=lost + source=manual (tidak dipakai lead seed); buat lead phone 0800000xxxx lalu hapus via Mongo (tidak ada DELETE /api/leads). Pesan Inbox diambil dari GET /api/conversations/{id} (field 'messages'); GET /api/conversations/{id}/messages TIDAK ada (405). Jalankan: pytest /app/backend/tests/test_broadcast_wa_i104.py -o addopts=''.",
+  "rca_of_the_issue": "Tidak ada bug fungsional. Dua kegagalan awal murni artefak test (endpoint messages salah + lead uji lama tersisa karena tidak ada DELETE /api/leads) dan sudah diperbaiki di file test."
+}

@@ -1,0 +1,29 @@
+{
+  "summary": "Iterasi 100 - SSOT Batch 7 (GABUNG + BATALKAN GABUNGAN untuk TITIK JEMPUT kembar) diverifikasi menyeluruh. Backend 8/8 pytest LULUS (tests/backend_test_ssot_batch7.py) dalam 3.73s: (A) MERGE titik jemput: seed pkp_test_b7 + 1 booking origin=SRC_NAME -> POST /api/master/pickup-points/pkp_test_b7/merge {target_id: <Stasiun Bandung>} -> 200 cascade.bookings=1; booking.origin='Stasiun Bandung'; sumber active=false, merged_into=<tgt>, merged_moved.bookings=[bkg_test_b7]; GET /api/master/pickup-points baris sumber punya merged_into_name & merged_moved_count=1. (B) MERGE ke diri sendiri -> 400; MERGE dgn target nonaktif -> 400. (C) UNMERGE: POST /unmerge -> 200 {restored:{bookings:1}, skipped:0}; booking.origin kembali ke SRC_NAME; sumber active=true, merged_into hilang; RE-UNMERGE -> 400 'tidak sedang dalam status gabungan'. (D) UNMERGE dgn skipped: booking manual diubah ke 'Bandung' via Mongo sesudah merge -> unmerge -> restored.bookings=0, skipped=1, booking tetap 'Bandung'. (E) SELECTOR /api/pickup-points: SRC_NAME muncul sebelum merge, HILANG sesudah merge (active=false filtered), MUNCUL kembali sesudah unmerge. (F) Regresi tipis destinasi: merge+unmerge round-trip 'Penjaga INV-RegDest B7' -> Bali sukses. Cleanup: purge_guard_artifacts() dijalankan di test terakhir. Frontend LULUS end-to-end: login owner -> /app/masterdata -> panel Titik Jemput (md-pickup-panel) -> Bandara Soekarno-Hatta (id pkp_ef322...) -> md-merge -> md-merge-panel -> md-merge-target Select -> pilih Stasiun Bandung opt -> md-merge-confirm -> badge 'Digabung ->' muncul + tombol md-unmerge -> klik md-unmerge -> md-unmerge-panel -> md-unmerge-confirm -> badge hilang + tombol md-merge kembali. Regresi destinasi Jakarta -> Bali via UI: merge+unmerge round-trip sukses. Rename preview panel md-confirm untuk pickup 'Bandung' muncul dgn cascade info (dibatalkan agar tak mengubah data). Screenshot menampilkan toast 'Gabungan Jakarta dibatalkan - 0 dokumen kembali' hijau. Tidak ada bug fungsional di scope batch 7 maupun regresi destinasi.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {"ui_bugs": [], "integration_issues": [], "design_issues": []},
+  "test_report_links": [
+    "/app/backend/tests/backend_test_ssot_batch7.py",
+    "/app/test_reports/pytest/ssot_batch7.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "routers/pickup_points.merge_master_pickup_point (baris 128-129): list-comprehension async iterates find() dgn filter di dalam comprehension `if d.get('id')` — safe tapi meng-collect id sebelum update_many. Pola OK utk merge kecil; untuk ribuan booking pertimbangkan bulk_write. Non-blocker.",
+    "routers/pickup_points.unmerge_master_pickup_point (baris 159-165): loop O(N) update_one per booking id. Konsisten dgn pola destinasi (batch 6). Skipped counter tidak membedakan alasan (id tidak ada vs origin sudah diubah manual) — cukup utk MVP.",
+    "routers/pickup_points.master_pickup_points (baris 78-80): pop('merged_moved') sebelum kembali baik agar payload tidak membocorkan struktur internal; merged_moved_count sudah dihitung. Konsisten dgn master_destinations.",
+    "Frontend MasterData.jsx: MergePanel & Row sudah digeneralisasi via prop `kind` (pickup/dest), memakai `kind !== 'city'` untuk menampilkan Gabung — pola DRY yang baik. Selector siblings sudah exclude row itu sendiri + merged_into + inactive.",
+    "Selector /api/pickup-points hanya memfilter active:{$ne:false} — tidak memfilter merged_into eksplisit. Cukup karena merge selalu men-set active=false, tapi seandainya ada race/manual reset active=true tanpa unmerge, baris merged bisa bocor. Non-blocker (invarian aman via unmerge/merge flow)."
+  ],
+  "updated_files": [
+    "/app/backend/tests/backend_test_ssot_batch7.py",
+    "/app/test_reports/pytest/ssot_batch7.xml",
+    "/app/test_reports/iteration_100.json"
+  ],
+  "success_rate": {"backend": "100% (8/8)", "frontend": "100% (pickup merge+unmerge, dest regresi, rename preview)"},
+  "test_credentials": "owner@demo.local / demo12345",
+  "seed_data_creation": "Test data pymongo (sinkron): pkp_test_b7 'Penjaga INV-Stasiun Kembar TEST' + booking bkg_test_b7 origin sama; ditarget ke seed 'Stasiun Bandung'. Untuk regresi destinasi: dst_test_b7_reg 'Penjaga INV-RegDest B7' -> Bali. Semua dihapus di finally-block per test. Purge akhir via purge_guard_artifacts() di TestZZZCleanup.",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Jalankan: cd /app/backend && REACT_APP_BACKEND_URL=<url> python -m pytest tests/backend_test_ssot_batch7.py -v -o addopts=''. Pakai pymongo sinkron (bukan motor) untuk seed & cleanup Mongo agar tidak berbagi event-loop dgn app. Login FE: tombol 'Masuk' -> tunggu URL bukan '/login' (redirect ke /app/dashboard). Pilih target via [data-testid^='md-merge-target-opt-'] setelah membuka Select trigger dgn wait_for_timeout(400). Bandara Soekarno-Hatta id awalan 'pkp_'; Jakarta destinasi awalan 'dst_'. Iterasi ini iteration_100; SSOT batch berikutnya bisa memakai pola yang sama (Row/MergePanel via prop kind).",
+  "rca_of_the_issue": "N/A - tidak ada bug pada scope batch 7."
+}

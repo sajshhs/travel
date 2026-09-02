@@ -1,0 +1,63 @@
+{
+  "summary": "Phase 9 / Tahap B feature B1 Pricing Engine frontend testing completed. All core features working correctly: Settings page 'Aturan Harga (Pricing Engine)' section renders with all vehicle type rates and pricing fields, pre-populated from seeded data. Save and persistence verified. Booking form 'Hitung Otomatis' button successfully auto-calculates price via POST /api/pricing/quote, displays breakdown panel with line items. Public calculator works via Pricing Engine. All regression tests passed.",
+  "backend_issues": {},
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [],
+    "incomplete_tests": [
+      {
+        "test": "Driver RBAC - Settings access denial",
+        "issue": "Could not complete driver login to test Settings access denial",
+        "impact": "LOW - navigationConfig.js shows driver role excludes 'settings' from allowlist, so RBAC is correctly configured in code",
+        "fix_priority": "LOW"
+      }
+    ]
+  },
+  "passed_tests": [
+    "Login as owner at /app/login",
+    "Settings page accessible at /app/settings",
+    "Pricing Rules section 'Aturan Harga (Pricing Engine)' renders with data-testid='settings-pricing-rules'",
+    "All vehicle type rate inputs present: hiace_premio, hiace, elf, bus, avanza, default",
+    "All pricing fields present: driver_fee_per_day, fuel_per_km, toll_parking_per_day, weekend_surcharge_percent, holiday_surcharge_percent, dp_percent, rounding",
+    "Pre-populated values verified: hiace_premio=1500000, weekend_surcharge=20, holiday_surcharge=30, dp=30",
+    "Changed Hiace Premio rate to 1600000 and saved successfully",
+    "Success toast 'Pengaturan disimpan' appeared after save",
+    "Value persisted after page reload (1600000)",
+    "Bookings page accessible at /app/bookings",
+    "Booking form dialog opens via 'Buat Booking' button",
+    "Customer selection works in booking form",
+    "Vehicle selection works in booking form",
+    "Start and end datetime fields work",
+    "'Hitung Otomatis' button (data-testid='bf-auto-price') works",
+    "Base price auto-filled: Rp 6,150,000 for 3 days",
+    "Price breakdown panel (data-testid='bf-price-breakdown') renders with line items",
+    "Breakdown shows 'Harga dasar' total row",
+    "Success toast 'Harga dihitung' appeared after auto-price",
+    "Total display updates to Rp 6,150,000",
+    "Availability check works (shows conflict with BK-0001)",
+    "Submit button correctly disabled when booking conflict exists",
+    "Regression: 'Profil Perusahaan' section (settings-company) still renders",
+    "Regression: 'Harga & Kebijakan' section (settings-pricing) still renders",
+    "Regression: 'Kalender Operasional' section (settings-operational) still renders",
+    "Regression: Company section save works with success toast",
+    "Regression: Public calculator accessible via /kalkulator navigation",
+    "Regression: Public calculator form renders with all fields",
+    "Regression: Public calculator calculates estimate: Rp 7,050,000 for 3 days, 500km",
+    "Regression: Calculator shows valid price format with breakdown"
+  ],
+  "test_report_links": [
+    "/root/.emergent/automation_output/20260629_045342/console_20260629_045342.log",
+    "/root/.emergent/automation_output/20260629_045545/console_20260629_045545.log"
+  ],
+  "action_item_for_main_agent": "",
+  "updated_files": [],
+  "success_percentage": {
+    "frontend": "95%",
+    "integration": "100%",
+    "regression": "95%",
+    "overall": "97%"
+  },
+  "should_call_test_agent_after_fix": false,
+  "should_main_agent_test_itself": false
+}

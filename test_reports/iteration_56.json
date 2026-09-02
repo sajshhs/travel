@@ -1,0 +1,40 @@
+{
+  "summary": "Completed comprehensive backend testing of negative amount fix (INV-1 data integrity). Schema-level validation (Field ge=0) successfully prevents negative line-item amounts on bookings/quotations. All 18 tests passed (100% success rate).",
+  "backend_issues": {
+    "critical_bugs": [],
+    "flaky_endpoints": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "passed_tests": [
+    "PRIMARY FIX: POST /api/bookings with negative add_on correctly rejected with 422",
+    "PRIMARY FIX: POST /api/bookings/group with negative add_on correctly rejected with 422",
+    "PRIMARY FIX: POST /api/quotations with negative item correctly rejected with 422",
+    "PRIMARY FIX: PATCH /api/quotations/{id} with negative item correctly rejected with 422",
+    "REGRESSION: POST /api/bookings with positive add_on returns 200 with correct total (2000000 + 150000 = 2150000)",
+    "REGRESSION: Zero amount add_ons allowed (ge=0 permits 0)",
+    "REGRESSION: Booking without add_ons works correctly",
+    "SANITY: POST /api/expenses with negative amount correctly rejected with 422 (Field gt=0 unchanged)",
+    "SANITY: POST /api/expenses with zero amount correctly rejected with 422 (Field gt=0 unchanged)",
+    "SANITY: POST /api/payments with negative amount correctly rejected with 422 (Field gt=0 unchanged)",
+    "SANITY: POST /api/payments with zero amount correctly rejected with 422 (Field gt=0 unchanged)",
+    "Auth login works correctly",
+    "Customer, vehicle, driver data retrieval works"
+  ],
+  "test_report_links": [
+    "/app/backend/backend_test_negative_amounts.py"
+  ],
+  "action_item_for_main_agent": "",
+  "updated_files": [
+    "/app/backend/backend_test_negative_amounts.py"
+  ],
+  "success_percentage": {
+    "backend": "100%",
+    "frontend": "N/A (backend-only testing as requested)"
+  },
+  "should_call_test_agent_after_fix": false,
+  "should_main_agent_test_itself": false
+}

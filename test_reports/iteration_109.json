@@ -1,0 +1,41 @@
+{
+  "summary": "Iteration 109 — verifikasi restore end-to-end + 2 perubahan UI publik (hover kartu AirportRouteStrip, testimoni berbintang + foto). Backend: 15/15 pytest lulus (health, /api/public/booking/config dengan 3 rute seed, login owner + /auth/me, 9 endpoint publik, booking search daily_rental & airport_transfer). Frontend: 7 halaman publik load HTTP 200 tanpa error konsol; section rute bandara menampilkan 3 kartu + harga benar, animasi hover berjalan (icon transform rotate/scale, panah translate) tanpa reflow layout (lebar/tinggi kartu identik), klik kartu deep-link ke /booking?service=airport_transfer&route=<id> dan wizard terbuka dengan rute + tarif terpilih; testimoni menampilkan 3 kartu, 14 bintang amber terisi, angka rating (4.0/5.0/5.0), 3 avatar termuat (naturalWidth=120), nama & role tampil; dark mode kontras 16.5:1 pada harga rute & teks testimoni, tema persist antar-halaman; booking wizard search tanggal bebas (5-7 Okt 2026) mengembalikan 3 unit dengan harga final + DP 30%; login ERP owner@demo.local berhasil ke /app/dashboard dengan data nyata (5 booking aktif, 4 armada, AR Rp 18.748.000). Tidak ada regresi ditemukan. Database TIDAK di-reseed dan tidak ada data uji dibuat.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [
+      {"component": "HomeSections/Stars", "issue": "Label rating di-hardcode `{n}.0`, sehingga rating pecahan (mis. 4.5) akan tampil '4.5.0' dan rating >5 tetap menampilkan 5 bintang. Seed saat ini integer sehingga belum terlihat.", "selector": "[data-testid=\"home-testimonials\"]", "priority": "LOW"},
+      {"component": "Router (App.js)", "issue": "Path /login tidak ada — tanpa peringatan jatuh ke halaman Beranda (catch-all), bukan 404 atau redirect ke /app/login. /app/memory/test_credentials.md juga menulis 'Login ERP: /login' padahal rute nyata /app/login.", "selector": "n/a", "priority": "LOW"}
+    ],
+    "integration_issues": [],
+    "design_issues": [
+      {"screen": "/booking langkah 1", "issues": ["Input waktu penjemputan memakai native <input type=datetime-local> (picker default browser) alih-alih komponen kalender shadcn — inkonsisten dengan gaya form lain"]},
+      {"screen": "/booking langkah 2 (Pilih Unit) & /fleet", "issues": ["Foto armada seed tidak relevan: 'Hiace Premio 01' memakai foto interior kafe, 'Hiace Premio 02' foto VW kombi kuning, 'Isuzu Elf Long 01' foto pickup Toyota"]}
+    ]
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_restore_smoke_i109.py",
+    "/app/test_reports/pytest/i109.xml"
+  ],
+  "action_items": [
+    "Opsional: buat Stars menampilkan rating via toFixed(1) dan clamp 0..5 agar aman untuk rating pecahan",
+    "Opsional: tambahkan redirect /login -> /app/login (atau halaman 404) dan perbarui /app/memory/test_credentials.md",
+    "Opsional: ganti foto armada seed dengan gambar Hiace/Elf yang relevan",
+    "Opsional: ganti input datetime-local pada wizard booking dengan komponen kalender shadcn"
+  ],
+  "critical_code_review_comments": [
+    "AirportRouteStrip.jsx: seluruh animasi hover memakai transform/color pada child (group-hover) sehingga tidak memicu reflow — sudah benar; harga jatuh ke 'Hubungi kami' saat from_price falsy, aman.",
+    "HomeSections.jsx TestimonialsSection: <img> avatar tidak punya onError fallback ke inisial; jika URL eksternal (i.pravatar.cc) gagal, akan tampil kotak kosong. Pertimbangkan onError untuk menghapus avatar.",
+    "Stars: `{n}.0` hardcoded — gunakan Number(n).toFixed(1) dan Math.min(5, Math.max(0, n))."
+  ],
+  "updated_files": ["/app/backend/tests/test_restore_smoke_i109.py"],
+  "success_rate": {"backend": "100% (15/15)", "frontend": "100% pada semua alur yang diuji"},
+  "seed_data_creation": "Tidak ada. Tidak menjalankan gate.sh maupun seed_data.py; tidak ada dokumen uji yang dibuat/dihapus (semua uji read-only kecuali POST /booking/search yang tidak menulis DB).",
+  "should_call_test_agent_after_fix": false,
+  "should_main_agent_self_test": true,
+  "test_credentials": "owner@demo.local / demo12345 (login di /app/login, BUKAN /login)",
+  "context_for_next_testing_agent": "Rute login ERP = /app/login (testid: login-email-input, login-password-input, login-submit-button). Input tanggal booking = [data-testid=booking-start]/[booking-end] bertipe datetime-local, isi dengan fill('2026-10-05T08:00'). Tanggal 10-17 Agu 2026 sengaja penuh di seed; pakai Okt 2026 untuk hasil tersedia. Toggle tema = [data-testid=nav-theme-switch] (persist via localStorage). Kartu rute bandara: ars-item-{BDO-CGK,CGK-BDO,BDO-KJT} dengan harga 950k/950k/700k. Backend smoke regresi cepat: pytest backend/tests/test_restore_smoke_i109.py.",
+  "rca_of_the_issue": "Tidak ada kegagalan aplikasi. 3 kegagalan awal pada suite baru murni kesalahan path/payload di skrip uji saya (/api/public/site & /api/public/blog tidak ada — yang benar /api/public/company & /api/public/articles; pencarian ketersediaan memakai POST /api/public/booking/search dengan field start_datetime/end_datetime/route_id, bukan /availability). Setelah dikoreksi, semua lulus."
+}

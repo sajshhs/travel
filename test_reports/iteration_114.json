@@ -1,0 +1,33 @@
+{
+  "summary": "Iteration 114 — MANAJEMEN DATA (backup/restore/upload/schedule/cron/RBAC) tested end-to-end. Backend: 25/25 pytest tests pass (overview shape, manual backup w/ 70 collections+958 docs+40 media & physical ZIP, manifest format_version=1, download ZIP content manifest.json+db/*.jsonl+media/*, 404 for unknown id, partial restore of customers with snapshot (count restored, pre_restore entry created), wrong confirm 400, unknown collection 400, unknown backup_id 400, full restore mode=full with login/bookings still working, upload valid ZIP (kind uploaded, collections/documents match manifest), non-zip 400, zip w/o manifest 400, delete removes registry+physical file & 404 for unknown, schedule GET/PATCH persistence, keep_last=0 -> 422, cron 401 without auth / 200 queued / 200 duplicate / last_status 'skipped' when disabled and 'ok: backup_*' when enabled, retention keep_last=1 leaves <=1 auto archive, RBAC ops_admin 200 & marketing/driver 403). Frontend: /app/data page fully functional for owner (4 stat cards, backup-now toast 'Backup selesai' + new row, download works, restore dialog partial flow w/ select-all/none, submit gating on 'RESTORE', toast 'Restore selesai' + restores-list grows + 'Snapshot sebelum restore' archive, delete row via browser confirm, schedule toggle & keep_last toasts 'Jadwal backup disimpan', collections-grid 70 items, upload ZIP -> toast 'terdaftar' + 'Diunggah' row). ops_admin can open /app/data; marketing has no menu entry and is blocked by RoleGuard (toast 'Akses ditolak' + redirect to dashboard). No backend 5xx and no console errors observed.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_data_management_i114.py",
+    "/app/test_reports/pytest/i114_data_mgmt.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "services/backup.py register_uploaded reads whole upload into memory (MAX_UPLOAD 512MB) — a single large upload can spike RSS; consider streaming to a temp file and validating from disk.",
+    "restore_backup uses drop()+insert_many per collection with no rollback on mid-way failure; if the ZIP entry for a later collection is corrupt the DB is left partially restored (snapshot exists but restore is manual). Consider restoring into temp collections then renaming.",
+    "Full restore replaces users/sessions from the archive: restoring an older archive will invalidate all current sessions and can revert user/password changes. UI warning mentions data replacement but not the session/login implication — worth an explicit note in RestoreDialog for mode 'full'.",
+    "DELETE /api/data/backups/{id} returns 200 even when the physical file is already missing (registry-only cleanup) — acceptable but undocumented in the response payload."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_data_management_i114.py"
+  ],
+  "success_rate": {"backend": "100% (25/25)", "frontend": "100% of tested flows"},
+  "seed_data_creation": "Temporary backup archives (manual/auto/pre_restore/uploaded) created during tests; cleaned up at end — only 2 archives (~4.9 MB) remain in /app/backend/backups. One seeded customer was deleted directly in Mongo then restored via partial restore (count verified back to original).",
+  "should_call_test_agent_after_fix": false,
+  "should_main_agent_self_test": false,
+  "test_credentials": "owner@demo.local / ops@demo.local / marketing@demo.local / driver@demo.local — demo12345; WEBHOOK_CRON_SECRET read from /app/backend/.env",
+  "context_for_next_testing_agent": "Run /app/backend/tests/test_data_management_i114.py with `-n 0` (serial) — the suite shares module-level STATE across classes and xdist loadscope would split it. DELETE /api/customers/{id} returns 400 when the customer has bookings, so the test deletes the doc directly via pymongo (MONGO_URL/DB_NAME from /app/backend/.env) before partial restore. The final test trims the archive registry to the 2 newest archives to keep disk usage low. Cron tests need ~25s sleeps for the BackgroundTask to finish.",
+  "rca_of_the_issue": "No product defects found. The only two initial test failures were test-side: the API blocks deleting a customer that has bookings (business rule), so the partial-restore precondition now removes the document directly in Mongo."
+}

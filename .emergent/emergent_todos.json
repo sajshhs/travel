@@ -1,0 +1,26 @@
+[
+  {
+    "content": "Verify current app state (services, gate baseline)",
+    "status": "completed"
+  },
+  {
+    "content": "Finish EN i18n in PublicLayout.jsx (announcement bar, WhatsApp text, drawer help labels, footer)",
+    "status": "completed"
+  },
+  {
+    "content": "Sweep all public pages/components for remaining hardcoded Indonesian visible in ?lang=en",
+    "status": "completed"
+  },
+  {
+    "content": "Check frontend compilation (esbuild) + run bash scripts/gate.sh",
+    "status": "completed"
+  },
+  {
+    "content": "Run testing agent + screenshots for all public pages in EN mode",
+    "status": "completed"
+  },
+  {
+    "content": "Update plan.md / session handoff docs after tests pass",
+    "status": "completed"
+  }
+]

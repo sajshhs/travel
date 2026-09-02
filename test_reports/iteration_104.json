@@ -1,0 +1,49 @@
+{
+  "summary": "Backend: 16/16 pytest passed for iteration 104 (broadcast real send via mock provider + background worker + progress polling; anti-double-send guard; broadcast messages logged to Inbox with rendered {customer_name}; Inbox wa-media upload PNG success + reject .txt + reject >8MB + reject non-whatsapp channel + auth guard; Invoice /send-wa creates+sends+marks status='sent' + booking-based endpoint + no-invoice 404 + no-token 401 + driver 403; regression /wa/test-send mock + /wa/openwa/status). Frontend: Inbox attachment flow (upload PNG → chip → send → attachment badge in thread) WORKS; Finance invoice-wa button clicks → success toast; Booking booking-invoice-wa button visible on confirmed/completed rows but clicking first row toasts an error because that particular booking has no invoice yet (button is rendered regardless of invoice existence). CRITICAL FRONTEND ISSUE: <CrmBroadcast /> component exists at /app/frontend/src/components/app/CrmBroadcast.jsx but is NOT imported/rendered by ANY page — CRM tab list uses <CrmCampaigns /> for the 'campaigns' tab (Crm.jsx:100), and there is no other route mounting CrmBroadcast. Therefore Frontend Flow 1 (Broadcast) is entirely non-functional in the UI; users cannot create/send a broadcast from the web app despite the backend endpoints working end-to-end. Provider was reset to 'openwa' at the end per instructions.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [
+      {
+        "component": "CrmBroadcast",
+        "issue": "Component exists but is not imported/rendered anywhere. Neither Crm.jsx (tab 'campaigns' renders CrmCampaigns not CrmBroadcast) nor any other feature/route mounts it. The entire Broadcast UI (broadcast-panel, broadcast-new, bc-title, bc-message, bc-submit, broadcast-send-*, broadcast-progress-*) is unreachable in the running app.",
+        "selector": "[data-testid=\"broadcast-panel\"]",
+        "priority": "HIGH"
+      },
+      {
+        "component": "Bookings row (booking-invoice-wa)",
+        "issue": "Button is always rendered for confirmed/ongoing/completed bookings even when no invoice exists → clicking triggers backend 404 'Belum ada invoice…' and an error toast. UX improvement: hide/disable the button when the booking has no invoice, or auto-create one, to avoid noisy errors.",
+        "selector": "[data-testid^=\"booking-invoice-wa-\"]",
+        "priority": "MEDIUM"
+      }
+    ],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_broadcast_media_invoice.py",
+    "/app/test_reports/pytest/pytest_iter104.xml"
+  ],
+  "action_items": [
+    "Wire <CrmBroadcast /> into a route/tab — most likely add a new tab 'broadcast' to Crm.jsx TABS (import CrmBroadcast and render when tab==='broadcast'), or expose /app/broadcasts route. Without this, the new backend broadcast feature has no UI entry point.",
+    "Consider hiding booking-invoice-wa button when booking has no invoice, or auto-issuing an invoice on click, to avoid confusing 404 toast for the user."
+  ],
+  "critical_code_review_comments": [
+    "backend/routers/broadcasts.py::_run_broadcast uses per-message find_one_and_update to persist progress — good; but there is no upper cap on failed_count vs recipients, and errors from send_wa are swallowed without persisting the last error text on the broadcast doc (only aggregate failed count).",
+    "backend/routers/inbox.py::post_wa_media loads the whole file into memory before size check (await file.read(); then len>MAX). For 8MB it's fine, but consider streaming/spooled check to reject very large uploads without buffering.",
+    "backend/routers/invoices.py::_send_invoice_wa promotes invoice status draft→sent only after WA send success — correct. But the status update happens even if the phone was resolved from booking.customer_phone and later the customer WA is invalid; consider guarding on res.status in ('sent','delivered','read') which it already does.",
+    "frontend/CrmBroadcast.jsx polls /broadcasts every 4s while any row is 'sending' — that is fine, but with mock provider the transition happens in <1s so the interval is not observable; more importantly the component is currently orphaned (not mounted). This is the real defect."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_broadcast_media_invoice.py"
+  ],
+  "success_rate": {"backend": "100% (16/16)", "frontend": "66% (Inbox attach OK, Finance invoice-wa OK, Booking invoice-wa button-visible-but-first-row-errors, Broadcast UI missing)"},
+  "test_credentials": "owner@demo.local / demo12345 ; driver@demo.local / demo12345 (from /app/memory/test_credentials.md)",
+  "seed_data_creation": "None — used seeded WA conversations, leads (7+ with phone), and bookings. Created a few TEST_ invoices and TEST_ broadcasts (persisted in DB — not cleaned up but harmless).",
+  "retest_needed": true,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "WA provider was reset to 'openwa' at end. For frontend UI tests always PATCH /api/wa/config {provider:'mock'} first (otherwise sendImage/sendFile hits openwa sidecar which returns 503 because QR not scanned). Backend endpoints tested: /api/broadcasts, /api/broadcasts/{id}/send, /api/conversations?channel=whatsapp, /api/conversations/{id}/wa-media, /api/invoices, /api/invoices/{id}/send-wa, /api/bookings/{id}/send-invoice-wa. Frontend testids used: inbox-conv-*, inbox-attach-btn, inbox-attach-input, inbox-attach-chip, inbox-composer, inbox-send, inbox-msg-attachment-*, tab-finance-invoices, invoice-wa-*, booking-invoice-wa-*. The Broadcast UI (broadcast-panel etc.) cannot be reached until CrmBroadcast is imported somewhere.",
+  "rca_of_the_issue": "CrmBroadcast.jsx defined but never imported. grep -rln CrmBroadcast /app/frontend/src returns only the component file itself; Crm.jsx imports CrmCampaigns and renders that in the 'campaigns' tab. Fix: in /app/frontend/src/features/app/Crm.jsx add `import CrmBroadcast from '@/components/app/CrmBroadcast';` and add a new TABS entry like ['broadcast','Broadcast',Send] plus `{tab==='broadcast' && <CrmBroadcast />}`; alternatively replace CrmCampaigns rendering with CrmBroadcast, or expose a top-level route /app/broadcasts in App.js."
+}

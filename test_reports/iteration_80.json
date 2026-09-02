@@ -1,0 +1,116 @@
+{
+  "summary": "Comprehensive testing of booking flow (public + ops). Backend APIs working well (93.3% success, 56/60 tests). CRITICAL FRONTEND BUG: /booking page completely broken with React error preventing any public bookings. ERP booking management works correctly.",
+  
+  "backend_issues": {
+    "critical_bugs": [],
+    "minor_issues": [
+      {
+        "endpoint": "/api/public/booking/submit",
+        "issue": "Returns 422 instead of 400 for validation errors (name/phone missing)",
+        "impact": "Minor - 422 is actually more appropriate for validation errors than 400",
+        "fix_priority": "LOW"
+      }
+    ],
+    "rbac_issues": [
+      {
+        "endpoint": "/api/bookings",
+        "issue": "Marketing admin can access bookings endpoint (should be 403)",
+        "impact": "RBAC violation - marketing should not see booking data",
+        "fix_priority": "MEDIUM"
+      },
+      {
+        "endpoint": "/api/media/assets",
+        "issue": "Marketing admin gets 404 on media endpoint (should be 200)",
+        "impact": "Marketing cannot access media library as intended",
+        "fix_priority": "MEDIUM"
+      }
+    ]
+  },
+  
+  "frontend_issues": {
+    "critical_bugs": [
+      {
+        "component": "BookingWizard",
+        "page": "/booking",
+        "issue": "Complete page crash with React error: 'Cannot read properties of null (reading origin)'",
+        "root_cause": "In BookingWizard.jsx line 74-84, searchPayload callback accesses search.service, search.start, search.origin without optional chaining, but search is initialized as null (line 33). When callback is referenced before loadConfig completes, it tries to access properties on null.",
+        "impact": "SHOWSTOPPER - Public booking flow completely broken, no bookings can be made through UI",
+        "fix_priority": "CRITICAL",
+        "affected_selectors": ["All booking form elements not rendering"],
+        "fix_suggestion": "Add optional chaining in searchPayload callback: search?.service, search?.start, search?.origin, etc. OR ensure callback is not called/referenced until search state is initialized"
+      }
+    ],
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  
+  "passed_tests": [
+    "Backend: Login for all roles (owner, ops, marketing, driver)",
+    "Backend: GET /api/public/booking/config - returns services, vehicle types, routes, DP%, payment info",
+    "Backend: POST /api/public/booking/search (daily rental) - returns 3 available vehicles with prices and DP",
+    "Backend: POST /api/public/booking/search (airport transfer) - returns vehicles with flat rates",
+    "Backend: POST /api/public/booking/quote - returns quote with vehicle and pricing details",
+    "Backend: POST /api/public/booking/submit - creates booking BK-0066 with hold status",
+    "Backend: POST /api/public/booking/lookup - finds booking by code + phone",
+    "Backend: GET /api/public/booking/{code}?token - returns status with payment instructions",
+    "Backend: Price consistency - total and DP match between quote and stored booking (PUBLIC STORY 3)",
+    "Backend: Payment has bank accounts configured",
+    "Backend: POST /api/public/booking/{code}/proof - uploads payment proof successfully",
+    "Backend: Validation errors return 4xx with Indonesian error messages",
+    "Backend: End date before start date rejected with clear message",
+    "Backend: Past dates rejected",
+    "Backend: GET /api/bookings/payment-proofs - lists pending proofs for ops",
+    "Backend: Uploaded proof appears in ops queue with booking info and media URL",
+    "Backend: POST /api/bookings/{id}/proofs/{proof_id}/verify - verifies proof, creates payment, booking becomes confirmed",
+    "Backend: Booking status changes from Hold to Terkonfirmasi after verification",
+    "Backend: Payment status updated to DP after verification",
+    "Backend: RBAC - Driver cannot access payment proofs (403)",
+    "Backend: RBAC - Driver can access bookings (scoped)",
+    "Frontend: Homepage loads correctly with navigation and content",
+    "Frontend: ERP login works (/app/login)",
+    "Frontend: ERP redirects to dashboard after login",
+    "Frontend: /app/bookings page loads and displays booking table",
+    "Frontend: Booking BK-0066 shows as Terkonfirmasi with DP status",
+    "Frontend: Booking table layout is correct, no text overflow issues"
+  ],
+  
+  "test_report_links": [
+    "/app/backend/backend_test_booking_flow.py"
+  ],
+  
+  "action_item_for_main_agent": {
+    "critical": [
+      "FIX SHOWSTOPPER: BookingWizard.jsx line 74-84 - Add optional chaining to searchPayload callback (search?.service, search?.start, search?.origin, etc.) OR ensure callback is not invoked until search state is initialized. This completely blocks public booking flow.",
+      "Test fix by loading /booking page - should show booking form without React error"
+    ],
+    "high": [],
+    "medium": [
+      "Fix RBAC: Marketing admin should get 403 on /api/bookings (currently returns 200)",
+      "Fix RBAC: Marketing admin should get 200 on /api/media/assets (currently returns 404)"
+    ],
+    "low": [
+      "Consider: Validation errors return 422 (currently) vs 400 (expected in tests) - 422 is actually more correct for validation, so tests could be updated instead"
+    ],
+    "notes": [
+      "PaymentProofsPanel not visible because it auto-hides when no pending proofs (correct behavior)",
+      "Backend booking flow works end-to-end via API",
+      "Price consistency verified (PUBLIC STORY 3)",
+      "Airport transfer shows flat rates correctly (PUBLIC STORY 6)",
+      "All dates used were 25-27 days in future to avoid seed data conflicts"
+    ]
+  },
+  
+  "updated_files": [
+    "/app/backend/backend_test_booking_flow.py"
+  ],
+  
+  "success_percentage": {
+    "backend": "93.3% (56/60 tests passed)",
+    "frontend": "20% (Critical booking page broken, ERP pages work)",
+    "overall": "Unable to complete full E2E testing due to critical frontend bug"
+  },
+  
+  "should_call_test_agent_after_fix": "true",
+  "should_main_agent_test_itself": "false"
+}

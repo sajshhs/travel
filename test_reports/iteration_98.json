@@ -1,0 +1,28 @@
+{
+  "summary": "Iterasi 98 — SSOT Batch 5 (master KOTA + Ekspor Excel + Gabung Destinasi) diverifikasi menyeluruh. Backend 19/19 pytest LULUS. Frontend menyeluruh LULUS (masterdata 3 panel, ekspor xlsx via download event, rename+restore kota Bandung dgn panel konfirmasi menampilkan '3 pelanggan · 1 mitra', toggle nonaktif↔aktif, customer form cf-city select + quick-add kota baru → sukses insert customer, partner form pf-city select Jakarta → sukses insert partner, merge Jakarta→Bali di panel dest → toast '0 dokumen pindah ke Bali' + badge 'Digabung → Bali' + tombol aksi menghilang). Backend: (A) POST /api/customers city 'KotaNgawurXYZ' → 400; 'bandung' → tersimpan 'Bandung'; kosong → sah; PATCH bad city → 400. Sama utk partners. (B) POST /api/cities idempotent (dua kali sama → id sama). (C) POST /api/public/landing/sewa-hiace-jakarta/lead vehicle_type='Hiace Premio' → 'hiace_premio'; 'mobil aneh' → apa adanya (lunak). (D) GET /api/master/export owner → 200 xlsx dgn 3 sheet Titik Jemput/Destinasi/Kota; marketing_admin & driver → 403. (E) Merge: self→400, target ops_active=false→400, sukses cascade lead ke 'Gunung Bromo' + sumber ops_active=false+merged_into terisi, re-merge→400. (F) Regresi ERP /api/bookings destinasi ngawur tetap 400. Semua data uji (customer+partner+kota+lead+dest merge source dst_test_b5) dibersihkan via purge_guard_artifacts()=39 doc. Jakarta (dst_19b2f1609cba4d8c) yang dimerge via UI direstore Mongo (unset merged_into/merged_into_name, set ops_active=True). Tidak ada bug fungsional.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {"ui_bugs": [], "integration_issues": [], "design_issues": []},
+  "test_report_links": [
+    "/app/backend/tests/backend_test_ssot_batch5.py",
+    "/app/test_reports/pytest/ssot_batch5.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "routers/pickup_points.master_cities & master_pickup_points & master_destinations & /master/export: setiap baris menjalankan 2–3× count_documents (customers/partners atau bookings/leads/quotations). Utk 6–8 baris = 12–24 count query per GET. Cukup utk skala saat ini; kandidat aggregation $facet bila daftar tumbuh besar.",
+    "services/refs.city_or_400: memuat seluruh koleksi cities aktif (limit 500) tiap panggilan POST/PATCH customer/partner. Sama polanya dgn destination_or_400/origin_or_400 — sudah dicatat sebelumnya sbg kandidat TTL cache (mis. 30s).",
+    "routers/pickup_points.merge_master_destination: kondisi 'target.get(merged_into)' menolak target yg field-nya terisi walau None. Setelah restore via `$unset` field bisa hilang atau ter-set None; keduanya aman krn `get('merged_into')` None → falsy. OK.",
+    "MasterData.jsx exportExcel: window.URL.createObjectURL(res.data) — bergantung pada `res.data` sebagai Blob (responseType='blob'). Sudah benar. Blob URL di-revoke — OK.",
+    "components/app/CitySelect.jsx line 50: mengizinkan value warisan 'X (warisan — di luar master)' agar edit pelanggan lama tak putus. Bagus utk kompat; tetapi PATCH selanjutnya akan gagal 400 bila user MENGUBAH ke value warisan itu (city_or_400). Utk sekarang harmless krn user harus memilih dari opsi valid; label warisan sekedar tampilan.",
+    "routers/pickup_points.master_export: 3 sheet dibangun berurutan; utk ratusan destinasi, count_documents per baris bisa lambat. Tolerabel utk skala saat ini."
+  ],
+  "updated_files": [
+    "/app/backend/tests/backend_test_ssot_batch5.py"
+  ],
+  "success_rate": {"backend": "100% (19/19)", "frontend": "100% (semua skenario)"},
+  "test_credentials": "owner/marketing/driver @demo.local — demo12345",
+  "seed_data_creation": "Test data prefix 'Penjaga INV-' + phone 0800000xxx. Dibersihkan purge_guard_artifacts()=39. Jakarta destination direstore manual via Mongo ($unset merged_into/merged_into_name, ops_active=true) setelah UI merge test — verifikasi doc final: {name:'Jakarta', ops_active:true, merged_into:None}.",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Jalankan: cd /app/backend && REACT_APP_BACKEND_URL=<url> python -m pytest tests/backend_test_ssot_batch5.py -v -o addopts=''. Bila fixture dedupe customer 409 muncul → jalankan purge_guard_artifacts() dulu (unique-partial index phone_normalized). Merge test menggunakan pymongo (sinkron) untuk hindari motor cross-event-loop error. Frontend login: page.get_by_role('button', name='Masuk') + wait_for_function 'location.pathname bukan /login' (wait_for_url '**/app/**' salah cocok krn /app/login juga match). Panel merge md-merge-panel-{id} dibuka lewat md-merge-{id}, target Select trigger md-merge-target-{id} → opsi via role=option (SelectItem shadcn), lalu md-merge-confirm-{id}. UI TIDAK menyediakan undo merge — restore selalu manual Mongo.",
+  "rca_of_the_issue": "N/A — tidak ada bug pada scope batch 5. Satu test failure awal (merge tests) karena AsyncIOMotorClient tidak boleh dipakai lintas event loop asyncio.new_event_loop() per test; digantikan dgn pymongo (sinkron). Booking regresi awal 422 karena payload kekurangan customer_id+vehicle_id (validasi pydantic tereksekusi lebih dulu dari destination_or_400); test disempurnakan dgn mengambil customer/vehicle nyata via GET, sekarang mendapat 400 dgn detail berisi 'destin' — validasi refs bekerja."
+}

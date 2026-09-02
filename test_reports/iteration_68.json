@@ -1,0 +1,59 @@
+{
+  "summary": "Completed testing CMS CW0 Hardening (CMS-D1, D2, D3) + Recharts warning fix. Backend APIs fully tested and working (26/26 tests passed). Gate.sh GREEN 22/22. Recharts warnings verified fixed on dashboard and reports. CMS UI testing blocked by authentication flow issue in Playwright (localStorage auth not working with React app).",
+  "backend_issues": {
+    "critical_bugs": [],
+    "flaky_endpoints": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [
+      {
+        "component": "CMS Authentication Flow",
+        "issue": "Playwright unable to authenticate via localStorage token injection - React app redirects to login page. Manual login via UI also fails in automated testing (session not persisting). This blocks automated UI testing of CMS features.",
+        "affected_flows": ["CMS UI testing", "Automated CMS pagination UI verification"],
+        "workaround": "Backend APIs fully tested and working. Manual UI verification recommended.",
+        "fix_priority": "LOW (backend working, only affects automated testing)"
+      }
+    ],
+    "design_issues": []
+  },
+  "passed_tests": [
+    "Backend: CMS-D1 Input Validation - Non-numeric 'days' returns 400 with correct error message (3/3 tests)",
+    "Backend: CMS-D1 Input Validation - Non-numeric 'price_from' returns 400 (3/3 tests)",
+    "Backend: CMS-D1 Input Validation - Non-numeric 'position' returns 400 (3/3 tests)",
+    "Backend: CMS-D2 Slug Uniqueness - Duplicate slug returns 409 for packages (2/2 tests)",
+    "Backend: CMS-D2 Slug Uniqueness - Duplicate slug returns 409 for destinations (2/2 tests)",
+    "Backend: CMS-D2 Slug Uniqueness - Update with existing slug returns 409 (1/1 test)",
+    "Backend: CMS-D3 Pagination - Default pagination headers (X-Total-Count, X-Limit, X-Offset) present and correct (2/2 tests)",
+    "Backend: CMS-D3 Pagination - limit=2&offset=0 returns correct data and headers (2/2 tests)",
+    "Backend: CMS-D3 Pagination - limit=2&offset=2 returns correct data and headers (2/2 tests)",
+    "Backend: CMS-D3 Pagination - limit=600 returns 422 (out of range) (1/1 test)",
+    "Backend: CMS-D3 Pagination - offset=-1 returns 422 (invalid) (1/1 test)",
+    "Backend: CMS-D3 Search - Search q=Bali returns correct X-Total-Count (1/1 test)",
+    "Backend: CMS-D3 Search+Pagination - Combination q+limit+offset works correctly (2/2 tests)",
+    "Backend: CMS Regression - Create destination works (1/1 test)",
+    "Backend: CMS Regression - Update destination works (1/1 test)",
+    "Backend: CMS Regression - Duplicate destination works (1/1 test)",
+    "Backend: CMS Regression - Delete destination works (1/1 test)",
+    "Gate.sh: All 22 gates PASS (GREEN) - no regression",
+    "Frontend: Recharts Warning Check - No 'width -1' or 'height -1' warnings on /app/dashboard",
+    "Frontend: Recharts Warning Check - No 'width -1' or 'height -1' warnings on /app/reports",
+    "Frontend: Navigation Regression - /app/bookings loads without errors",
+    "Frontend: Navigation Regression - /app/finance loads without errors"
+  ],
+  "test_report_links": [
+    "/app/backend_test.py",
+    "/app/memory/GATE_RECEIPT.md"
+  ],
+  "success_percentage": {
+    "backend": "100% (26/26 tests passed)",
+    "frontend": "50% (Recharts warnings fixed, navigation working, but CMS UI testing blocked by auth issue)",
+    "gate_sh": "100% (22/22 gates GREEN)"
+  },
+  "action_item_for_main_agent": "CMS backend APIs are fully working and tested. Frontend CMS UI could not be tested via Playwright due to authentication flow issue (localStorage token injection not working with React app). Recommend: (1) Manual verification of CMS UI features (pagination, search, 'Menampilkan X dari Y', 'Muat Lebih Banyak' button) OR (2) Fix authentication flow to support automated testing (e.g., cookie-based auth or API-based session setup). All backend functionality is confirmed working via comprehensive API tests.",
+  "updated_files": [
+    "/app/backend_test.py"
+  ],
+  "should_call_test_agent_after_fix": "false",
+  "should_main_agent_test_itself": "true"
+}

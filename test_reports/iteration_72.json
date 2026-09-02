@@ -1,0 +1,110 @@
+{
+  "summary": "Round 2 frontend-only testing completed. Tested 10 feature areas (F-A through F-I). Found 1 CRITICAL RBAC bug: driver role can access calendar page (should be blocked by RoleGuard). All other features working correctly including the UX bug fix from Round 1 (chip filter now filters the attention panel list).",
+  "backend_issues": {
+    "critical_bugs": [],
+    "flaky_endpoints": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [],
+    "rbac_issues": [
+      {
+        "component": "DepartureCalendar / RoleGuard",
+        "issue": "Driver role (driver@demo.local) can access /app/calendar page - RoleGuard not blocking access",
+        "test_case": "F-G.2: Login as driver@demo.local, navigate to /app/calendar",
+        "expected": "Driver should be redirected away or blocked from viewing calendar (only owner and ops_admin should access)",
+        "actual": "Driver can view full calendar page with all features",
+        "impact": "CRITICAL - Drivers should only access their driver workspace, not the ERP calendar management interface",
+        "fix_priority": "CRITICAL",
+        "affected_route": "/app/calendar",
+        "file": "frontend/src/features/app/DepartureCalendar.jsx or route guard configuration"
+      }
+    ]
+  },
+  "passed_tests": [
+    "F-A: Chip filter 'Bentrok sopir' filters attention panel list to show only BK-0005 and BK-0007",
+    "F-A: Attention scope text displays 'Menampilkan 2 dari 6 keberangkatan · saringan Bentrok sopir'",
+    "F-A: Clear filter button restores full list and hides scope text",
+    "F-A: Calendar total changes from 9 to 2 keberangkatan when filtered",
+    "F-A2: Chip filter 'Permintaan menunggu' shows BK-0006 and BK-0007 (both pending)",
+    "F-A2: Chip filter 'Belum ada sopir' shows items with no driver assigned",
+    "F-B: Related booking links work - clicking link in detail panel switches to related booking",
+    "F-B: Risks section remains visible after switching to related booking",
+    "F-C: Day-list panel opens when clicking date number area (top-left corner of cell)",
+    "F-C: Day-list shows risk badges and risk count badge",
+    "F-C: Clicking event chip in day-list opens detail panel",
+    "F-C: Back button from detail returns to day-list",
+    "F-D: Export panel opens with scope text displayed",
+    "F-D: Custom date range selection works (start/end date inputs)",
+    "F-D: Group by vehicle checkbox works",
+    "F-D: Excel export button triggers export (no errors)",
+    "F-E: Assign driver controls (dc-assign-select, dc-assign-save) exist for confirmed bookings without driver",
+    "F-E: Approve and reject buttons (dc-approve, dc-reject) exist for pending bookings",
+    "F-F: Empty state displays when searching for non-existent text ('zzzzzz')",
+    "F-F: Reset filters button restores calendar view",
+    "F-G.1: Ops admin (ops@demo.local) can access calendar page",
+    "F-G.1: Ops admin sees 'Buat Keberangkatan' button and full calendar functionality",
+    "F-H: Week view (dc-view-week) displays correctly",
+    "F-H: Week view shows event blocks with data-severity attributes",
+    "F-H: Previous/next navigation works in week view",
+    "F-H: Return to month view (dc-view-month) works",
+    "F-I: No page errors in console",
+    "F-I: No unexpected console warnings (excluding known Recharts width/height warnings)"
+  ],
+  "test_report_links": [
+    "/app/.screenshots/test_f_a_initial.png",
+    "/app/.screenshots/test_f_a_filtered.png",
+    "/app/.screenshots/test_f_a_complete.png",
+    "/app/.screenshots/test_f_b_complete.png",
+    "/app/.screenshots/test_f_c_daylist.png",
+    "/app/.screenshots/test_f_d_export_panel.png",
+    "/app/.screenshots/test_f_f_empty.png",
+    "/app/.screenshots/test_f_h_week.png",
+    "/app/.screenshots/test_f_g_ops.png",
+    "/app/.screenshots/test_f_g_driver.png",
+    "/app/.screenshots/test_final.png"
+  ],
+  "success_percentage": {
+    "frontend": "96.4% (27/28 tests passed, 1 CRITICAL RBAC issue)"
+  },
+  "updated_files": [],
+  "action_item_for_main_agent": {
+    "critical": [
+      "Fix RBAC for /app/calendar route: Driver role (driver@demo.local) should NOT be able to access the calendar page. Only owner and ops_admin roles should have access. Implement or fix RoleGuard to redirect drivers to their workspace or show access denied. Test with: login as driver@demo.local, navigate to /app/calendar - should be blocked."
+    ],
+    "info": [
+      "All Round 1 issues confirmed resolved: (1) PATCH /api/maintenance FALSE POSITIVE verified with /app/scripts/verify_patch_inv21.py, (2) Day-list FALSE POSITIVE - works when clicking date number area instead of center, (3) UX bug (chip filter not filtering list) FIXED - now shows scope text and filters correctly.",
+      "All new features working: Attention panel chip filtering with scope text, related booking links, day-list with risk badges, export UI with custom ranges, ops action buttons, empty state, week view regression passed.",
+      "No console errors found during testing (F-I passed)."
+    ]
+  },
+  "should_call_test_agent_after_fix": "true",
+  "should_main_agent_test_itself": "false",
+  "detailed_findings": {
+    "round_2_focus": {
+      "status": "MOSTLY_WORKING",
+      "ux_bug_fix_verified": "PASS - Chip filter now filters attention panel list and shows scope text 'Menampilkan X dari Y keberangkatan · saringan [TYPE]'",
+      "false_positives_confirmed": [
+        "PATCH /api/maintenance: Verified with verify_patch_inv21.py - works correctly",
+        "Day-list panel: Works when clicking date number area (top-left), not center of cell"
+      ],
+      "new_critical_bug": "Driver role can access calendar page (RBAC failure)"
+    },
+    "feature_test_results": {
+      "F-A_chip_filter_list": "PASS - Filters list to BK-0005 and BK-0007 for driver_conflict",
+      "F-A_scope_text": "PASS - Shows 'Menampilkan 2 dari 6 keberangkatan · saringan Bentrok sopir'",
+      "F-A_clear_filter": "PASS - Restores full list and hides scope",
+      "F-A2_other_chips": "PASS - pending_request and no_driver filters work correctly",
+      "F-B_related_links": "PASS - Switches between related bookings, risks section persists",
+      "F-C_daylist": "PASS - Opens on date number click, shows risk badges, event chip navigation works",
+      "F-D_export_ui": "PASS - Panel opens, custom range works, group checkbox works, Excel export triggers",
+      "F-E_ops_actions": "PASS - Assign driver controls and approve/reject buttons exist",
+      "F-F_empty_state": "PASS - Shows empty hint and reset button, reset restores view",
+      "F-G1_ops_access": "PASS - Ops admin can access calendar with full functionality",
+      "F-G2_driver_blocked": "FAIL - Driver CAN access calendar (should be blocked)",
+      "F-H_week_view": "PASS - Week view displays, navigation works, return to month works",
+      "F-I_console_errors": "PASS - No page errors or unexpected warnings"
+    }
+  }
+}

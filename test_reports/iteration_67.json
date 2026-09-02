@@ -1,0 +1,48 @@
+{
+  "summary": "WhatsApp module regression test completed after QUAL-1 fix (exception handler logging change in auto-reply work-hours check). All 25 tests passed with 100% success rate. NO 5xx errors detected. NO regression found.",
+  "backend_issues": {
+    "critical_bugs": [],
+    "flaky_endpoints": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "passed_tests": [
+    "Authentication: Login as owner (200)",
+    "WA Config: GET /api/wa/config (200)",
+    "WA Config: PATCH /api/wa/config with auto_reply_enabled=true (200)",
+    "WA Config: Verify config changes persisted (200)",
+    "WA Simulate-Inbound: Normal message with auto-reply (200) - CRITICAL PATH",
+    "WA Simulate-Inbound: Same number update conversation (200)",
+    "WA Simulate-Inbound: Different number new conversation (200)",
+    "WA Simulate-Inbound: Minimal payload edge case (200)",
+    "WA Test-Send: Mock send working as expected (200, status=sent, provider=mock)",
+    "WA Templates: GET templates list (200, 4 templates)",
+    "WA Templates: PUT new template (200)",
+    "WA Templates: DELETE template (200)",
+    "WA Webhook: GET verification with correct token (200)",
+    "WA Webhook: GET verification with wrong token (403 as expected)",
+    "WA Webhook: POST inbound message (200, received=1)",
+    "Adversarial: Empty simulate-inbound payload (422, NOT 5xx)",
+    "Adversarial: Missing text field (422, NOT 5xx)",
+    "Adversarial: Invalid phone type (422, NOT 5xx)",
+    "Adversarial: Invalid provider in config (400, NOT 5xx)",
+    "Adversarial: Bad type in config (422, NOT 5xx)",
+    "Adversarial: Empty test-send payload (422, NOT 5xx)",
+    "General Smoke: Health check (200)",
+    "General Smoke: Dashboard (200)",
+    "General Smoke: Bookings (200)",
+    "General Smoke: Customers (200)"
+  ],
+  "test_report_links": ["/app/backend/backend_test_whatsapp_regression.py"],
+  "action_item_for_main_agent": "",
+  "updated_files": ["/app/backend/backend_test_whatsapp_regression.py"],
+  "success_percentage": {
+    "backend": "100% (25/25 tests passed)",
+    "frontend": "N/A (backend-only testing)"
+  },
+  "should_call_test_agent_after_fix": false,
+  "should_main_agent_test_itself": false
+}

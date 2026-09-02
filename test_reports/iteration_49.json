@@ -1,0 +1,47 @@
+{
+  "summary": "E16 'Pinjam Armada / Sub-charter' feature testing completed successfully. All backend APIs (65/65 tests) and frontend UI elements working correctly. RBAC, Partner CRUD, Sub-charter lifecycle, AP calculations, COGS integration, and WhatsApp notifications (MOCKED) verified.",
+  "backend_issues": {
+    "critical_bugs": [],
+    "flaky_endpoints": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "passed_tests": [
+    "RBAC: Driver gets 403 on /api/partners and /api/subcharters (owner/ops_admin get 200)",
+    "Partner CRUD: List, Create, Read, Update with AP summary (ap_total, ap_paid, ap_outstanding, subcharter_count, vehicle_count)",
+    "Partner detail endpoint returns subcharters, settlements, and vehicles arrays",
+    "Sub-charter lifecycle: requested → confirmed (creates COGS expense) → settled (creates settlement) / cancelled (removes COGS)",
+    "AP calculations accurate: ap_total = Σ confirmed/settled costs, ap_paid = Σ settlements, ap_outstanding = total - paid",
+    "COGS expense created with category 'sewa_mitra' linked to booking_id and trip_id",
+    "Manual settlement reduces AP outstanding correctly",
+    "WhatsApp notifications (MOCKED): subcharter.requested and subcharter.confirmed events in automation_runs with send_wa actions",
+    "Anti-overlap validation: Cannot create overlapping sub-charter for same partner vehicle",
+    "Available partners endpoint returns partner vehicles free in time window",
+    "Partner deletion validation: Cannot delete partner with active sub-charter or vehicles",
+    "Cannot cancel settled sub-charter (returns 400)",
+    "Frontend: Partners page loads with stats (AP Outstanding: Rp 2.200.000, Active Orders: 2, Partners: 5)",
+    "Frontend: Both tabs (Mitra & Utang, Order Sub-charter) functional",
+    "Frontend: Partner form dialog opens, fills, submits, and closes successfully",
+    "Frontend: Sub-charter form dialog opens and closes",
+    "Frontend: Partner detail drawer opens and closes",
+    "Frontend: Action buttons present (confirm, settle, cancel) based on sub-charter status",
+    "Light regression: dashboard, vehicles, drivers, customers, bookings, trips all return 200"
+  ],
+  "test_report_links": [
+    "/app/backend/backend_test_e16.py",
+    "/app/.screenshots/e16_partners_page.png"
+  ],
+  "action_item_for_main_agent": "",
+  "updated_files": [
+    "/app/backend/backend_test_e16.py"
+  ],
+  "success_percentage": {
+    "backend": "100% (65/65 tests passed)",
+    "frontend": "100% (all UI elements functional)"
+  },
+  "should_call_test_agent_after_fix": "false",
+  "should_main_agent_test_itself": "false"
+}

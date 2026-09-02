@@ -1,0 +1,130 @@
+{
+  "summary": "BUG-0127 Data Cleanliness Verification - Completed comprehensive testing of data pollution cleanup and RBAC regression",
+  "backend_issues": {},
+  "frontend_issues": {},
+  "passed_tests": [
+    "Backend API: GET /api/customers returns exactly 4 demo customers (PT Maju Jaya, Keluarga Andi, CV Sentosa Wisata, Keluarga Hendra)",
+    "Backend API: GET /api/audit-logs has no summaries > 1000 chars, no test markers",
+    "Backend API: GET /api/conversations has no test conversation names",
+    "Backend API: GET /api/bookings returns only demo bookings BK-0001 to BK-0010",
+    "UI: /app/customers displays exactly 4 demo customers, no pollution",
+    "UI: /app/inbox displays clean conversations, no test markers",
+    "UI: /app/bookings displays only demo bookings BK-0001 to BK-0010",
+    "UI: /app/auditlog displays clean audit logs, no test markers",
+    "UI: /app/crm displays clean lead data, no test markers",
+    "UI: /app/media has no guard-media-* assets",
+    "RBAC: Driver role properly blocked from /app/customers",
+    "RBAC: Driver role properly blocked from /app/finance",
+    "RBAC: Driver role properly blocked from /app/reports",
+    "RBAC: Driver role properly blocked from /app/users",
+    "RBAC: Driver role properly blocked from /app/settings",
+    "RBAC: Driver role properly blocked from /app/auditlog",
+    "RBAC: Driver role properly blocked from /app/crm",
+    "RBAC: Driver role properly blocked from /app/inbox",
+    "RBAC: Driver role properly blocked from /app/quotations",
+    "RBAC: Driver role properly blocked from /app/dispatch",
+    "RBAC: Driver role properly blocked from /app/media",
+    "RBAC: Driver role can access /app/driver-workspace",
+    "RBAC: Marketing role properly blocked from /app/bookings",
+    "RBAC: Marketing role properly blocked from /app/vehicles",
+    "RBAC: Marketing role properly blocked from /app/drivers",
+    "RBAC: Marketing role properly blocked from /app/maintenance",
+    "RBAC: Marketing role properly blocked from /app/gps",
+    "RBAC: Marketing role properly blocked from /app/quotations",
+    "RBAC: Marketing role properly blocked from /app/driver-workspace",
+    "RBAC: Marketing role can access /app/crm",
+    "RBAC: Marketing role can access /app/inbox"
+  ],
+  "test_report_links": [
+    "/app/backend_test_bug0127.py"
+  ],
+  "action_item_for_main_agent": "",
+  "updated_files": [
+    "/app/backend_test_bug0127.py"
+  ],
+  "success_percentage": {
+    "backend": "100% (4/4 tests passed)",
+    "frontend": "100% (6/6 data cleanliness tests passed)",
+    "rbac": "100% (20/20 RBAC tests passed)"
+  },
+  "should_call_test_agent_after_fix": false,
+  "should_main_agent_test_itself": false,
+  "detailed_results": {
+    "bug_0127_verification": {
+      "status": "PASSED",
+      "description": "Verified that NO test pollution data exists in the system",
+      "backend_api_tests": {
+        "customers": "PASSED - Exactly 4 demo customers, no pollution markers, no oversized names",
+        "audit_logs": "PASSED - No summaries > 1000 chars, no test markers (Smoke, Penjaga INV, guard-media)",
+        "conversations": "PASSED - No test conversation names (Penjaga INV-*, Smoke Customer, Guard Lead)",
+        "bookings": "PASSED - Only demo bookings BK-0001 to BK-0010, no test customer names"
+      },
+      "ui_tests": {
+        "customers_page": "PASSED - Displays exactly 4 demo customers, clean data",
+        "inbox_page": "PASSED - No test conversations visible",
+        "bookings_page": "PASSED - Only demo bookings visible",
+        "auditlog_page": "PASSED - Clean audit logs",
+        "crm_page": "PASSED - Clean lead data",
+        "media_page": "PASSED - No guard-media-* assets"
+      }
+    },
+    "rbac_regression": {
+      "status": "PASSED",
+      "description": "Verified role-based access control for driver and marketing roles",
+      "driver_role": {
+        "blocked_pages": [
+          "/app/customers",
+          "/app/finance",
+          "/app/reports",
+          "/app/users",
+          "/app/settings",
+          "/app/auditlog",
+          "/app/crm",
+          "/app/inbox",
+          "/app/quotations",
+          "/app/dispatch",
+          "/app/media"
+        ],
+        "allowed_pages": [
+          "/app/driver-workspace"
+        ],
+        "redirect_behavior": "Driver is properly redirected to /app/driver-workspace when accessing restricted pages"
+      },
+      "marketing_role": {
+        "blocked_pages": [
+          "/app/bookings",
+          "/app/vehicles",
+          "/app/drivers",
+          "/app/maintenance",
+          "/app/gps",
+          "/app/quotations",
+          "/app/driver-workspace"
+        ],
+        "allowed_pages": [
+          "/app/crm",
+          "/app/inbox"
+        ],
+        "redirect_behavior": "Marketing is properly redirected to /app/dashboard when accessing restricted pages"
+      }
+    },
+    "demo_data_integrity": {
+      "status": "VERIFIED",
+      "customers": "4 demo customers intact (PT Maju Jaya, Keluarga Andi, CV Sentosa Wisata, Keluarga Hendra)",
+      "bookings": "10 demo bookings intact (BK-0001 to BK-0010)",
+      "conversations": "7 conversations (all legitimate demo data)",
+      "audit_logs": "64 audit log entries (all clean)"
+    }
+  },
+  "notes": [
+    "BUG-0127 is FULLY RESOLVED - No test pollution data found in any collection",
+    "All backend API endpoints return clean data with no test markers",
+    "All UI pages display clean data with no pollution",
+    "RBAC is working correctly for driver and marketing roles",
+    "Demo data remains intact after cleanup",
+    "The 'AAAA' and '<script>' findings in initial UI scan were false positives from HTML/JS code, not actual data pollution",
+    "All 4 demo customers are correctly displayed in the UI",
+    "All 10 demo bookings (BK-0001 to BK-0010) are correctly displayed",
+    "No end-to-end flow testing was performed as the primary focus was BUG-0127 verification and RBAC regression",
+    "Public site end-to-end flows (booking, DP upload, ops verification) were not tested in this iteration"
+  ]
+}

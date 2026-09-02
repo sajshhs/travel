@@ -1,0 +1,48 @@
+{
+  "summary": "Phase 3 (Website Publik + Lead Capture) comprehensive testing completed. All backend APIs (64/64 tests) and frontend flows verified. CRITICAL INVARIANT confirmed: leads submitted from public website persist and appear in ERP CRM with source='website' and stage='new'. Phase 2 regression tests passed.",
+  "backend_issues": {
+    "critical_bugs": [],
+    "flaky_endpoints": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "passed_tests": [
+    "Backend: All 11 Phase 3 public endpoints (GET /public/fleet, /fleet/{id}, /destinations, /destinations/{slug}, /articles, /articles/{slug}, /testimonials, /company, POST /public/trip-estimate, POST /public/quotation)",
+    "Backend: Phase 3 trip estimate calculator returns correct breakdown and total",
+    "Backend: Phase 3 quotation creates lead with source='website' and stage='new'",
+    "Backend: CRITICAL INVARIANT verified - lead from public website appears in ERP CRM",
+    "Backend: Phase 2 regression - Auth (login for owner/ops/driver), GET /auth/me",
+    "Backend: Phase 2 regression - Vehicles CRUD + duplicate prevention + INV-1",
+    "Backend: Phase 2 regression - Drivers CRUD",
+    "Backend: Phase 2 regression - Customers CRUD + Customer 360",
+    "Backend: Phase 2 regression - Bookings CRUD + INV-1 (total calculation) + INV-4 (anti double-booking)",
+    "Backend: Phase 2 regression - Payments + INV-2 (paid <= total) + INV-3 (payment_status derivation)",
+    "Backend: Phase 2 regression - Dashboard + INV-9 (KPI counts accurate)",
+    "Backend: Phase 2 regression - RBAC (driver restrictions, ops_admin access)",
+    "Backend: Phase 2 regression - FK guards (delete with relations blocked)",
+    "Frontend: All 8 public pages load without errors (Home, Fleet, Destinations, Trip Calculator, Quotation, Blog, About, Contact)",
+    "Frontend: Trip Calculator form submission works, displays correct calculation (Rp 6.450.000 for 3 days, 500km, Hiace Premio)",
+    "Frontend: Quotation form submission works, redirects to Thank You page with success message",
+    "Frontend: END-TO-END flow verified - quotation submission → ERP login → lead appears in CRM with correct data (name, source=website, stage=Baru/new, destination, pax, date)",
+    "Frontend: ERP login works (owner@demo.local / demo12345)",
+    "Frontend: ERP pages render without red-screen errors (Dashboard, Bookings, Vehicles, Drivers, Customers, CRM, GPS)",
+    "Frontend: CRM Leads page displays leads table with correct data including test lead 'E2E Test Lead 160057'"
+  ],
+  "test_report_links": [
+    "/app/backend_test.py",
+    "/app/backend_test_output.log"
+  ],
+  "action_item_for_main_agent": "",
+  "updated_files": [
+    "/app/backend_test.py"
+  ],
+  "success_percentage": {
+    "backend": "100% (64/64 tests passed)",
+    "frontend": "100% (all pages load, all forms work, E2E flow verified)"
+  },
+  "should_call_test_agent_after_fix": false,
+  "should_main_agent_test_itself": false
+}

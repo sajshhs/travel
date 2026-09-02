@@ -1,0 +1,40 @@
+{
+  "summary": "Completed verification of 3 5xx-on-bad-input bug fixes (EXPORT-1, R6-4, R6-5) in restored environment. All fixes confirmed working: adversarial inputs return proper 4xx/2xx instead of 500, and normal usage has no regressions. Automated guardrail (no-5xx-on-adversarial-input, INV-5XX-01) has true-green baseline.",
+  "backend_issues": {
+    "critical_bugs": [],
+    "flaky_endpoints": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "passed_tests": [
+    "EXPORT-1 FIX: Quotation PDF with special/markup characters (<b>&</b>, <&>) returns HTTP 200 with valid PDF (not 500)",
+    "EXPORT-1 FIX: PDF response has correct content-type (application/pdf) and size (>1KB)",
+    "EXPORT-1 REGRESSION: Normal quotation PDF generation works correctly",
+    "R6-4 FIX: Segment preview with malformed criteria (and:'not-a-list', invalid operators) returns 200/400 (not 500)",
+    "R6-4 FIX: Error message for malformed criteria mentions 'kriteria' or 'tidak valid'",
+    "R6-4 REGRESSION: Normal segment preview with valid criteria returns 200 with count/sample fields",
+    "R6-5 FIX: Destinations with non-numeric lat/lng ('abc', 'xyz') return HTTP 400 (not 500)",
+    "R6-5 FIX: Error message mentions field name and 'angka' (numeric)",
+    "R6-5 FIX: Packages with non-numeric price ('gratis') return HTTP 400 (not 500)",
+    "R6-5 REGRESSION: Destinations with valid numeric lat/lng (-6.9, 107.6) created successfully",
+    "R6-5 REGRESSION: Packages with valid numeric price (5000000) created successfully",
+    "Authentication: Login as owner@demo.local successful",
+    "All 16 test assertions passed (100% success rate)"
+  ],
+  "test_report_links": [
+    "/app/backend/backend_test_5xx_fixes.py"
+  ],
+  "action_item_for_main_agent": "",
+  "updated_files": [
+    "/app/backend/backend_test_5xx_fixes.py"
+  ],
+  "success_percentage": {
+    "backend": "100% (16/16 tests passed)",
+    "frontend": "N/A (backend-only testing as requested)"
+  },
+  "should_call_test_agent_after_fix": false,
+  "should_main_agent_test_itself": false
+}

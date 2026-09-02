@@ -1,0 +1,48 @@
+{
+  "summary": "Iterasi 110 — uji BE+FE atas 7 perbaikan ERP RahazaTrans. Backend: 25 pytest baru (tests/test_i110_features.py) SEMUA LULUS: quick-add customer→master, master add-on (409 duplikat, 403 marketing), booking multi add-on + total & persistensi add_ons, dispatch assign dgn driver_fee_rate (rate/days/total), GET /dispatch/{id}/detail + timeline urut, driver tasks/ack/checkin/checkout, kredit fee 150.000×3=450.000 + IDEMPOTEN saat checkout diulang, withdraw >saldo=400 + reservasi saldo, finance pay (tanpa bukti=422, PDF=400, PNG=200 → status paid + proof_url + expense gaji_driver paid=true + double-pay 400), reject → saldo kembali, admin override driver_id (owner) & driver TIDAK bisa override, maintenance 2 in_progress (complete 1 → armada TETAP maintenance; complete 2 → available), pesanan publik source=web_booking, RBAC marketing 403 (driver/tasks, driver/fees, payroll/*) & driver 403 payroll. Regresi test_restore_smoke_i109.py 15/15 lulus. Frontend (Playwright, owner+driver): dialog Buat Booking (quick-add customer auto-terpilih, master add-on baru → baris otomatis terisi, baris ke-2 dari master, subtotal & total Rp 2.100.000 benar, submit sukses), panel 'Pesanan Website Masuk' tampil dgn tombol ACC+Minta DP/Setujui/Tolak, filter Semua/Online/Manual menyaring 13/3/10 baris tanpa salah badge, Dispatch klik baris → dispatch-detail-dialog (status, unit/kontak, dd-timeline) + assign-fee-rate 150.000 → estimasi 'Rp 450.000 (Rp 150.000 × 3 hari)' → assign sukses & timeline mencatat assign, AUTO-REFRESH SENYAP terbukti (aksi driver via API → papan berubah Terjadwal→Berjalan/Menjemput dalam 22s tanpa reload), Ruang Kerja Driver owner: dw-driver-picker + prompt dw-pick-driver, pilih 'Driver Satu' → summary + driver-fee-card (earned 450k, tersedia 250k) + pengajuan (>saldo ditolak toast 'Maksimal Rp 250.000', 50.000 sukses → saldo 200k), driver@demo.local TIDAK melihat picker & hanya tugas sendiri, Finance tab Fee Driver: saldo per driver + tabel pencairan, wd-pay-confirm DISABLED sampai bukti dipilih → setelah unggah PNG status 'Dicairkan' + link 'Bukti transfer', Maintenance: kolom Bengkel terpisah & tidak dobel di kolom Pekerjaan.",
+  "backend_issues": {
+    "critical": [],
+    "minor": [
+      {"endpoint": "POST /api/dispatch/{booking_id}/assign", "issue": "driver_fee_rate kosong = 'tidak diubah', BUKAN 'tanpa fee'. Terbukti: trip dgn rate 150.000 di-assign ulang tanpa field → rate/days/total tetap 150.000/3/450.000. Tidak ada cara menghapus fee dari UI (mis. rate keliru atau keberangkatan diputuskan tanpa fee), dan driver pengganti mewarisi rate lama tanpa konfirmasi."},
+      {"endpoint": "POST /api/bookings/{id}/reschedule (dan jalur ubah tanggal lain)", "issue": "driver_fee_days/driver_fee_total disnapshot saat assign dan TIDAK dihitung ulang bila tanggal keberangkatan berubah → saldo driver dikreditkan dgn jumlah hari lama (mis. 3 hari padahal jadi 5 hari)."},
+      {"endpoint": "POST /api/payroll/withdrawals/{id}/pay", "issue": "expenses.insert_one dijalankan SEBELUM update status withdrawal tanpa kompensasi; jika update gagal, tersisa expense gaji_driver yatim (kas berkurang, pencairan masih 'requested' → bisa dibayar dua kali)."},
+      {"endpoint": "GET /api/payroll/fee-balances", "issue": "N+1 query: loop per driver memanggil drivers.find_one + 2 query agregasi (_fee_numbers). Aman untuk skala seed, akan lambat saat ratusan driver."}
+    ]
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [
+      {"screen": "Booking & Trip (/app/bookings)", "issues": ["Panel 'Pesanan Website Masuk' hanya merender baris status='pending' + source='web_booking'; pada mode default booking_flow 'hold_dp' pesanan website masuk sebagai 'hold' sehingga panel inbox TIDAK PERNAH tampil kecuali mode diubah ke 'ops_approval' (diverifikasi: setelah mode ops_approval panel muncul dgn BK-0073). Pertimbangkan menyertakan pesanan 'hold' online yang belum ada bukti DP agar inbox berguna di konfigurasi default."]},
+      {"screen": "Dispatch detail dialog", "issues": ["Baris 'Rute - → -' ditampilkan apa adanya bila origin/destination booking kosong; lebih baik tampilkan em dash tunggal atau sembunyikan barisnya."]}
+    ]
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_i110_features.py",
+    "/app/backend/tests/_i110_online_pending_setup.py",
+    "/app/test_reports/pytest/pytest_i110.xml"
+  ],
+  "action_items": [
+    "Putuskan semantik field 'Fee Driver /hari' kosong saat assign: bila dimaksudkan 'tanpa fee', kirim driver_fee_rate=0 dari AssignTripDialog dan reset driver_fee_rate/days/total di backend (dgn penjaga: jangan reset bila fee sudah dikreditkan).",
+    "Hitung ulang driver_fee_days/driver_fee_total saat tanggal keberangkatan berubah (reschedule) sebelum trip selesai.",
+    "Buat pembayaran pencairan atomik: tulis status withdrawal dulu (compare-and-set status 'requested'→'paid') lalu insert expense, atau bersihkan expense bila update gagal.",
+    "Pertimbangkan panel 'Pesanan Website Masuk' juga menampilkan pesanan online berstatus 'hold' (mode default hold_dp) agar fitur inbox terlihat tanpa mengubah setelan."
+  ],
+  "critical_code_review_comments": [
+    "routers/dispatch.py assign: patch fee bersifat partial-update tanpa jalan untuk mengosongkan — dokumentasikan atau tambahkan reset eksplisit.",
+    "services/trips.py finalize_trip_completion: kredit fee sudah idempotent per trip (terbukti checkout ganda tidak dobel) — pertahankan; tetapi tidak ada pembalikan entry bila trip di-'buka' kembali/booking dibatalkan setelah selesai.",
+    "routers/driver_fees.py: saldo = earned − paid − requested dihitung on-the-fly tiap request tanpa index pada driver_fee_entries.driver_id / driver_withdrawals.driver_id — tambahkan index.",
+    "Semua endpoint baru memakai safe_doc & proyeksi {_id: 0}; tidak ditemukan kebocoran ObjectId maupun kebocoran data driver lain (driver override hanya untuk owner/ops_admin — diuji)."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_i110_features.py (baru)",
+    "/app/backend/tests/_i110_online_pending_setup.py (baru, helper manual)"
+  ],
+  "success_rate": {"backend": "100% (25/25 + regresi i109 15/15)", "frontend": "100% alur inti (7/7 fitur terverifikasi)"},
+  "seed_data_creation": "Customer 'Penjaga INV-*' (beberapa), master add-on 'TEST_Parkir Bandara *', booking BK-0071 (API, selesai, fee 450k dikreditkan ke Driver Satu), BK-0073 (pesanan online pending, dibuat saat mode ops_approval — mode SUDAH dipulihkan ke hold_dp), BK-0074 (UI, assigned Driver Dua, trip to_pickup, 19-21 Nov 2026), pencairan Driver Satu: 200k & 50k dicairkan (ada expense gaji_driver + bukti PNG), 100k ditolak. Catatan maintenance uji sudah dihapus & armada dipulihkan ke 'available'.",
+  "should_call_test_agent_after_fix": false,
+  "should_main_agent_self_test": true,
+  "test_credentials": "owner@demo.local / ops@demo.local / driver@demo.local / marketing@demo.local — semua demo12345",
+  "context_for_next_testing_agent": "Jalankan tests/test_i110_features.py SERIAL: `pytest tests/test_i110_features.py -n 0` (STATE dibagi antar-kelas; dgn -n 2 loadscope tiap kelas jatuh ke worker beda → KeyError palsu). Rute Ruang Kerja Driver adalah /app/driver-workspace (BUKAN /app/driver). Halaman /app/bookings & /app/maintenance perlu tunggu >20s + tunggu selector isi (thead th / panel) sebelum assert, kalau tidak hasil count() bisa 0 karena data belum termuat (sempat memberi false-negative pada online-orders-panel). Untuk menguji panel 'Pesanan Website Masuk' pakai helper tests/_i110_online_pending_setup.py setup|restore (mengubah booking_flow.mode ke ops_approval lalu memulihkan hold_dp). Tanggal aman: Nov/Des 2026 (10-17 Agu & 4-11 Nov sebagian sudah terisi).",
+  "rca_of_the_issue": "Tidak ada bug pemblokir. Temuan utama bersifat semantik/robustness: (1) assign memperlakukan driver_fee_rate=None sebagai 'tidak diubah' sehingga rate lama menempel pada keberangkatan/driver baru; (2) snapshot driver_fee_days tidak mengikuti perubahan tanggal booking; (3) pay_withdrawal menulis expense sebelum mengubah status pencairan tanpa kompensasi kegagalan."
+}

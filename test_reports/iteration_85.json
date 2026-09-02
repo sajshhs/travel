@@ -1,0 +1,68 @@
+{
+  "summary": "Completed comprehensive testing of INV-REF-01 validation fixes (ghost references & invalid enums). All 23 backend API tests passed (100%). Frontend UI verification confirmed all required table columns and form controls are present and working correctly.",
+  
+  "backend_issues": {
+    "critical_bugs": [],
+    "flaky_endpoints": []
+  },
+  
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  
+  "passed_tests": [
+    "BACKEND: Ghost workshop_id rejected with 400 + Indonesian error message",
+    "BACKEND: Ghost current_vehicle_id rejected with 400",
+    "BACKEND: Ghost customer_id rejected with 400",
+    "BACKEND: Ghost lead_id rejected with 400",
+    "BACKEND: Ghost segment_id rejected with 400",
+    "BACKEND: Invalid vehicle type rejected with 400 + list of valid types",
+    "BACKEND: Invalid vehicle status rejected with 400",
+    "BACKEND: Invalid vehicle ownership rejected with 400",
+    "BACKEND: PATCH vehicle with invalid type rejected with 400",
+    "BACKEND: Invalid driver status rejected with 400",
+    "BACKEND: Invalid customer type rejected with 400",
+    "BACKEND: Invalid transfer route vehicle type rejected with 400",
+    "BACKEND: Invalid payment type rejected with 400",
+    "BACKEND: Invalid payment method rejected with 400",
+    "BACKEND: Valid vehicle type='hiace' accepted (200)",
+    "BACKEND: Valid vehicle ownership='partner' + partner_id accepted (200)",
+    "BACKEND: Vehicle ownership='partner' WITHOUT partner_id rejected with 400",
+    "BACKEND: PATCH vehicle with valid type='elf' accepted (200)",
+    "BACKEND: Maintenance with valid workshop_id accepted + workshop name populated",
+    "BACKEND: Conversation with valid customer_id accepted (200)",
+    "BACKEND: Campaign with valid segment_id accepted (200)",
+    "BACKEND: Payment with valid type='dp' method='transfer' accepted (200)",
+    "BACKEND: GET /api/vehicles includes partner_name for partner vehicles",
+    "FRONTEND: Vehicles table displays Type column",
+    "FRONTEND: Vehicles table displays Day Rate column (with 'Tarif tipe' fallback)",
+    "FRONTEND: Vehicles table displays Web badge (Tayang/Tidak)",
+    "FRONTEND: Vehicles table displays Partner name for partner vehicles",
+    "FRONTEND: Bookings table displays Driver name column (with 'Belum ada sopir' indicator)",
+    "FRONTEND: Bookings table displays Journey/Route column",
+    "FRONTEND: Bookings table displays Paid amount below total",
+    "FRONTEND: Bookings table displays Online badge for web bookings",
+    "FRONTEND: Maintenance table displays Workshop column",
+    "FRONTEND: Customers table displays Email column"
+  ],
+  
+  "test_report_links": [
+    "/app/backend_test.py"
+  ],
+  
+  "success_percentage": {
+    "backend": "100% (23/23 tests passed)",
+    "frontend": "100% (all required UI elements verified)"
+  },
+  
+  "updated_files": [
+    "/app/backend_test.py"
+  ],
+  
+  "action_item_for_main_agent": "",
+  
+  "should_call_test_agent_after_fix": false,
+  "should_main_agent_test_itself": false
+}

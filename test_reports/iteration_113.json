@@ -1,0 +1,39 @@
+{
+  "summary": "Iterasi 113 — fokus fitur NOTA REFUND. Backend: 21 test pytest baru (/app/backend/tests/test_refund_notes_i113.py) meliputi cancel booking dgn refund → nota otomatis + WA mock, idempotensi cancel, refund_amount=0, validasi 400/404, list/PDF(attachment+inline)/send-wa/sent_count, bundle GET /api/documents/booking/{id}, layout REFUND_NOTE (8 kode), naskah (placeholder refund_amount/cancellation_reason + tolak placeholder asing), preview PDF, penomoran key 'refund' (5 aturan, override pola RF-2026-000x lalu reset), config wa_caption_refund (+400 utk placeholder asing). 20/21 lulus. Frontend: login owner, alur cancel booking (cb-reason/cb-fee/cb-refund/cb-send-refund-wa/cb-submit) → toast 'Booking BK-0024 dibatalkan · nota refund RFD/2026/09/0010 terkirim via WhatsApp'; dialog booking-documents-dialog menampilkan bdoc-refund-section + baris nota, tombol invoice baru hilang, konfirmasi/SPJ disabled, refund-note-wa → toast sukses (WA terkirim 2×); tab Nota Refund di /app/documents?tab=refunds (10 nota), Kop & Tampilan berisi opsi 'Nota Refund (bukti pengembalian dana)', Naskah menampilkan doc-ph-refund_amount & doc-ph-cancellation_reason, Rekening/Pajak/WA menyimpan doc-cfg-wa_caption_refund, Penomoran menampilkan numbering-refund + preview RFD/2026/09/0011. 1 bug baru ditemukan (500) di jalur kwitansi utk pembayaran refund negatif.",
+  "backend_issues": {
+    "critical": [
+      {"endpoint": "POST /api/documents/receipts", "issue": "500 Internal Server Error saat payment_id merujuk pembayaran type=refund (amount negatif). RCA: services/documents.py build_receipt → terbilang(-250000) → _terbilang() → IndexError: _SATUAN[n] list index out of range. Jalur ini bisa dipicu langsung dari UI: BookingDocumentsDialog booking cancelled menampilkan baris 'Pembayaran pelunasan · refund · -Rp 250.000' dengan tombol 'Terbitkan Kwitansi' (bdoc-make-receipt-{payment_id}).", "priority": "HIGH"}
+    ],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [
+      {"component": "BookingDocumentsDialog (section Kwitansi pembayaran)", "issue": "Untuk booking cancelled, baris pembayaran refund (nominal negatif) masih menampilkan tombol 'Terbitkan Kwitansi' yang memanggil endpoint gagal 500. Seharusnya disembunyikan/di-disable (kwitansi tidak berlaku utk refund; sudah ada Nota Refund).", "selector": "[data-testid^=\"bdoc-make-receipt-\"]", "priority": "HIGH"}
+    ],
+    "integration_issues": [],
+    "design_issues": [
+      {"screen": "Documents → tab Naskah (REFUND_NOTE)", "issues": ["Panel 'Pratinjau (data contoh)' tampil kosong/putih di Chromium headless (PDF viewer tidak tersedia); endpoint preview sendiri mengembalikan PDF 200 dan fallback link 'Buka PDF di tab baru' tersedia — kemungkinan bukan bug produksi, hanya catatan."]}
+    ]
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_refund_notes_i113.py",
+    "/app/test_reports/pytest/i113_refund.xml"
+  ],
+  "action_items": [
+    "Guard terbilang()/_terbilang() untuk nilai negatif (mis. pakai abs() + prefiks 'minus') dan/atau tolak POST /api/documents/receipts dengan 400 bila payment.amount <= 0 atau type == 'refund'.",
+    "Sembunyikan/disable tombol 'Terbitkan Kwitansi' (bdoc-make-receipt-*) untuk baris pembayaran refund di BookingDocumentsDialog."
+  ],
+  "critical_code_review_comments": [
+    "services/documents.py: _terbilang() tidak aman untuk input negatif — satu-satunya penyebab 500 di jalur kwitansi refund; validasi di build_receipt lebih baik daripada patch di router.",
+    "services/documents.py on_booking_cancelled() menelan semua Exception ke out['error'] yang tidak dikembalikan ke klien pada respons cancel (hanya refund_note=None) — kegagalan penerbitan nota jadi tak terlihat oleh ops; pertimbangkan mengembalikan out['error'] pada payload cancel.",
+    "GET /api/documents/refund-notes mengembalikan list mentah tanpa metadata paging (limit 300) — tidak konsisten dgn endpoint lain yang memakai {data: [...]}."
+  ],
+  "updated_files": ["/app/backend/tests/test_refund_notes_i113.py"],
+  "success_rate": {"backend": "95% (20/21 test lulus; 1 gagal = bug 500 kwitansi utk pembayaran refund)", "frontend": "100% dari item yang diminta"},
+  "seed_data_creation": "Booking uji dibuat via POST /api/bookings (customer 'CV Sentosa Wisata', armada Hiace Premio 01, Jakarta→Bandung, tanggal jauh di masa depan) + POST /api/payments: BK-0011..BK-0025. Sebagian dibatalkan dgn refund → nota RFD/2026/09/0002..0010 dan RF-2026-0003/0006/0008 (uji pola nomor). Aturan penomoran refund & wa_caption_refund sudah dipulihkan ke bawaan (verifikasi: pola {PREFIX}/{YYYY}/{MM}/{SEQ}, caption default).",
+  "should_call_test_agent_after_fix": false,
+  "should_main_agent_self_test": true,
+  "test_credentials": "owner@demo.local / demo12345 (login di /app/login, data-testid login-email-input/login-password-input/login-submit-button)",
+  "context_for_next_testing_agent": "Fitur Nota Refund (backend+frontend) sudah lulus penuh kecuali bug 500 POST /api/documents/receipts untuk pembayaran type=refund (amount negatif) — test regresi tersedia: pytest /app/backend/tests/test_refund_notes_i113.py::TestReceiptForRefundPayment. Jalankan file test dengan -n 0 -p no:randomly karena test bergantung urutan. Booking baru harus memakai origin/destination dari master (mis. Jakarta → Bandung) dan tanggal jauh ke depan agar tidak bentrok armada.",
+  "rca_of_the_issue": "POST /api/documents/receipts → routers/documents.py:121 build_receipt() → documents.py:203 terbilang(payment.amount) dengan amount = -250000 → _terbilang() langsung mengindeks _SATUAN[n] untuk n < 12, sehingga _SATUAN[-250000] memicu IndexError → 500. Reproduksi: cancel booking dgn refund_amount>0 (membuat payment type=refund amount negatif), lalu POST /api/documents/receipts {payment_id: <id payment refund>} atau klik 'Terbitkan Kwitansi' pada baris refund di dialog Dokumen booking. Mitigasi: tolak payment non-positif dengan 400 dan/atau tangani negatif di terbilang()."
+}

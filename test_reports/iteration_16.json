@@ -1,0 +1,131 @@
+{
+  "summary": "Completed comprehensive backend testing for B2 Quotation Lifecycle (Phase 9). All 28 tests passed (100% success rate). Fixed one minor bug in schema (pax field default value). All critical features verified: RBAC, filters, validations, status transitions, convert logic (INV-19, INV-4), PDF generation, phone normalization, and regressions.",
+  "backend_issues": {
+    "critical_bugs": [],
+    "fixed_bugs": [
+      {
+        "file": "/app/backend/schemas.py",
+        "issue": "QuotationDraftCreate.pax had default value of 1, preventing lead's pax from being used when creating quotation from lead",
+        "fix": "Changed pax default from 1 to None to allow fallback to lead's pax value",
+        "fix_priority": "LOW",
+        "status": "FIXED"
+      }
+    ],
+    "flaky_endpoints": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "passed_tests": [
+    "Auth: 401 without token",
+    "RBAC: Driver gets 403 on all quotation endpoints",
+    "RBAC: Owner and ops_admin allowed",
+    "GET /api/quotations list with seed data verification",
+    "GET /api/quotations?status=sent filter",
+    "GET /api/quotations?lead_id=xxx filter",
+    "GET /api/quotations?q=Rina search filter",
+    "POST /api/quotations from lead with auto-items from Pricing Engine",
+    "POST /api/quotations manual with explicit items",
+    "POST validation: missing customer_name returns 400",
+    "POST validation: invalid lead_id returns 400",
+    "GET /api/quotations/{id} detail",
+    "PATCH /api/quotations/{id} on draft (notes, customer info, pax)",
+    "PATCH items with total recomputation",
+    "POST /api/quotations/{id}/send (draft → sent)",
+    "POST /api/quotations/{id}/accept (sent → accepted)",
+    "POST /api/quotations/{id}/reject",
+    "Illegal status transitions return 400",
+    "PATCH on rejected quotation returns 400",
+    "POST /api/quotations/{id}/convert creates booking, customer, updates lead to won",
+    "INV-19: Double-convert prevention (returns 400)",
+    "Convert non-accepted quotation returns 400",
+    "INV-4: Anti double-booking (overlapping dates return 400)",
+    "GET /api/quotations/{id}/pdf returns valid PDF with correct headers",
+    "Phone normalization to +62 format (08xxx, 8xxx, 62xxx)",
+    "Regression: Booking creation still works",
+    "Regression: B1 Pricing Engine still works"
+  ],
+  "test_report_links": [
+    "/app/backend_test.py"
+  ],
+  "success_percentage": {
+    "backend": "100% (28/28 tests passed)",
+    "frontend": "N/A (backend-only testing as requested)"
+  },
+  "action_item_for_main_agent": "",
+  "updated_files": [
+    "/app/backend/schemas.py"
+  ],
+  "should_call_test_agent_after_fix": false,
+  "should_main_agent_test_itself": false,
+  "test_details": {
+    "total_tests": 28,
+    "passed": 28,
+    "failed": 0,
+    "skipped": 0,
+    "success_rate": "100.0%"
+  },
+  "verified_features": {
+    "authentication_and_rbac": {
+      "401_without_token": "✅ PASS",
+      "driver_403_forbidden": "✅ PASS",
+      "owner_allowed": "✅ PASS",
+      "ops_admin_allowed": "✅ PASS"
+    },
+    "quotation_list_and_filters": {
+      "get_list": "✅ PASS - Seed quotation QUO-2026-0001 found",
+      "filter_by_status": "✅ PASS",
+      "filter_by_lead_id": "✅ PASS",
+      "search_by_q": "✅ PASS"
+    },
+    "quotation_creation": {
+      "from_lead_auto_items": "✅ PASS - Items auto-built from Pricing Engine, customer info pulled from lead",
+      "manual_with_items": "✅ PASS - Total calculated correctly",
+      "validation_missing_customer": "✅ PASS - Returns 400",
+      "validation_invalid_lead": "✅ PASS - Returns 400"
+    },
+    "quotation_update": {
+      "get_detail": "✅ PASS",
+      "patch_draft": "✅ PASS - Notes, customer info, pax updated",
+      "patch_items_recompute": "✅ PASS - Total recomputed when items changed",
+      "patch_rejected_forbidden": "✅ PASS - Returns 400"
+    },
+    "status_transitions": {
+      "send_draft_to_sent": "✅ PASS - sent_at timestamp set",
+      "accept_sent_to_accepted": "✅ PASS - accepted_at timestamp set",
+      "reject": "✅ PASS - rejected_at timestamp set",
+      "illegal_transitions": "✅ PASS - Returns 400"
+    },
+    "quotation_convert": {
+      "convert_accepted": "✅ PASS - Booking created, customer created/deduped, lead stage updated to won",
+      "inv_19_double_convert": "✅ PASS - Returns 400 with 'sudah dikonversi' message",
+      "convert_non_accepted": "✅ PASS - Returns 400",
+      "inv_4_anti_double_booking": "✅ PASS - Returns 400 for overlapping dates"
+    },
+    "pdf_export": {
+      "generate_pdf": "✅ PASS - 2520 bytes, Content-Type: application/pdf, Content-Disposition with filename"
+    },
+    "phone_normalization": {
+      "08xxx_format": "✅ PASS - +628152003333",
+      "8xxx_format": "✅ PASS - +628152003333",
+      "62xxx_format": "✅ PASS - +628152003333"
+    },
+    "regressions": {
+      "booking_creation": "✅ PASS - BK-0004 created successfully",
+      "pricing_engine": "✅ PASS - Total: Rp 6,210,000"
+    }
+  },
+  "notes": [
+    "All tests passed on first run after fixing the pax schema issue",
+    "Seed data contains QUO-2026-0001 with status 'sent' and customer 'Rina Wedding Organizer' as expected",
+    "Convert endpoint correctly creates booking with base_price and total_amount equal to quotation total",
+    "Lead stage correctly updated to 'won' with converted_customer_id when quotation is converted",
+    "Phone normalization works correctly for all formats (08xxx, 8xxx, 62xxx)",
+    "PDF generation works with proper Content-Type and Content-Disposition headers",
+    "Anti double-booking (INV-4) and double-convert prevention (INV-19) both working correctly",
+    "Pricing Engine (B1) integration working correctly - items auto-built when not provided",
+    "All RBAC rules enforced correctly - driver gets 403, owner and ops_admin allowed"
+  ]
+}

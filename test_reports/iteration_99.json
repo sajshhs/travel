@@ -1,0 +1,29 @@
+{
+  "summary": "Iterasi 99 - SSOT Batch 6 (UNDO GABUNGAN destinasi + KOTA BENGKEL + ekspor kolom Bengkel) diverifikasi menyeluruh. Backend 11/11 pytest LULUS (tests/backend_test_ssot_batch6.py): (A) UNDO merge sukses cascade balik: seed dst_test_b6 + 1 lead + 1 quotation -> merge ke Gunung Bromo -> merged_moved berisi lead+quotation -> POST /unmerge -> {restored: leads 1, quotations 1, skipped 0}, dokumen balik ke 'Penjaga INV-Bromo Kembar TEST', sumber ops_active=true & merged_into hilang; re-unmerge -> 400 'tidak sedang dalam status gabungan'. (B) UNDO skipped: lead diubah manual ke 'Bali' sesudah merge -> unmerge -> restored.leads=0, restored.quotations=1, skipped=1. (C) Workshops city_or_400: POST city='KotaNgawurB6' -> 400 dgn detail 'kota bengkel'; 'bandung' -> tersimpan 'Bandung'; PATCH city ngawur -> 400. (D) GET /master/cities: setiap baris punya used_by_workshops (int). (E) Rename kota PATCH /master/cities/{id} cascade juga workshops.city (buat kota+bengkel uji -> rename -> cascade.workshops>=1 -> workshop.city = nama baru). (F) GET /master/export sheet 'Kota' berkolom 'Bengkel'. (G) Regresi tipis: rename destinasi still works; POST /api/customers city ngawur tetap 400. Frontend menyeluruh LULUS: login owner -> /app/masterdata -> Merge destinasi Jakarta -> Bali via md-merge/md-merge-target/md-merge-confirm -> muncul badge 'Digabung -> Bali' + tombol 'Batalkan Gabungan' (md-unmerge-{id}) -> klik md-unmerge -> panel md-unmerge-panel menampilkan 'Tidak ada dokumen yang ikut pindah - baris ini hanya diaktifkan kembali' -> md-unmerge-confirm -> toast 'Gabungan Jakarta dibatalkan - 0 dokumen kembali', badge hilang, tombol Gabung kembali muncul. Workshop UI: /app/maintenance -> tab Vendor/Bengkel -> wsh-add -> wsh-form -> wsh-city Select (6 opsi kota master) -> pilih Bandung -> wsh-save sukses; hapus bengkel uji via wsh-del + konfirmasi. Cleanup: purge_guard_artifacts()=14 doc. Tidak ada bug fungsional.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {"ui_bugs": [], "integration_issues": [], "design_issues": []},
+  "test_report_links": [
+    "/app/backend/tests/backend_test_ssot_batch6.py",
+    "/app/test_reports/pytest/ssot_batch6.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "routers/pickup_points.unmerge_master_destination: loop O(N) update_one per doc di merged_moved. Untuk merge kecil (puluhan dokumen) sangat aman; untuk ratusan bisa dijadikan bulk_write. Non-blocker.",
+    "routers/pickup_points.unmerge: skipped counter dinaikkan untuk id yang tidak ditemukan / sudah dipindah manual - keduanya sama-sama masuk skipped tanpa membedakan alasannya. Cukup untuk MVP; jika perlu audit lebih rinci pertimbangkan mengembalikan array skipped_ids per collection.",
+    "routers/workshops.create_workshop & update_workshop: city_or_400 tidak dipanggil bila body.city None (create memakai body.city langsung utk city_or_400 - jika body.city adalah None akan lolos ke helper). Perlu cek city_or_400 menerima None sebagai 'kosong sah'; test test_create_bad_city_400 membuktikan validasi bekerja utk nilai ngawur - OK.",
+    "routers/pickup_points.master_cities: tiga count_documents/baris (customers/partners/workshops) kini konsisten dgn '· Z bengkel' di UI (usageLabel city). Tambahkan aggregation $facet bila daftar kota tumbuh besar - kandidat masa depan.",
+    "routers/pickup_points.master_export sheet Kota: header 'Bengkel' ditambahkan di kolom E, order stabil (Nama, Aktif, Pelanggan, Mitra, Bengkel). Kompatibel utk regresi excel unduhan Ops."
+  ],
+  "updated_files": [
+    "/app/backend/tests/backend_test_ssot_batch6.py",
+    "/app/test_reports/pytest/ssot_batch6.xml",
+    "/app/test_reports/iteration_99.json"
+  ],
+  "success_rate": {"backend": "100% (11/11)", "frontend": "100% (unmerge + workshop UI end-to-end)"},
+  "test_credentials": "owner@demo.local demo12345",
+  "seed_data_creation": "Test data prefix 'Penjaga INV-' + phone 0800000xxx. Cleanup dilakukan via purge_guard_artifacts()=14 doc. Semua dokumen uji (dst_test_b6, led_test_b6_unmerge, quo_test_b6_unmerge) dihapus di finally-block per test class. Bengkel UI uji dihapus via DELETE /workshops/{id} melalui aksi UI wsh-del.",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Jalankan: cd /app/backend && REACT_APP_BACKEND_URL=<url> python -m pytest tests/backend_test_ssot_batch6.py -v -o addopts=''. Untuk merge/unmerge test pakai pymongo (sinkron) - hindari motor cross-event-loop. Frontend: destinasi Jakarta id awalan dst_ (bukan pkp_) - filter query_selector_all(\"[data-testid^='md-name-dst_']\"). Toast unmerge muncul dgn teks 'Gabungan X dibatalkan - N dokumen kembali'. Untuk seed cepat: pymongo update_one upsert=True + $unset merged_* fields agar setelah re-run test tidak terjebak state 'sudah pernah digabung'.",
+  "rca_of_the_issue": "N/A - tidak ada bug pada scope batch 6."
+}

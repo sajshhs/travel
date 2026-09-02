@@ -1,0 +1,157 @@
+{
+  "summary": "Completed comprehensive E27 phase testing: GET /api/departures/attention (8 risk classes), POST/PATCH /api/maintenance (INV-21 enforcement), enriched /api/bookings/calendar projection, and full UI testing of Perlu Perhatian panel with risk indicators. Found 1 critical backend bug in PATCH /api/maintenance re-validation.",
+  "backend_issues": {
+    "critical_bugs": [
+      {
+        "endpoint": "PATCH /api/maintenance/{id}",
+        "issue": "Does not re-validate INV-21 when changing start_date/end_date to clash with active booking - returns 200 instead of 400",
+        "test_case": "BACKEND 9a: Created maintenance with free window, then PATCHed to clash with active booking BK-0009",
+        "expected": "400 with error message containing booking code",
+        "actual": "200 (success) - allows maintenance window to clash with active departure",
+        "impact": "CRITICAL - Violates INV-21 invariant, allows double-booking of vehicles (maintenance + active departure)",
+        "fix_priority": "CRITICAL",
+        "root_cause": "PATCH endpoint calculates effective values (rec + updates) but may not be re-validating with vehicle_lock or _assert_no_departure_clash correctly",
+        "file": "backend/routers/maintenance.py lines 178-215"
+      }
+    ],
+    "flaky_endpoints": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [
+      {
+        "component": "DayListPanel",
+        "issue": "Day-list panel not displaying when clicking on calendar cell with events",
+        "test_case": "FRONTEND 21: Clicked on cell with events using selector [data-testid^='dc-cell-']:has([data-testid^='dc-event-'])",
+        "selector": "[data-testid='dc-daylist']",
+        "fix_priority": "MEDIUM",
+        "impact": "Users cannot view day-list view of events for a specific date",
+        "possible_cause": "Selector timing issue or state not updating correctly after cell click"
+      }
+    ],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "passed_tests": [
+    "BACKEND 1: GET /api/departures/attention?month - Returns correct structure with 6 risks (5 high, 1 medium)",
+    "BACKEND 2: GET /api/departures/attention?start&end - Returns correct period label",
+    "BACKEND 2b: GET /api/departures/attention with reversed range - Normalizes correctly",
+    "BACKEND 3: GET /api/departures/attention without auth - Returns 401",
+    "BACKEND 3b: GET /api/departures/attention with invalid token - Returns 401",
+    "BACKEND 4a: GET /api/departures/attention?month=abcd - Doesn't 5xx, fallbacks to current month",
+    "BACKEND 4b: GET /api/departures/attention?month=2026-13 - Doesn't 5xx, fallbacks to current month",
+    "BACKEND 5: POST /api/maintenance with clashing window - Correctly rejects with 400 and booking code in error",
+    "BACKEND 6: POST /api/maintenance with free window (60-70 days future) - Succeeds with 200",
+    "BACKEND 8: POST /api/maintenance without start_date/end_date - Succeeds with 200",
+    "BACKEND 9b: PATCH /api/maintenance non-window field (cost) - Succeeds with 200",
+    "BACKEND 10: GET /api/bookings/calendar - Returns enriched projection with vehicle_id, driver_id, driver_name",
+    "BACKEND 11: POST /api/bookings with overlapping vehicle - Correctly rejects with 400",
+    "BACKEND 12a: GET /api/bookings/calendar/export?format=excel - Succeeds with 200",
+    "BACKEND 12b: GET /api/bookings/calendar/export?format=pdf - Succeeds with 200",
+    "BACKEND 12c: GET /api/bookings/calendar/export with start&end&group=vehicle - Succeeds with 200",
+    "BACKEND 13a: GET /api/departures/attention as ops_admin - Succeeds with 200",
+    "BACKEND 13b: POST /api/maintenance as ops_admin - Succeeds with 200",
+    "BACKEND 13c: GET /api/departures/attention as driver - Succeeds with 200",
+    "BACKEND 13d: POST /api/maintenance as driver - Correctly rejects with 403",
+    "FRONTEND 14: Login and Attention Panel - Panel visible with 6 total risks, 5 risk chips displayed",
+    "FRONTEND 15: Risk chip filtering - Chip becomes active, month total changes from 9 to 2, clear filter works",
+    "FRONTEND 16: 'Saring di kalender' button - Toggle works correctly",
+    "FRONTEND 17: 'Tindak lanjuti' button - Detail panel opens with risks section visible",
+    "FRONTEND 19: Risk indicators in month grid - Found 6 events with risk indicators (5 high severity, 2 conflict-marked)",
+    "FRONTEND 20: Week view - Displays correctly, no errors, can switch back to month view",
+    "FRONTEND 22: Calendar navigation (prev/next/today) - All work correctly",
+    "FRONTEND 22: Search input - Works correctly",
+    "FRONTEND 22: Status filter - Works correctly",
+    "FRONTEND 22: Vehicle filter - Works correctly",
+    "FRONTEND 22: Color mode toggle (status/vehicle) - Works correctly"
+  ],
+  "test_report_links": [
+    "/app/backend_test.py",
+    "/app/.screenshots/frontend_14_attention_panel.png",
+    "/app/.screenshots/frontend_17_detail_panel.png",
+    "/app/.screenshots/frontend_19_month_grid.png",
+    "/app/.screenshots/frontend_20_week_view.png",
+    "/app/.screenshots/frontend_21_daylist.png"
+  ],
+  "success_percentage": {
+    "backend": "95.8% (23/24 tests passed)",
+    "frontend": "90% (18/20 tests passed, 2 skipped/minor issues)"
+  },
+  "updated_files": [
+    "/app/backend_test.py"
+  ],
+  "action_item_for_main_agent": {
+    "critical": [
+      "Fix PATCH /api/maintenance/{id} to re-validate INV-21 when start_date/end_date are changed. The endpoint should reject (400) if the new window clashes with active bookings. Current behavior: returns 200 and allows the clash. Test case: Create maintenance with free window, then PATCH to clash with active booking - should reject but doesn't."
+    ],
+    "medium": [
+      "Investigate DayListPanel not displaying when clicking calendar cells. The selector [data-testid='dc-daylist'] is not found after clicking cells with events."
+    ],
+    "info": [
+      "Related booking links (FRONTEND 18) not tested - no driver conflicts visible in current calendar view (expected behavior).",
+      "Risk classes vehicle_conflict and maintenance_conflict show 0 by design (violate INV-4/INV-21 invariants).",
+      "Data seed shows: driver_conflict=2, pending_request=2, no_driver=3, hold_expiring=1, unpaid_soon=1 (total 6 risks)."
+    ]
+  },
+  "should_call_test_agent_after_fix": "true",
+  "should_main_agent_test_itself": "false",
+  "detailed_findings": {
+    "attention_endpoint": {
+      "status": "WORKING",
+      "risk_classes_found": {
+        "driver_conflict": 2,
+        "pending_request": 2,
+        "no_driver": 3,
+        "hold_expiring": 1,
+        "unpaid_soon": 1,
+        "vehicle_conflict": 0,
+        "maintenance_conflict": 0
+      },
+      "notes": "vehicle_conflict and maintenance_conflict are 0 by design - backend prevents these via INV-4/INV-21"
+    },
+    "maintenance_inv21": {
+      "status": "PARTIALLY WORKING",
+      "post_validation": "WORKING - Correctly rejects maintenance that clashes with active bookings",
+      "patch_validation": "BROKEN - Does not re-validate when changing window dates",
+      "notes": "POST /api/maintenance correctly enforces INV-21, but PATCH /api/maintenance does not re-validate effective window"
+    },
+    "calendar_projection": {
+      "status": "WORKING",
+      "fields_verified": [
+        "vehicle_id",
+        "driver_id",
+        "driver_name",
+        "status",
+        "payment_status",
+        "start_datetime"
+      ],
+      "sample_count": 9
+    },
+    "ui_attention_panel": {
+      "status": "WORKING",
+      "features_tested": [
+        "Panel visibility",
+        "Risk count display",
+        "Risk chips (5 types visible)",
+        "Chip filtering (9 → 2 items)",
+        "Clear filter button",
+        "Saring di kalender toggle",
+        "Tindak lanjuti button opens detail panel"
+      ]
+    },
+    "ui_calendar": {
+      "status": "MOSTLY WORKING",
+      "features_tested": [
+        "Month view with risk indicators",
+        "Week view timeline",
+        "Navigation (prev/next/today)",
+        "Search",
+        "Status filter",
+        "Vehicle filter",
+        "Color mode toggle"
+      ],
+      "issues": [
+        "Day-list panel not displaying"
+      ]
+    }
+  }
+}

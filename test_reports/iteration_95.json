@@ -1,0 +1,44 @@
+{
+  "summary": "Iterasi 95 — uji SSOT Batch 2 (master pickup_points, relasi bookings.origin, relasi leads.destination, jalur publik lunak) + Alarm Harga, backend (pytest 15 kasus) & frontend (Playwright: booking quick-add, CRM lead, panel Master Harga, regresi edit booking & Driver Workspace). Semua fungsi yang diminta LULUS. Satu defek data ditemukan: seed tidak me-reset koleksi `pickup_points` sehingga master titik jemput terisi DUPLIKAT (Bandung/Jakarta/Bandara Soekarno-Hatta/Stasiun Bandung masing-masing 2 baris) dan duplikat itu tampil di dropdown bf-origin/be-origin (11 opsi untuk 7 titik unik).",
+  "backend_issues": {
+    "critical": [],
+    "minor": [
+      {"endpoint": "GET /api/pickup-points (data seed)", "issue": "Master titik jemput berisi duplikat: 'Bandung', 'Jakarta', 'Bandara Soekarno-Hatta', 'Stasiun Bandung' masing-masing 2 baris dengan id pkp_ berbeda. Penyebab: `scripts/seed_data.py` menyisipkan pickup_points TAPI koleksi `pickup_points` TIDAK ada di daftar COLLECTIONS yang di-delete_many() (baris 61-91), jadi setiap `seed_reset.sh`/reseed menambah 4 baris lagi (akan terus bertambah setiap gate.sh dijalankan). POST /api/pickup-points sendiri sudah idempotent — masalahnya hanya di seed."},
+      {"endpoint": "GET /api/pricing/unit-rates (data seed)", "issue": "Data seed sendiri memicu alarm: 'Isuzu Elf Long 01' day_rate 2.500.000 vs tarif tipe Elf 1.600.000 → warning 'menyimpang 56% di ATAS'. Bukan bug kode, tetapi demo owner akan melihat badge kuning permanen — pertimbangkan menyelaraskan nilai seed atau memang disengaja."}
+    ]
+  },
+  "frontend_issues": {
+    "ui_bugs": [
+      {"component": "PickupPointSelect (bf-origin / be-origin)", "issue": "Dropdown menampilkan opsi ganda dengan nama identik (Bandung, Jakarta, Bandara Soekarno-Hatta, Stasiun Bandung muncul 2x) karena duplikat di master; SelectItem memakai value={o.name} sehingga dua item punya value sama (Radix menandai keduanya terpilih). Akar masalah = data seed, bukan komponen; tetapi komponen sebaiknya melakukan dedupe by-name sebagai pertahanan.", "selector": "[data-testid=\"bf-origin\"], [data-testid^=\"bf-origin-opt-\"]", "priority": "MEDIUM"}
+    ],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/backend_test_ssot_batch2.py",
+    "/app/backend/tests/_legacy_origin_check.py",
+    "/app/test_reports/pytest/ssot_batch2.xml"
+  ],
+  "action_items": [
+    "Tambahkan \"pickup_points\" ke daftar COLLECTIONS yang di-reset di scripts/seed_data.py (baris ~61-91) agar reseed tidak menumpuk duplikat, lalu jalankan seed_reset.sh untuk membersihkan duplikat yang sudah ada.",
+    "Opsional (defensif): dedupe by lowercase name di PickupPointSelect/DestinationSelect agar duplikat data tidak pernah menghasilkan opsi Radix dengan value kembar.",
+    "Opsional: pertimbangkan unique index case-insensitive pada pickup_points.name (mis. collation strength 2) supaya duplikat tidak mungkin ada.",
+    "Tinjau nilai seed tarif Isuzu Elf Long 01 (2.500.000 vs tarif tipe 1.600.000) yang memicu badge alarm bawaan."
+  ],
+  "critical_code_review_comments": [
+    "scripts/seed_data.py: setiap koleksi yang di-insert seed WAJIB ada di COLLECTIONS reset — pickup_points terlewat, sehingga seed tidak idempotent. Guardrail (verify_data_integrity/verify_schema) tidak mendeteksi duplikat nama pada master ini; tambahkan cek duplikat nama master.",
+    "routers/pickup_points.py: pengecekan idempotensi memakai loop `async for` atas seluruh koleksi (O(n) per POST) — cukup untuk skala master kecil, tetapi lebih baik pakai query regex/collation + unique index.",
+    "PickupPointSelect: SelectItem value = nama (bukan id). Aman selama nama unik; karena keunikan tidak dijamin di DB, tambahkan dedupe di klien."
+  ],
+  "updated_files": [
+    "/app/backend/tests/backend_test_ssot_batch2.py (baru)",
+    "/app/backend/tests/_legacy_origin_check.py (baru, helper cek booking warisan)"
+  ],
+  "success_rate": {"backend": "100% (14 lulus, 1 skip → diverifikasi terpisah via _legacy_origin_check.py = PASS)", "frontend": "100% (5 skenario: quick-add+simpan booking, CRM lead, alarm harga, edit booking, driver workspace)"},
+  "seed_data_creation": "Master titik jemput uji: 'Terminal Uji X' (API) & 'Pool Uji FE' (quick-add UI) — TIDAK ADA endpoint delete, dibiarkan; akan hilang setelah seed_reset (setelah pickup_points masuk daftar reset). Lead uji: TEST_lead_bali, TEST_lead_empty, TEST_publik_aneh, TEST_publik_bromo, TEST_Lead FE Batch2 (tanpa endpoint delete). Booking uji: semua dibatalkan (termasuk BK-0071 dari UI). Tarif unit sudah dikembalikan ke seed (Premio 01=1.500.000, Premio 02=1.650.000, Elf Long=2.500.000, Commuter=0).",
+  "should_call_test_agent_after_fix": false,
+  "should_main_agent_self_test": true,
+  "test_credentials": "owner@demo.local / marketing@demo.local / driver@demo.local — demo12345 (dari /app/memory/test_credentials.md)",
+  "context_for_next_testing_agent": "Suite baru: /app/backend/tests/backend_test_ssot_batch2.py (jalankan: cd /app/backend && python -m pytest tests/backend_test_ssot_batch2.py -v). Catatan: (1) test edit booking WARISAN di-skip bila tak ada booking dgn origin di luar master — gunakan /app/backend/tests/_legacy_origin_check.py yang menyisipkan booking warisan langsung ke Mongo lalu PATCH notes (hasil: PASS, origin warisan tidak dipaksa berubah). (2) POST /api/public/quotation mengembalikan payload tanpa field destination; verifikasi normalisasi lewat GET /api/leads?q=<nama>. (3) GET /api/leads/destination-options mengembalikan objek {value,label,slug}. (4) Panel Master Harga: toast saat deviasi >50% berisi teks warning (bukan 'disimpan'), badge unit-rate-warning-<id> hilang saat nilai normal. (5) Booking dibuat via UI memakai tanggal 2027 agar tak bentrok INV-4.",
+  "rca_of_the_issue": "Duplikat master titik jemput: scripts/seed_data.py melakukan `pickup_points.insert_many([...4 baris...])` tetapi 'pickup_points' tidak terdaftar di COLLECTIONS yang dibersihkan `delete_many({})` sebelum seeding. Karena seed_reset.sh/gate.sh sudah dijalankan >1 kali, tiap eksekusi menambah 4 baris → saat ini 2 salinan tiap nama seed. Dampak: dropdown titik jemput menampilkan opsi kembar dengan value Radix identik; validasi origin_or_400 tetap benar (mencocokkan nama) sehingga tidak ada kegagalan fungsional. Perbaikan: daftarkan 'pickup_points' di COLLECTIONS reset + (disarankan) unique index case-insensitive, lalu reseed."
+}

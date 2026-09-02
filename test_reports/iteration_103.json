@@ -1,0 +1,24 @@
+{
+  "summary": "Tested OpenWA WhatsApp integration end-to-end (backend + frontend). All 16 backend tests pass covering auth, /api/wa/config validation, sidecar status/qr auth+shape (with real Node sidecar spawning), non-blocking restart, graceful fail on test-send (no scanned session), webhook auth-key enforcement, inbound onMessage creating lead (source=whatsapp) + Inbox conversation with auto-reply (>=2 messages), non-message events and group messages ignored, and regression mock provider still sends OK. Frontend flow verified: owner login → /app/settings → WA Adapter section → provider Select changed to 'OpenWA — Scan QR (Unofficial)' → Save → wa-openwa-box appears, status badge 'Menunggu Scan QR' shown, QR SVG rendered within seconds. connected=false and state STARTING/AUTHENTICATING as EXPECTED (no phone scanned).",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {"ui_bugs": [], "integration_issues": [], "design_issues": []},
+  "test_report_links": [
+    "/app/backend/tests/test_openwa_integration.py",
+    "/app/test_reports/pytest/pytest_openwa.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "routers/whatsapp.py:67 uses asyncio.get_event_loop().create_task — works but consider asyncio.create_task() (Python 3.10+) since we're already in an async handler.",
+    "services/openwa.py stop() sleeps 1.5s synchronously inside potentially async request path (restart endpoint) — blocks event loop briefly (~1.5s). Consider running stop() via asyncio.to_thread to avoid stalling other requests.",
+    "services/whatsapp.py::_parse_openwa_event correctly skips groups/status/fromMe; consider also skipping isNotification/isBroadcast events explicitly for robustness.",
+    "OPENWA_API_KEY is validated fail-closed on webhook — good. But the same key is also injected via query-string in spawn() URL (base64-safe? currently plain) which ends up in logs; low risk but consider a header instead."
+  ],
+  "updated_files": ["/app/backend/tests/test_openwa_integration.py"],
+  "success_rate": {"backend": "100% (16/16)", "frontend": "100% (single flow)"},
+  "test_credentials": "owner@demo.local / demo12345 (from /app/memory/test_credentials.md)",
+  "seed_data_creation": "None (test creates ephemeral inbound lead via webhook with unique phone per run)",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Inbox conversations endpoint is /api/conversations (not /api/inbox/conversations). Backend tests live at /app/backend/tests/test_openwa_integration.py; run with `python -m pytest backend/tests/test_openwa_integration.py -v -o addopts=''` (pytest.ini uses xdist which breaks single-file runs unless addopts overridden). Provider left as 'openwa' at end of run as instructed. Sidecar (Node wa-automate on :8033) must be running — auto-spawns via ensure_running; connected stays false since no QR scanned (EXPECTED). Do NOT test restart with fresh=true.",
+  "rca of the issue": "n/a — no bugs found"
+}

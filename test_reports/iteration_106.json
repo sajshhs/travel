@@ -1,0 +1,22 @@
+{
+  "summary": "Iteration 106 — Re-verifikasi integrasi OpenWA setelah restore repo. Backend: 10/10 pytest lulus (login owner, /wa/config tanpa leak access_token, /wa/openwa/status running+installed, /wa/openwa/qr non-empty, webhook fail-closed tanpa/salah key -> 403, webhook key benar+payload kosong -> {ok, received:0}, /wa/simulate-inbound membuat lead+conversation channel=whatsapp, RBAC driver -> 403 di /wa/openwa/status, provider tetap 'openwa'). Frontend: login owner sukses, /app/settings menampilkan panel wa-openwa-box, badge 'Menunggu Scan QR', QR SVG (wa-openwa-qr) ter-render, tombol 'Muat Ulang Status' berfungsi tanpa error console, dashboard /app tanpa page error fatal. Provider tetap 'openwa' setelah test selesai.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {"ui_bugs": [], "integration_issues": [], "design_issues": []},
+  "test_report_links": [
+    "/app/backend/tests/test_openwa_session_i106.py",
+    "/app/test_reports/pytest/i106.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "whatsapp.py sudah fail-closed dengan benar: tanpa OPENWA_API_KEY di env atau key mismatch -> 403 (baris 196-198).",
+    "_mask_config (baris 29-41) memastikan access_token/app_secret tidak bocor, hanya *_set boolean.",
+    "OpenWaPanel.jsx polling tiap 6 detik — beban ringan, sesuai kebutuhan; tombol reset dilindungi visual (warna merah), tidak diklik dalam test."
+  ],
+  "updated_files": ["/app/backend/tests/test_openwa_session_i106.py"],
+  "success_rate": {"backend": "100%", "frontend": "100%"},
+  "test_credentials": "owner@demo.local/demo12345, driver@demo.local/demo12345 (dari /app/memory/test_credentials.md). OPENWA_API_KEY=rahaza-openwa-key-2026 dari /app/backend/.env.",
+  "seed_data_creation": "Test simulate-inbound membuat 1 lead + 1 conversation dengan prefix unik (6281299887XXX) via /api/wa/simulate-inbound. Data ini konsumsi channel=whatsapp dan aman diabaikan.",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Semua endpoint OpenWA dan panel Settings berfungsi. Provider WA dikembalikan ke 'openwa' di akhir test. Sidecar running di port 8033, QR ter-generate namun belum di-scan (connected=false — sesuai instruksi). Bila perlu retest, gunakan /app/backend/tests/test_openwa_session_i106.py (10 tests, ~5s runtime, tidak reseed DB)."
+}

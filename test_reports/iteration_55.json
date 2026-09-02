@@ -1,0 +1,99 @@
+{
+  "summary": "Completed comprehensive backend testing for 5 bug fixes (A, B, C, D, E) + regression tests. All critical fixes verified working correctly.",
+  "backend_issues": {
+    "critical_bugs": [],
+    "flaky_endpoints": [],
+    "notes": "All 5 fixes (A, B, C, D, E) are working correctly. FIX E (dispatch re-assign frees old vehicle) was the primary focus and passed with clean scenario testing."
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [],
+    "notes": "Frontend testing was skipped as per review request (backend only)"
+  },
+  "passed_tests": [
+    "FIX E: Dispatch re-assign frees old vehicle - OLD vehicle becomes 'available', NEW vehicle becomes 'on_trip' (CRITICAL TEST PASSED)",
+    "FIX A: Driver double-booking prevention via PATCH - Rejects conflicting driver assignment (400), accepts non-conflicting driver (200)",
+    "FIX B: Cancel state-machine guard - Cannot cancel completed bookings (400), idempotent cancel works (200)",
+    "FIX C: Timezone-aware timestamps - cancelled_at and refund payment.paid_at are tz-aware ISO strings ending '+00:00'",
+    "FIX D: Confirm re-validation - Confirms booking with no conflicts successfully (200)",
+    "REGRESSION: Create booking with payment_status='belum_bayar'",
+    "REGRESSION: Record DP payment, payment_status becomes 'dp'",
+    "REGRESSION: Record full payment, payment_status becomes 'lunas'",
+    "REGRESSION: Anti double-booking rejects overlapping bookings (400)",
+    "REGRESSION: Auth works correctly (owner@demo.local login successful)"
+  ],
+  "test_report_links": [
+    "/app/backend_test.py",
+    "/app/backend_test_clean.py",
+    "/app/backend_test_comprehensive.py"
+  ],
+  "success_percentage": {
+    "backend": "100%",
+    "frontend": "N/A (skipped as per request)"
+  },
+  "updated_files": [
+    "/app/backend_test.py",
+    "/app/backend_test_clean.py",
+    "/app/backend_test_comprehensive.py"
+  ],
+  "action_item_for_main_agent": "",
+  "should_call_test_agent_after_fix": false,
+  "should_main_agent_test_itself": false,
+  "detailed_test_results": {
+    "fix_e_dispatch_reassign": {
+      "status": "PASSED",
+      "description": "Re-implemented fix verified: old-vehicle release now ONLY checks for other ACTIVE TRIPS (status standby/to_pickup/on_trip), not merely-scheduled 'confirmed' bookings",
+      "test_scenario": "Created FRESH booking with far-future dates (2027) on available vehicles to avoid state pollution",
+      "results": {
+        "vehicle1_before_reassign": "on_trip",
+        "vehicle1_after_reassign": "available",
+        "vehicle2_after_reassign": "on_trip"
+      },
+      "critical": true
+    },
+    "fix_a_driver_double_booking_patch": {
+      "status": "PASSED",
+      "description": "PATCH /api/bookings/{id} correctly rejects assigning driver with overlapping active booking (400 'bentrok'), accepts non-conflicting driver (200)"
+    },
+    "fix_b_cancel_state_machine": {
+      "status": "PASSED",
+      "description": "POST /api/bookings/{id}/cancel on 'completed' booking returns 400 ('selesai'), already-cancelled is idempotent 200 with no duplicate refund payment"
+    },
+    "fix_c_timezone_aware_timestamps": {
+      "status": "PASSED",
+      "description": "After cancel with refund, booking.cancelled_at and refund payment.paid_at are tz-aware ISO strings ending '+00:00'",
+      "verified_timestamps": {
+        "cancelled_at": "2026-07-04T21:09:44.414207+00:00",
+        "refund_paid_at": "2026-07-04T21:09:44.414207+00:00"
+      }
+    },
+    "fix_d_confirm_revalidation": {
+      "status": "PASSED",
+      "description": "POST /api/bookings/{id}/confirm successfully confirms booking when no conflicts exist (200)"
+    },
+    "regression_tests": {
+      "status": "PASSED",
+      "tests": [
+        "Create booking with payment_status derivation (belum_bayar)",
+        "Record payment and payment_status updates (dp, lunas)",
+        "Vehicle anti double-booking (INV-4) rejects overlap with 400",
+        "Auth works correctly"
+      ]
+    }
+  },
+  "test_environment": {
+    "backend_url": "https://trip-route-buttons.preview.emergentagent.com/api",
+    "test_credentials": "owner@demo.local / demo12345",
+    "database_state": "Clean re-seeded with bookings BK-0001 to BK-0006",
+    "test_approach": "Used unique far-future dates (2027-2028) and available vehicles only to avoid state pollution"
+  },
+  "notes": [
+    "FIX E was the primary focus of this re-test and PASSED successfully",
+    "All 5 fixes (A, B, C, D, E) are working correctly",
+    "Regression tests confirm core functionality remains intact",
+    "Used clean testing approach with unique dates to avoid state pollution from previous test runs",
+    "WhatsApp provider is MOCK by design (not a bug)",
+    "Frontend testing was skipped as per review request (backend only)"
+  ]
+}

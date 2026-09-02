@@ -1,0 +1,1468 @@
+{
+ "fe_calls": {
+  "POST /api/public/quotation": [
+   "features/public/Quotation.jsx"
+  ],
+  "GET /api/public/track/{p}": [
+   "features/public/PublicTrack.jsx"
+  ],
+  "GET /api/public/company": [
+   "features/public/Contact.jsx",
+   "components/public/PublicLayout.jsx"
+  ],
+  "POST /api/public/trip-estimate": [
+   "features/public/TripCalculator.jsx",
+   "components/public/TripEstimatorInline.jsx"
+  ],
+  "GET /api/quotations{p}": [
+   "features/app/Quotations.jsx"
+  ],
+  "GET /api/trips/{p}/track": [
+   "features/app/GpsTracking.jsx"
+  ],
+  "GET /api/trips/{p}/eta": [
+   "features/app/GpsTracking.jsx"
+  ],
+  "GET /api/vehicles": [
+   "features/app/GpsTracking.jsx",
+   "components/app/QuotationDetailDialog.jsx",
+   "components/app/MaintenanceFormDialog.jsx",
+   "components/app/BookingFormDialog.jsx",
+   "components/app/AssignTripDialog.jsx"
+  ],
+  "GET /api/locations/history": [
+   "features/app/GpsTracking.jsx"
+  ],
+  "GET /api/gps/devices": [
+   "features/app/GpsTracking.jsx"
+  ],
+  "GET /api/gps/summary": [
+   "features/app/GpsTracking.jsx"
+  ],
+  "POST /api/gps/devices/{p}/assign": [
+   "features/app/GpsTracking.jsx"
+  ],
+  "DELETE /api/gps/devices/{p}": [
+   "features/app/GpsTracking.jsx"
+  ],
+  "GET /api/locations/live": [
+   "features/app/GpsTracking.jsx"
+  ],
+  "GET /api/trips": [
+   "features/app/GpsTracking.jsx"
+  ],
+  "GET /api/dispatch/today": [
+   "features/app/Dispatch.jsx"
+  ],
+  "POST /api/dispatch/{p}/confirm-departure": [
+   "features/app/Dispatch.jsx"
+  ],
+  "POST /api/dispatch/trips/{p}/enroute": [
+   "features/app/Dispatch.jsx"
+  ],
+  "POST /api/dispatch/trips/{p}/arrived": [
+   "features/app/Dispatch.jsx"
+  ],
+  "DELETE /api/customers/{p}": [
+   "features/app/Customers.jsx"
+  ],
+  "DELETE /api/partners/{p}": [
+   "features/app/Partners.jsx"
+  ],
+  "POST /api/subcharters/{p}/confirm": [
+   "features/app/Partners.jsx"
+  ],
+  "POST /api/subcharters/{p}/settle": [
+   "features/app/Partners.jsx"
+  ],
+  "POST /api/subcharters/{p}/cancel": [
+   "features/app/Partners.jsx"
+  ],
+  "GET /api/reports/summary": [
+   "features/app/Reports.jsx"
+  ],
+  "GET /api/reports/export": [
+   "features/app/Reports.jsx"
+  ],
+  "GET /api/reports/payroll/export": [
+   "features/app/Reports.jsx"
+  ],
+  "GET /api/reports/drivers/export": [
+   "features/app/Reports.jsx"
+  ],
+  "GET /api/driver/summary": [
+   "features/app/DriverWorkspace.jsx"
+  ],
+  "GET /api/driver/tasks": [
+   "features/app/DriverWorkspace.jsx"
+  ],
+  "POST /api/driver/tasks/{p}/ack": [
+   "features/app/DriverWorkspace.jsx"
+  ],
+  "POST /api/driver/tasks/{p}/arrived": [
+   "features/app/DriverWorkspace.jsx"
+  ],
+  "POST /api/driver/checkin": [
+   "features/app/DriverWorkspace.jsx",
+   "features/app/DriverCheckin.jsx"
+  ],
+  "POST /api/driver/checkout": [
+   "features/app/DriverWorkspace.jsx",
+   "features/app/DriverCheckin.jsx"
+  ],
+  "GET /api/maintenance": [
+   "features/app/Maintenance.jsx"
+  ],
+  "GET /api/maintenance/reminders": [
+   "features/app/Maintenance.jsx"
+  ],
+  "GET /api/maintenance/summary": [
+   "features/app/Maintenance.jsx"
+  ],
+  "POST /api/maintenance/{p}/complete": [
+   "features/app/Maintenance.jsx"
+  ],
+  "DELETE /api/maintenance/{p}": [
+   "features/app/Maintenance.jsx"
+  ],
+  "POST /api/users": [
+   "features/app/Users.jsx"
+  ],
+  "GET /api/conversations": [
+   "features/app/Inbox.jsx"
+  ],
+  "GET /api/conversations/{p}": [
+   "features/app/Inbox.jsx"
+  ],
+  "POST /api/conversations/{p}/read": [
+   "features/app/Inbox.jsx"
+  ],
+  "GET /api/users": [
+   "features/app/Inbox.jsx"
+  ],
+  "GET /api/wa/templates": [
+   "features/app/Inbox.jsx",
+   "components/app/CrmCampaigns.jsx",
+   "components/app/WhatsAppSettings.jsx",
+   "components/app/AutomationSettings.jsx"
+  ],
+  "POST /api/conversations/{p}/messages": [
+   "features/app/Inbox.jsx"
+  ],
+  "POST /api/conversations/{p}/${next ": [
+   "features/app/Inbox.jsx"
+  ],
+  "POST /api/wa/simulate-inbound": [
+   "features/app/Inbox.jsx"
+  ],
+  "PATCH /api/conversations/{p}": [
+   "features/app/Inbox.jsx",
+   "features/app/Inbox.jsx"
+  ],
+  "GET /api/settings": [
+   "features/app/Settings.jsx",
+   "components/cms/ThemeManagerPanel.jsx"
+  ],
+  "PATCH /api/settings": [
+   "features/app/Settings.jsx",
+   "components/cms/ThemeManagerPanel.jsx"
+  ],
+  "POST /api/bookings/{p}/{p}": [
+   "features/app/Bookings.jsx"
+  ],
+  "GET /api/driver/my-trips": [
+   "features/app/DriverCheckin.jsx"
+  ],
+  "POST /api/locations": [
+   "features/app/DriverCheckin.jsx"
+  ],
+  "POST /api/trips/{p}/status": [
+   "features/app/DriverCheckin.jsx"
+  ],
+  "GET /api/leads/pipeline": [
+   "features/app/Crm.jsx"
+  ],
+  "GET /api/leads/reminders": [
+   "features/app/Crm.jsx",
+   "components/app/CrmReminders.jsx"
+  ],
+  "GET /api/leads/agents": [
+   "features/app/Crm.jsx"
+  ],
+  "POST /api/leads/{p}/stage": [
+   "features/app/Crm.jsx",
+   "components/app/LeadDetailDrawer.jsx"
+  ],
+  "DELETE /api/vehicles/{p}": [
+   "features/app/Vehicles.jsx"
+  ],
+  "GET /api/finance/summary": [
+   "features/app/Finance.jsx"
+  ],
+  "GET /api/finance/pl-full": [
+   "features/app/Finance.jsx"
+  ],
+  "GET /api/expenses": [
+   "features/app/Finance.jsx"
+  ],
+  "GET /api/invoices": [
+   "features/app/Finance.jsx"
+  ],
+  "PATCH /api/invoices/{p}": [
+   "features/app/Finance.jsx"
+  ],
+  "GET /api/finance/ar": [
+   "features/app/Finance.jsx"
+  ],
+  "POST /api/finance/ar/{p}/remind": [
+   "features/app/Finance.jsx"
+  ],
+  "POST /api/finance/ar/remind-all": [
+   "features/app/Finance.jsx"
+  ],
+  "GET /api/content/{p}": [
+   "features/app/ContentManager.jsx"
+  ],
+  "DELETE /api/content/{p}/{p}": [
+   "features/app/ContentManager.jsx"
+  ],
+  "GET /api/automation/stats": [
+   "features/app/Automation.jsx"
+  ],
+  "GET /api/automation/event-types": [
+   "features/app/Automation.jsx",
+   "components/app/AutomationSettings.jsx"
+  ],
+  "GET /api/automation/rules": [
+   "features/app/Automation.jsx",
+   "components/app/AutomationSettings.jsx"
+  ],
+  "PATCH /api/automation/rules/{p}": [
+   "features/app/Automation.jsx",
+   "components/app/AutomationSettings.jsx",
+   "components/app/AutomationSettings.jsx"
+  ],
+  "GET /api/automation/runs{p}": [
+   "features/app/Automation.jsx"
+  ],
+  "GET /api/automation/events{p}": [
+   "features/app/Automation.jsx"
+  ],
+  "DELETE /api/drivers/{p}": [
+   "features/app/Drivers.jsx"
+  ],
+  "GET /api/public/chat/{p}": [
+   "components/public/ChatWidget.jsx"
+  ],
+  "POST /api/public/chat": [
+   "components/public/ChatWidget.jsx"
+  ],
+  "POST /api/driver/tasks/{p}/pod": [
+   "components/app/DriverPodDialog.jsx"
+  ],
+  "GET /api/leads/{p}": [
+   "components/app/LeadDetailDrawer.jsx"
+  ],
+  "POST /api/leads/{p}/assign": [
+   "components/app/LeadDetailDrawer.jsx"
+  ],
+  "POST /api/leads/{p}/activities": [
+   "components/app/LeadDetailDrawer.jsx"
+  ],
+  "POST /api/leads/{p}/convert": [
+   "components/app/LeadDetailDrawer.jsx"
+  ],
+  "PATCH /api/leads/{p}": [
+   "components/app/LeadDetailDrawer.jsx"
+  ],
+  "POST /api/payroll/payouts/generate-bulk": [
+   "components/app/PayoutBulkDialog.jsx"
+  ],
+  "PATCH /api/vehicles/{p}": [
+   "components/app/VehicleFormDialog.jsx",
+   "components/app/PreventiveConfigDialog.jsx"
+  ],
+  "POST /api/vehicles": [
+   "components/app/VehicleFormDialog.jsx"
+  ],
+  "GET /api/broadcasts": [
+   "components/app/CrmBroadcast.jsx"
+  ],
+  "POST /api/broadcasts": [
+   "components/app/CrmBroadcast.jsx"
+  ],
+  "POST /api/broadcasts/{p}/send": [
+   "components/app/CrmBroadcast.jsx"
+  ],
+  "POST /api/leads": [
+   "components/app/LeadFormDialog.jsx"
+  ],
+  "GET /api/drivers/{p}/performance": [
+   "components/app/DriverDetailDrawer.jsx"
+  ],
+  "GET /api/drivers/{p}/compensation": [
+   "components/app/DriverDetailDrawer.jsx",
+   "components/app/DriverCompDialog.jsx"
+  ],
+  "GET /api/payroll/payouts": [
+   "components/app/DriverDetailDrawer.jsx",
+   "components/app/PayrollManager.jsx"
+  ],
+  "GET /api/crm/segments": [
+   "components/app/CrmSegments.jsx",
+   "components/app/CrmCampaigns.jsx",
+   "components/app/CrmSequences.jsx"
+  ],
+  "PATCH /api/crm/segments/{p}": [
+   "components/app/CrmSegments.jsx"
+  ],
+  "POST /api/crm/segments": [
+   "components/app/CrmSegments.jsx"
+  ],
+  "DELETE /api/crm/segments/{p}": [
+   "components/app/CrmSegments.jsx"
+  ],
+  "GET /api/crm/segments/{p}/preview": [
+   "components/app/CrmSegments.jsx",
+   "components/app/CrmCampaigns.jsx"
+  ],
+  "GET /api/quotations/{p}": [
+   "components/app/QuotationDetailDialog.jsx"
+  ],
+  "GET /api/drivers": [
+   "components/app/QuotationDetailDialog.jsx",
+   "components/app/PayoutFormDialog.jsx",
+   "components/app/BookingFormDialog.jsx",
+   "components/app/AssignTripDialog.jsx",
+   "components/app/BookingEditDialog.jsx"
+  ],
+  "POST /api/quotations/{p}/{p}": [
+   "components/app/QuotationDetailDialog.jsx"
+  ],
+  "GET /api/quotations/{p}/pdf": [
+   "components/app/QuotationDetailDialog.jsx"
+  ],
+  "POST /api/quotations/{p}/convert": [
+   "components/app/QuotationDetailDialog.jsx"
+  ],
+  "PATCH /api/drivers/{p}/compensation": [
+   "components/app/DriverCompDialog.jsx"
+  ],
+  "GET /api/workshops": [
+   "components/app/MaintenanceFormDialog.jsx",
+   "components/app/WorkshopsManager.jsx"
+  ],
+  "GET /api/service-types": [
+   "components/app/MaintenanceFormDialog.jsx",
+   "components/app/ServiceTypesManager.jsx"
+  ],
+  "PATCH /api/maintenance/{p}": [
+   "components/app/MaintenanceFormDialog.jsx"
+  ],
+  "POST /api/maintenance": [
+   "components/app/MaintenanceFormDialog.jsx"
+  ],
+  "PUT /api/content/{p}/{p}": [
+   "components/app/ContentFormDialog.jsx"
+  ],
+  "POST /api/content/{p}": [
+   "components/app/ContentFormDialog.jsx"
+  ],
+  "PATCH /api/service-types/{p}": [
+   "components/app/ServiceTypeFormDialog.jsx"
+  ],
+  "POST /api/service-types": [
+   "components/app/ServiceTypeFormDialog.jsx"
+  ],
+  "GET /api/vehicles/{p}/trips": [
+   "components/app/VehicleDetailDrawer.jsx"
+  ],
+  "GET /api/vehicles/{p}/maintenance": [
+   "components/app/VehicleDetailDrawer.jsx"
+  ],
+  "DELETE /api/workshops/{p}": [
+   "components/app/WorkshopsManager.jsx"
+  ],
+  "GET /api/partners/{p}": [
+   "components/app/PartnerDetailDrawer.jsx",
+   "components/app/SubcharterFormDialog.jsx"
+  ],
+  "PATCH /api/drivers/{p}": [
+   "components/app/DriverFormDialog.jsx"
+  ],
+  "POST /api/drivers": [
+   "components/app/DriverFormDialog.jsx"
+  ],
+  "PATCH /api/workshops/{p}": [
+   "components/app/WorkshopFormDialog.jsx"
+  ],
+  "POST /api/workshops": [
+   "components/app/WorkshopFormDialog.jsx"
+  ],
+  "POST /api/onboarding/complete": [
+   "components/app/OnboardingChecklist.jsx"
+  ],
+  "POST /api/onboarding/dismiss": [
+   "components/app/OnboardingChecklist.jsx"
+  ],
+  "GET /api/crm/rfm{p}": [
+   "components/app/CrmRfm.jsx"
+  ],
+  "GET /api/bookings": [
+   "components/app/InvoiceFormDialog.jsx",
+   "components/app/SubcharterFormDialog.jsx",
+   "components/app/ExpenseFormDialog.jsx"
+  ],
+  "POST /api/invoices": [
+   "components/app/InvoiceFormDialog.jsx"
+  ],
+  "PATCH /api/partners/{p}": [
+   "components/app/PartnerFormDialog.jsx"
+  ],
+  "POST /api/partners": [
+   "components/app/PartnerFormDialog.jsx"
+  ],
+  "GET /api/finance/reconciliation": [
+   "components/app/FinanceReconciliation.jsx"
+  ],
+  "POST /api/finance/reconciliation/sync": [
+   "components/app/FinanceReconciliation.jsx"
+  ],
+  "GET /api/shares": [
+   "components/app/ShareLinkPanel.jsx"
+  ],
+  "POST /api/shares": [
+   "components/app/ShareLinkPanel.jsx"
+  ],
+  "POST /api/shares/{p}/revoke": [
+   "components/app/ShareLinkPanel.jsx"
+  ],
+  "DELETE /api/shares/{p}": [
+   "components/app/ShareLinkPanel.jsx"
+  ],
+  "GET /api/partners": [
+   "components/app/SubcharterFormDialog.jsx"
+  ],
+  "PATCH /api/subcharters/{p}": [
+   "components/app/SubcharterFormDialog.jsx"
+  ],
+  "POST /api/subcharters": [
+   "components/app/SubcharterFormDialog.jsx"
+  ],
+  "GET /api/payroll/summary": [
+   "components/app/PayrollManager.jsx"
+  ],
+  "POST /api/payroll/payouts/generate": [
+   "components/app/PayoutFormDialog.jsx"
+  ],
+  "GET /api/maintenance/preventive": [
+   "components/app/MaintenancePreventive.jsx"
+  ],
+  "POST /api/maintenance/preventive/{p}/schedule": [
+   "components/app/MaintenancePreventive.jsx"
+  ],
+  "GET /api/analytics/ad-spend": [
+   "components/app/AdSpendDialog.jsx"
+  ],
+  "PUT /api/analytics/ad-spend": [
+   "components/app/AdSpendDialog.jsx"
+  ],
+  "PATCH /api/customers/{p}": [
+   "components/app/CustomerFormDialog.jsx"
+  ],
+  "POST /api/customers": [
+   "components/app/CustomerFormDialog.jsx"
+  ],
+  "GET /api/notifications/unread_count": [
+   "components/app/NotificationBell.jsx"
+  ],
+  "GET /api/notifications": [
+   "components/app/NotificationBell.jsx"
+  ],
+  "POST /api/notifications/{p}/read": [
+   "components/app/NotificationBell.jsx"
+  ],
+  "POST /api/notifications/{p}/dismiss": [
+   "components/app/NotificationBell.jsx"
+  ],
+  "POST /api/notifications/read_all": [
+   "components/app/NotificationBell.jsx"
+  ],
+  "GET /api/customers": [
+   "components/app/BookingFormDialog.jsx"
+  ],
+  "GET /api/bookings/availability": [
+   "components/app/BookingFormDialog.jsx"
+  ],
+  "POST /api/pricing/quote": [
+   "components/app/BookingFormDialog.jsx",
+   "components/app/QuotationFormDialog.jsx"
+  ],
+  "POST /api/bookings": [
+   "components/app/BookingFormDialog.jsx"
+  ],
+  "GET /api/crm/campaigns": [
+   "components/app/CrmCampaigns.jsx"
+  ],
+  "PATCH /api/crm/campaigns/{p}": [
+   "components/app/CrmCampaigns.jsx"
+  ],
+  "POST /api/crm/campaigns": [
+   "components/app/CrmCampaigns.jsx"
+  ],
+  "POST /api/crm/campaigns/{p}/send": [
+   "components/app/CrmCampaigns.jsx"
+  ],
+  "DELETE /api/crm/campaigns/{p}": [
+   "components/app/CrmCampaigns.jsx"
+  ],
+  "GET /api/crm/campaigns/{p}": [
+   "components/app/CrmCampaigns.jsx"
+  ],
+  "POST /api/partners/{p}/settlements": [
+   "components/app/SettlementDialog.jsx"
+  ],
+  "GET /api/crm/scoreboard{p}": [
+   "components/app/CrmScoreboard.jsx"
+  ],
+  "GET /api/crm/aging": [
+   "components/app/CrmScoreboard.jsx"
+  ],
+  "POST /api/crm/recompute": [
+   "components/app/CrmScoreboard.jsx"
+  ],
+  "GET /api/wa/config": [
+   "components/app/WhatsAppSettings.jsx"
+  ],
+  "PATCH /api/wa/config": [
+   "components/app/WhatsAppSettings.jsx"
+  ],
+  "POST /api/wa/test-send": [
+   "components/app/WhatsAppSettings.jsx"
+  ],
+  "PUT /api/wa/templates/{p}": [
+   "components/app/WhatsAppSettings.jsx"
+  ],
+  "DELETE /api/wa/templates/{p}": [
+   "components/app/WhatsAppSettings.jsx"
+  ],
+  "DELETE /api/service-types/{p}": [
+   "components/app/ServiceTypesManager.jsx"
+  ],
+  "GET /api/payroll/payouts/{p}": [
+   "components/app/PayoutDetailDialog.jsx"
+  ],
+  "PATCH /api/payroll/payouts/{p}": [
+   "components/app/PayoutDetailDialog.jsx"
+  ],
+  "POST /api/payroll/payouts/{p}/{p}": [
+   "components/app/PayoutDetailDialog.jsx"
+  ],
+  "DELETE /api/payroll/payouts/{p}": [
+   "components/app/PayoutDetailDialog.jsx"
+  ],
+  "POST /api/dispatch/trips/{p}/pod": [
+   "components/app/PodDialog.jsx"
+  ],
+  "GET /api/customers/{p}": [
+   "components/app/CustomerDetailDialog.jsx"
+  ],
+  "GET /api/payments": [
+   "components/app/PaymentDialog.jsx"
+  ],
+  "POST /api/payments": [
+   "components/app/PaymentDialog.jsx"
+  ],
+  "GET /api/finance/cashflow": [
+   "components/app/FinanceCashflow.jsx"
+  ],
+  "GET /api/leads": [
+   "components/app/QuotationFormDialog.jsx"
+  ],
+  "POST /api/quotations": [
+   "components/app/QuotationFormDialog.jsx"
+  ],
+  "GET /api/crm/sequences": [
+   "components/app/CrmSequences.jsx"
+  ],
+  "PATCH /api/crm/sequences/{p}": [
+   "components/app/CrmSequences.jsx",
+   "components/app/CrmSequences.jsx"
+  ],
+  "POST /api/crm/sequences": [
+   "components/app/CrmSequences.jsx"
+  ],
+  "DELETE /api/crm/sequences/{p}": [
+   "components/app/CrmSequences.jsx"
+  ],
+  "POST /api/crm/sequences/{p}/enroll": [
+   "components/app/CrmSequences.jsx"
+  ],
+  "GET /api/crm/sequences/{p}/enrollments": [
+   "components/app/CrmSequences.jsx"
+  ],
+  "GET /api/analytics/summary": [
+   "components/app/BiCockpit.jsx"
+  ],
+  "GET /api/analytics/funnel": [
+   "components/app/BiCockpit.jsx"
+  ],
+  "GET /api/analytics/channels": [
+   "components/app/BiCockpit.jsx"
+  ],
+  "GET /api/analytics/fleet": [
+   "components/app/BiCockpit.jsx"
+  ],
+  "GET /api/analytics/drivers": [
+   "components/app/BiCockpit.jsx"
+  ],
+  "GET /api/analytics/ar-aging": [
+   "components/app/BiCockpit.jsx"
+  ],
+  "GET /api/analytics/retention": [
+   "components/app/BiCockpit.jsx"
+  ],
+  "GET /api/analytics/forecast": [
+   "components/app/BiCockpit.jsx"
+  ],
+  "GET /api/analytics/export": [
+   "components/app/BiCockpit.jsx"
+  ],
+  "POST /api/dispatch/{p}/assign": [
+   "components/app/AssignTripDialog.jsx"
+  ],
+  "DELETE /api/automation/rules/{p}": [
+   "components/app/AutomationSettings.jsx"
+  ],
+  "POST /api/automation/rules/reset-defaults": [
+   "components/app/AutomationSettings.jsx"
+  ],
+  "POST /api/automation/rules": [
+   "components/app/AutomationSettings.jsx"
+  ],
+  "PATCH /api/bookings/{p}": [
+   "components/app/BookingEditDialog.jsx"
+  ],
+  "POST /api/expenses": [
+   "components/app/ExpenseFormDialog.jsx"
+  ],
+  "GET /api/auth/me": [
+   "context/AuthContext.js"
+  ],
+  "POST /api/auth/login": [
+   "context/AuthContext.js"
+  ],
+  "POST /api/auth/logout": [
+   "context/AuthContext.js"
+  ]
+ },
+ "missing": [
+  [
+   "DELETE (method mismatch, ada: GET)",
+   "/api/automation/rules/{p}",
+   [
+    "components/app/AutomationSettings.jsx"
+   ]
+  ],
+  [
+   "DELETE (method mismatch, ada: PUT)",
+   "/api/content/{p}/{p}",
+   [
+    "features/app/ContentManager.jsx"
+   ]
+  ],
+  [
+   "DELETE (method mismatch, ada: GET)",
+   "/api/crm/campaigns/{p}",
+   [
+    "components/app/CrmCampaigns.jsx"
+   ]
+  ],
+  [
+   "DELETE (method mismatch, ada: PATCH)",
+   "/api/crm/segments/{p}",
+   [
+    "components/app/CrmSegments.jsx"
+   ]
+  ],
+  [
+   "DELETE (method mismatch, ada: PATCH)",
+   "/api/crm/sequences/{p}",
+   [
+    "components/app/CrmSequences.jsx"
+   ]
+  ],
+  [
+   "DELETE (method mismatch, ada: GET)",
+   "/api/customers/{p}",
+   [
+    "features/app/Customers.jsx"
+   ]
+  ],
+  [
+   "DELETE (method mismatch, ada: GET)",
+   "/api/drivers/{p}",
+   [
+    "features/app/Drivers.jsx"
+   ]
+  ],
+  [
+   "DELETE (method mismatch, ada: GET)",
+   "/api/maintenance/{p}",
+   [
+    "features/app/Maintenance.jsx"
+   ]
+  ],
+  [
+   "DELETE (method mismatch, ada: GET)",
+   "/api/partners/{p}",
+   [
+    "features/app/Partners.jsx"
+   ]
+  ],
+  [
+   "DELETE (method mismatch, ada: GET)",
+   "/api/payroll/payouts/{p}",
+   [
+    "components/app/PayoutDetailDialog.jsx"
+   ]
+  ],
+  [
+   "DELETE (method mismatch, ada: PATCH)",
+   "/api/service-types/{p}",
+   [
+    "components/app/ServiceTypesManager.jsx"
+   ]
+  ],
+  [
+   "DELETE (method mismatch, ada: GET)",
+   "/api/vehicles/{p}",
+   [
+    "features/app/Vehicles.jsx"
+   ]
+  ],
+  [
+   "DELETE (method mismatch, ada: PUT)",
+   "/api/wa/templates/{p}",
+   [
+    "components/app/WhatsAppSettings.jsx"
+   ]
+  ],
+  [
+   "DELETE (method mismatch, ada: PATCH)",
+   "/api/workshops/{p}",
+   [
+    "components/app/WorkshopsManager.jsx"
+   ]
+  ],
+  [
+   "GET",
+   "/api/automation/events{p}",
+   [
+    "features/app/Automation.jsx"
+   ]
+  ],
+  [
+   "GET",
+   "/api/automation/runs{p}",
+   [
+    "features/app/Automation.jsx"
+   ]
+  ],
+  [
+   "GET",
+   "/api/crm/rfm{p}",
+   [
+    "components/app/CrmRfm.jsx"
+   ]
+  ],
+  [
+   "GET",
+   "/api/crm/scoreboard{p}",
+   [
+    "components/app/CrmScoreboard.jsx"
+   ]
+  ],
+  [
+   "GET",
+   "/api/quotations{p}",
+   [
+    "features/app/Quotations.jsx"
+   ]
+  ],
+  [
+   "PATCH (method mismatch, ada: GET)",
+   "/api/automation/rules/{p}",
+   [
+    "features/app/Automation.jsx",
+    "components/app/AutomationSettings.jsx",
+    "components/app/AutomationSettings.jsx"
+   ]
+  ],
+  [
+   "PATCH (method mismatch, ada: GET)",
+   "/api/bookings/{p}",
+   [
+    "components/app/BookingEditDialog.jsx"
+   ]
+  ],
+  [
+   "PATCH (method mismatch, ada: GET)",
+   "/api/conversations/{p}",
+   [
+    "features/app/Inbox.jsx",
+    "features/app/Inbox.jsx"
+   ]
+  ],
+  [
+   "PATCH (method mismatch, ada: GET)",
+   "/api/crm/campaigns/{p}",
+   [
+    "components/app/CrmCampaigns.jsx"
+   ]
+  ],
+  [
+   "PATCH (method mismatch, ada: GET)",
+   "/api/customers/{p}",
+   [
+    "components/app/CustomerFormDialog.jsx"
+   ]
+  ],
+  [
+   "PATCH (method mismatch, ada: GET)",
+   "/api/drivers/{p}",
+   [
+    "components/app/DriverFormDialog.jsx"
+   ]
+  ],
+  [
+   "PATCH (method mismatch, ada: GET)",
+   "/api/drivers/{p}/compensation",
+   [
+    "components/app/DriverCompDialog.jsx"
+   ]
+  ],
+  [
+   "PATCH (method mismatch, ada: GET)",
+   "/api/leads/{p}",
+   [
+    "components/app/LeadDetailDrawer.jsx"
+   ]
+  ],
+  [
+   "PATCH (method mismatch, ada: GET)",
+   "/api/maintenance/{p}",
+   [
+    "components/app/MaintenanceFormDialog.jsx"
+   ]
+  ],
+  [
+   "PATCH (method mismatch, ada: GET)",
+   "/api/partners/{p}",
+   [
+    "components/app/PartnerFormDialog.jsx"
+   ]
+  ],
+  [
+   "PATCH (method mismatch, ada: GET)",
+   "/api/payroll/payouts/{p}",
+   [
+    "components/app/PayoutDetailDialog.jsx"
+   ]
+  ],
+  [
+   "PATCH (method mismatch, ada: GET)",
+   "/api/settings",
+   [
+    "features/app/Settings.jsx",
+    "components/cms/ThemeManagerPanel.jsx"
+   ]
+  ],
+  [
+   "PATCH (method mismatch, ada: GET)",
+   "/api/subcharters/{p}",
+   [
+    "components/app/SubcharterFormDialog.jsx"
+   ]
+  ],
+  [
+   "PATCH (method mismatch, ada: GET)",
+   "/api/vehicles/{p}",
+   [
+    "components/app/VehicleFormDialog.jsx",
+    "components/app/PreventiveConfigDialog.jsx"
+   ]
+  ],
+  [
+   "PATCH (method mismatch, ada: GET)",
+   "/api/wa/config",
+   [
+    "components/app/WhatsAppSettings.jsx"
+   ]
+  ],
+  [
+   "POST (method mismatch, ada: GET)",
+   "/api/automation/rules",
+   [
+    "components/app/AutomationSettings.jsx"
+   ]
+  ],
+  [
+   "POST (method mismatch, ada: GET)",
+   "/api/bookings",
+   [
+    "components/app/BookingFormDialog.jsx"
+   ]
+  ],
+  [
+   "POST",
+   "/api/bookings/{p}/{p}",
+   [
+    "features/app/Bookings.jsx"
+   ]
+  ],
+  [
+   "POST (method mismatch, ada: GET)",
+   "/api/broadcasts",
+   [
+    "components/app/CrmBroadcast.jsx"
+   ]
+  ],
+  [
+   "POST (method mismatch, ada: GET)",
+   "/api/content/{p}",
+   [
+    "components/app/ContentFormDialog.jsx"
+   ]
+  ],
+  [
+   "POST",
+   "/api/conversations/{p}/${next ",
+   [
+    "features/app/Inbox.jsx"
+   ]
+  ],
+  [
+   "POST (method mismatch, ada: GET)",
+   "/api/crm/campaigns",
+   [
+    "components/app/CrmCampaigns.jsx"
+   ]
+  ],
+  [
+   "POST (method mismatch, ada: GET)",
+   "/api/crm/segments",
+   [
+    "components/app/CrmSegments.jsx"
+   ]
+  ],
+  [
+   "POST (method mismatch, ada: GET)",
+   "/api/crm/sequences",
+   [
+    "components/app/CrmSequences.jsx"
+   ]
+  ],
+  [
+   "POST (method mismatch, ada: GET)",
+   "/api/customers",
+   [
+    "components/app/CustomerFormDialog.jsx"
+   ]
+  ],
+  [
+   "POST (method mismatch, ada: GET)",
+   "/api/drivers",
+   [
+    "components/app/DriverFormDialog.jsx"
+   ]
+  ],
+  [
+   "POST (method mismatch, ada: GET)",
+   "/api/expenses",
+   [
+    "components/app/ExpenseFormDialog.jsx"
+   ]
+  ],
+  [
+   "POST (method mismatch, ada: GET)",
+   "/api/invoices",
+   [
+    "components/app/InvoiceFormDialog.jsx"
+   ]
+  ],
+  [
+   "POST (method mismatch, ada: GET)",
+   "/api/leads",
+   [
+    "components/app/LeadFormDialog.jsx"
+   ]
+  ],
+  [
+   "POST (method mismatch, ada: GET)",
+   "/api/maintenance",
+   [
+    "components/app/MaintenanceFormDialog.jsx"
+   ]
+  ],
+  [
+   "POST (method mismatch, ada: GET)",
+   "/api/partners",
+   [
+    "components/app/PartnerFormDialog.jsx"
+   ]
+  ],
+  [
+   "POST (method mismatch, ada: GET)",
+   "/api/partners/{p}/settlements",
+   [
+    "components/app/SettlementDialog.jsx"
+   ]
+  ],
+  [
+   "POST (method mismatch, ada: GET)",
+   "/api/payments",
+   [
+    "components/app/PaymentDialog.jsx"
+   ]
+  ],
+  [
+   "POST",
+   "/api/payroll/payouts/{p}/{p}",
+   [
+    "components/app/PayoutDetailDialog.jsx"
+   ]
+  ],
+  [
+   "POST (method mismatch, ada: GET)",
+   "/api/quotations",
+   [
+    "components/app/QuotationFormDialog.jsx"
+   ]
+  ],
+  [
+   "POST",
+   "/api/quotations/{p}/{p}",
+   [
+    "components/app/QuotationDetailDialog.jsx"
+   ]
+  ],
+  [
+   "POST (method mismatch, ada: GET)",
+   "/api/service-types",
+   [
+    "components/app/ServiceTypeFormDialog.jsx"
+   ]
+  ],
+  [
+   "POST (method mismatch, ada: GET)",
+   "/api/shares",
+   [
+    "components/app/ShareLinkPanel.jsx"
+   ]
+  ],
+  [
+   "POST (method mismatch, ada: GET)",
+   "/api/subcharters",
+   [
+    "components/app/SubcharterFormDialog.jsx"
+   ]
+  ],
+  [
+   "POST (method mismatch, ada: GET)",
+   "/api/users",
+   [
+    "features/app/Users.jsx"
+   ]
+  ],
+  [
+   "POST (method mismatch, ada: GET)",
+   "/api/vehicles",
+   [
+    "components/app/VehicleFormDialog.jsx"
+   ]
+  ],
+  [
+   "POST (method mismatch, ada: GET)",
+   "/api/workshops",
+   [
+    "components/app/WorkshopFormDialog.jsx"
+   ]
+  ],
+  [
+   "PUT (method mismatch, ada: GET)",
+   "/api/analytics/ad-spend",
+   [
+    "components/app/AdSpendDialog.jsx"
+   ]
+  ]
+ ],
+ "dead": [
+  [
+   [
+    "GET"
+   ],
+   "/api/audit-logs"
+  ],
+  [
+   [
+    "GET"
+   ],
+   "/api/automation/events"
+  ],
+  [
+   [
+    "GET"
+   ],
+   "/api/automation/rules/{rule_id}"
+  ],
+  [
+   [
+    "PATCH"
+   ],
+   "/api/automation/rules/{rule_id}"
+  ],
+  [
+   [
+    "DELETE"
+   ],
+   "/api/automation/rules/{rule_id}"
+  ],
+  [
+   [
+    "GET"
+   ],
+   "/api/automation/runs"
+  ],
+  [
+   [
+    "GET"
+   ],
+   "/api/bookings/calendar"
+  ],
+  [
+   [
+    "GET"
+   ],
+   "/api/bookings/{booking_id}"
+  ],
+  [
+   [
+    "PATCH"
+   ],
+   "/api/bookings/{booking_id}"
+  ],
+  [
+   [
+    "POST"
+   ],
+   "/api/bookings/{booking_id}/cancel"
+  ],
+  [
+   [
+    "POST"
+   ],
+   "/api/bookings/{booking_id}/complete"
+  ],
+  [
+   [
+    "POST"
+   ],
+   "/api/bookings/{booking_id}/confirm"
+  ],
+  [
+   [
+    "POST"
+   ],
+   "/api/conversations/{conversation_id}/wa-optin"
+  ],
+  [
+   [
+    "POST"
+   ],
+   "/api/conversations/{conversation_id}/wa-optout"
+  ],
+  [
+   [
+    "POST"
+   ],
+   "/api/crm/enrollments/{enrollment_id}/stop"
+  ],
+  [
+   [
+    "GET"
+   ],
+   "/api/crm/growth-config"
+  ],
+  [
+   [
+    "PATCH"
+   ],
+   "/api/crm/growth-config"
+  ],
+  [
+   [
+    "GET"
+   ],
+   "/api/crm/rfm"
+  ],
+  [
+   [
+    "GET"
+   ],
+   "/api/crm/scoreboard"
+  ],
+  [
+   [
+    "GET"
+   ],
+   "/api/dashboard"
+  ],
+  [
+   [
+    "GET"
+   ],
+   "/api/drivers/{driver_id}"
+  ],
+  [
+   [
+    "PATCH"
+   ],
+   "/api/drivers/{driver_id}"
+  ],
+  [
+   [
+    "DELETE"
+   ],
+   "/api/drivers/{driver_id}"
+  ],
+  [
+   [
+    "GET"
+   ],
+   "/api/finance/ar/overdue"
+  ],
+  [
+   [
+    "GET"
+   ],
+   "/api/finance/export"
+  ],
+  [
+   [
+    "GET"
+   ],
+   "/api/finance/profit-loss"
+  ],
+  [
+   [
+    "GET"
+   ],
+   "/api/gps/live"
+  ],
+  [
+   [
+    "POST"
+   ],
+   "/api/gps/webhook"
+  ],
+  [
+   [
+    "GET"
+   ],
+   "/api/invoices/{invoice_id}/export"
+  ],
+  [
+   [
+    "GET"
+   ],
+   "/api/maintenance/{maintenance_id}"
+  ],
+  [
+   [
+    "PATCH"
+   ],
+   "/api/maintenance/{maintenance_id}"
+  ],
+  [
+   [
+    "DELETE"
+   ],
+   "/api/maintenance/{maintenance_id}"
+  ],
+  [
+   [
+    "POST"
+   ],
+   "/api/notifications/scan"
+  ],
+  [
+   [
+    "GET"
+   ],
+   "/api/onboarding"
+  ],
+  [
+   [
+    "POST"
+   ],
+   "/api/onboarding/reset"
+  ],
+  [
+   [
+    "GET"
+   ],
+   "/api/partners/{partner_id}/settlements"
+  ],
+  [
+   [
+    "POST"
+   ],
+   "/api/partners/{partner_id}/settlements"
+  ],
+  [
+   [
+    "POST"
+   ],
+   "/api/payroll/payouts/{payout_id}/approve"
+  ],
+  [
+   [
+    "POST"
+   ],
+   "/api/payroll/payouts/{payout_id}/pay"
+  ],
+  [
+   [
+    "GET"
+   ],
+   "/api/payroll/payouts/{payout_id}/slip"
+  ],
+  [
+   [
+    "GET"
+   ],
+   "/api/pricing/rules"
+  ],
+  [
+   [
+    "GET"
+   ],
+   "/api/quotations"
+  ],
+  [
+   [
+    "POST"
+   ],
+   "/api/quotations"
+  ],
+  [
+   [
+    "POST"
+   ],
+   "/api/quotations/{quotation_id}/accept"
+  ],
+  [
+   [
+    "POST"
+   ],
+   "/api/quotations/{quotation_id}/reject"
+  ],
+  [
+   [
+    "POST"
+   ],
+   "/api/quotations/{quotation_id}/send"
+  ],
+  [
+   [
+    "GET"
+   ],
+   "/api/reports/drivers"
+  ],
+  [
+   [
+    "GET"
+   ],
+   "/api/reports/payroll"
+  ],
+  [
+   [
+    "GET"
+   ],
+   "/api/subcharters"
+  ],
+  [
+   [
+    "POST"
+   ],
+   "/api/subcharters"
+  ],
+  [
+   [
+    "GET"
+   ],
+   "/api/subcharters/available-partners"
+  ],
+  [
+   [
+    "GET"
+   ],
+   "/api/subcharters/{subcharter_id}"
+  ],
+  [
+   [
+    "PATCH"
+   ],
+   "/api/subcharters/{subcharter_id}"
+  ],
+  [
+   [
+    "GET"
+   ],
+   "/api/trips/{trip_id}"
+  ],
+  [
+   [
+    "GET"
+   ],
+   "/api/users/{user_id}"
+  ],
+  [
+   [
+    "PATCH"
+   ],
+   "/api/users/{user_id}"
+  ],
+  [
+   [
+    "GET"
+   ],
+   "/api/vehicles/{vehicle_id}"
+  ],
+  [
+   [
+    "PATCH"
+   ],
+   "/api/vehicles/{vehicle_id}"
+  ],
+  [
+   [
+    "DELETE"
+   ],
+   "/api/vehicles/{vehicle_id}"
+  ],
+  [
+   [
+    "GET"
+   ],
+   "/api/wa/webhook"
+  ],
+  [
+   [
+    "POST"
+   ],
+   "/api/wa/webhook"
+  ]
+ ]
+}

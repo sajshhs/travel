@@ -1,0 +1,63 @@
+{
+  "summary": "Completed comprehensive testing of RC-10 (persistent rate-limit) and RC-11 (money as integer) plus regression tests for RC-01, RC-05, RC-02, anti-double-booking, and RC-07. All backend tests passed (52/52). Frontend smoke tests passed - login, dashboard KPIs, bookings page, and payment flow all working correctly with whole rupiah amounts displayed throughout.",
+  "backend_issues": {
+    "critical_bugs": [],
+    "flaky_endpoints": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "passed_tests": [
+    "RC-10: 8 failed login attempts return 401 (persistent in MongoDB)",
+    "RC-10: 9th failed login attempt returns 429 (rate-limited)",
+    "RC-10: Per-key isolation works (different account can still login)",
+    "RC-10: Successful logins clear failure budget",
+    "RC-11: Booking base_price, total_amount, paid_amount are integers",
+    "RC-11: Payment amounts are integers",
+    "RC-11: Expense amounts are integers and rounded correctly",
+    "RC-11: Invoice amounts are integers and rounded correctly",
+    "RC-01: Partial payment (400k) works correctly with atomic $inc",
+    "RC-01: Payment status updates to 'dp' after partial payment",
+    "RC-01: Second payment (600k) completes to 'lunas'",
+    "RC-01: Overpayment rejected with 400 (atomic guard prevents race)",
+    "RC-01: paid_amount never exceeds total_amount",
+    "RC-01: paid_amount equals sum of payments",
+    "RC-05: Payment to cancelled booking rejected with 400",
+    "RC-02: AR endpoint returns correct outstanding amounts",
+    "Anti-double-booking: Overlapping bookings rejected with 400",
+    "RC-07: Driver double-assign prevented with 400",
+    "Core: All 3 roles (owner, ops, driver) can login",
+    "Core: Dashboard returns KPIs with whole rupiah amounts",
+    "Core: All list endpoints (vehicles, drivers, customers, bookings, payments, invoices, expenses) return 200",
+    "Frontend: Login page loads and works correctly",
+    "Frontend: Dashboard displays KPI cards with whole rupiah amounts (Rp 10.234.568, Rp 19.453.701)",
+    "Frontend: Bookings page loads with table showing bookings",
+    "Frontend: Payment modal opens with whole rupiah amounts (TOTAL, TERBAYAR, SISA)",
+    "Frontend: Payment can be recorded successfully",
+    "Frontend: Payment status badge updates from 'Belum Bayar' to 'DP'",
+    "Frontend: Success notification appears after payment"
+  ],
+  "test_report_links": [
+    "/app/backend/backend_test_rc10_rc11.py",
+    "/app/backend/backend_test_supplementary.py",
+    "/.screenshots/01_login_page.png",
+    "/.screenshots/03_dashboard.png",
+    "/.screenshots/04_bookings_page.png",
+    "/.screenshots/11_payment_modal_open.png",
+    "/.screenshots/12_payment_amount_filled.png",
+    "/.screenshots/13_after_payment_submit.png"
+  ],
+  "action_item_for_main_agent": "",
+  "updated_files": [
+    "/app/backend/backend_test_rc10_rc11.py",
+    "/app/backend/backend_test_supplementary.py"
+  ],
+  "success_percentage": {
+    "backend": "100% (52/52 tests passed)",
+    "frontend": "100% (all smoke tests passed)"
+  },
+  "should_call_test_agent_after_fix": false,
+  "should_main_agent_test_itself": false
+}

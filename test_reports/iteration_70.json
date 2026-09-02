@@ -1,0 +1,66 @@
+{
+  "summary": "Completed comprehensive testing of Rahaza Travel ERP Calendar Export & Enhancement features (Export PDF/Excel, Color by Vehicle, Week View with Timeline). All backend APIs and frontend features working correctly.",
+  "backend_issues": {
+    "critical_bugs": [],
+    "flaky_endpoints": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "passed_tests": [
+    "Backend: Export to Excel (GET /api/bookings/calendar/export?format=excel) returns valid xlsx file (5783 bytes)",
+    "Backend: Export to PDF (GET /api/bookings/calendar/export?format=pdf) returns valid PDF file (2936 bytes)",
+    "Backend: Export endpoint auth protection (401 without token)",
+    "Backend: Calendar endpoint regression (GET /api/bookings/calendar) returns 5 bookings",
+    "Frontend: Login successful with owner@demo.local",
+    "Frontend: Calendar page loads with 'Kalender Keberangkatan' heading",
+    "Frontend: Export buttons exist (data-testid: dc-export-excel, dc-export-pdf)",
+    "Frontend: Color toggle works - Status/Armada buttons (dc-color-status, dc-color-vehicle)",
+    "Frontend: Color toggle changes legend to show vehicle names (Hiace Premio 01, Hiace Premio 02, Isuzu Elf Long 01, Hiace Commuter Mitra)",
+    "Frontend: Color toggle changes event colors in calendar grid",
+    "Frontend: Week view toggle works (dc-view-week)",
+    "Frontend: Week view displays timeline with hours (dc-week)",
+    "Frontend: Week view label shows week range (e.g., '3 Agu – 9 Agu 2026')",
+    "Frontend: Week view shows 6 events positioned at correct times",
+    "Frontend: Week view shows conflicts side-by-side using lane packing (visible on Aug 4 and Aug 7-8)",
+    "Frontend: Navigation buttons work (dc-prev, dc-next, dc-today)",
+    "Frontend: Navigation in week mode shifts by week (label changed from '3 Agu – 9 Agu 2026' to '10 Agu – 16 Agu 2026')",
+    "Frontend: Detail panel opens from week view event click",
+    "Frontend: Detail panel shows all fields (customer, vehicle, route, start, end)",
+    "Frontend: Detail panel back button works (dc-detail-back)",
+    "Frontend: Create booking dialog opens (dc-create-open)",
+    "Frontend: Create booking dialog has start field with prefill (bf-start shows '08/04/2026, 08:00 AM')",
+    "Frontend: Create booking dialog closes properly (Escape key)",
+    "Frontend: Vehicle filter dropdown works (dc-filter-vehicle)",
+    "Frontend: Status filter dropdown works (dc-filter-status)",
+    "Frontend: Search input exists (dc-search)",
+    "Frontend: Month view grid displays correctly",
+    "Frontend: Month view date cells clickable",
+    "Frontend: Month view event chips clickable and open detail directly"
+  ],
+  "test_report_links": [
+    "/app/backend/calendar_export_test.py",
+    "/root/.emergent/automation_output/20260804_054924/console_20260804_054924.log",
+    "/root/.emergent/automation_output/20260804_055117/console_20260804_055117.log",
+    ".screenshots/calendar-initial.png",
+    ".screenshots/calendar-vehicle-color.png",
+    ".screenshots/calendar-week-view.png",
+    ".screenshots/calendar-month-view.png",
+    ".screenshots/test-week-conflicts.png",
+    ".screenshots/test-create-dialog.png",
+    ".screenshots/test-vehicle-filter.png"
+  ],
+  "action_item_for_main_agent": "",
+  "updated_files": [
+    "/app/backend/calendar_export_test.py"
+  ],
+  "success_percentage": {
+    "backend": "100% (4/4 tests passed)",
+    "frontend": "100% (28/28 features verified)",
+    "overall": "100%"
+  },
+  "should_call_test_agent_after_fix": false,
+  "should_main_agent_test_itself": false
+}

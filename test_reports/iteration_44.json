@@ -1,0 +1,60 @@
+{
+  "summary": "E13 Driver Leaderboard + Revenue-per-Trip feature testing completed. All backend APIs (41/41 tests) and frontend components passed successfully. Feature fully functional with proper RBAC enforcement.",
+  "backend_issues": {
+    "critical_bugs": [],
+    "flaky_endpoints": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "passed_tests": [
+    "Backend: GET /api/reports/drivers returns correct structure (period, fleet, drivers with all required fields)",
+    "Backend: Aggregate consistency - fleet.trips equals sum of driver trips, fleet.revenue equals sum of driver revenue",
+    "Backend: Revenue-per-trip calculation correct (fleet.revenue_per_trip = revenue/trips)",
+    "Backend: Leaderboard sorted by revenue descending with sequential ranks 1..N",
+    "Backend: GET /api/reports/summary includes 'drivers_report' key with correct data",
+    "Backend: GET /api/reports/drivers/export?format=excel returns xlsx file (>800 bytes, correct content-type)",
+    "Backend: GET /api/reports/drivers/export?format=pdf returns PDF file (>800 bytes, correct content-type)",
+    "Backend: Period filter works - GET /api/reports/drivers?period=2020-01 returns empty (fleet.trips=0, drivers=[])",
+    "Backend: RBAC enforced - driver token gets 403 on /api/reports/drivers and /api/reports/drivers/export",
+    "Frontend: Login as owner@demo.local successful",
+    "Frontend: Reports page loads with data-testid='reports-page'",
+    "Frontend: Driver Leaderboard section present (data-testid='reports-drivers')",
+    "Frontend: Section heading 'Laporan Driver (Leaderboard)' displayed",
+    "Frontend: 4 KPI cards present - Revenue per Trip (Rp 3.400.000), Total Trip (4), Trip Selesai (1/25%), Total KM (250 km)",
+    "Frontend: Leaderboard table present (data-testid='reports-drivers-table') with correct headers",
+    "Frontend: 2 driver rows displayed with correct ranking (Driver Satu rank #1, Driver Dua rank #2)",
+    "Frontend: Driver data correctly populated (trips, revenue, revenue_per_trip, km, completion_rate)",
+    "Frontend: Excel export button visible and enabled (data-testid='reports-drivers-excel')",
+    "Frontend: PDF export button visible and enabled (data-testid='reports-drivers-pdf')",
+    "Frontend: RBAC working - driver@demo.local redirected from /app/reports to /app/dashboard",
+    "Frontend: Reports menu not visible in driver's sidebar",
+    "Regression: Payroll section still present (data-testid='reports-payroll')",
+    "Regression: Period selector functional (data-testid='reports-period')",
+    "Regression: Top 4 KPI cards present (Total Pemasukan, Total Pengeluaran, Laba Bersih, Piutang AR)",
+    "Regression: Trend chart section present",
+    "Regression: Expense by category section present",
+    "Regression: Top customers section present",
+    "Regression: Fleet utilization section present"
+  ],
+  "test_report_links": [
+    "/app/backend_test_e13.py",
+    ".screenshots/e13_driver_section.png",
+    ".screenshots/e13_top_section.png",
+    ".screenshots/e13_rbac_driver.png"
+  ],
+  "action_item_for_main_agent": "",
+  "updated_files": [
+    "/app/backend_test_e13.py"
+  ],
+  "success_percentage": {
+    "backend": "100% (41/41 tests passed)",
+    "frontend": "100% (all UI components and interactions working)",
+    "rbac": "100% (driver properly blocked from reports)",
+    "regression": "100% (all existing features working)"
+  },
+  "should_call_test_agent_after_fix": false,
+  "should_main_agent_test_itself": false
+}

@@ -1,0 +1,139 @@
+{
+  "summary": "E28b RONDE 4 testing completed. All 4 dropdown replacements (SelectField) verified working correctly. RBAC anti-regression from iteration 73 confirmed intact. No critical or medium issues found.",
+  "backend_issues": {
+    "critical_bugs": [],
+    "flaky_endpoints": [],
+    "notes": "Backend unchanged in this round. RBAC endpoints verified via API: driver correctly gets 403 on calendar endpoints, owner gets 200."
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [],
+    "minor_notes": [
+      "Export panel backdrop does not dismiss with Escape key (requires clicking outside or close button). This is a minor UX issue, not blocking functionality."
+    ]
+  },
+  "passed_tests": [
+    "G1.1: Status filter dropdown opens with 7 options (all, pending, hold, confirmed, ongoing, completed, cancelled)",
+    "G1.2: Status filter 'Terkonfirmasi' reduces total from 9 to 6 keberangkatan",
+    "G1.3: Status filter trigger label updates to 'Terkonfirmasi'",
+    "G1.4: Reset to 'Semua status' restores full list",
+    "G2.1: Vehicle filter dropdown opens with 6 options (all + 5 vehicles)",
+    "G2.2: Vehicle filter by specific vehicle reduces total from 9 to 3 keberangkatan",
+    "G2.3: Reset to 'Semua armada' restores full list",
+    "G3.1: Driver assignment dropdown opens in detail panel",
+    "G3.2: Driver assignment dropdown shows 3 options (none + 2 drivers)",
+    "G3.3: Driver assignment shows 'Tanpa sopir' option (dc-assign-select-opt-none)",
+    "G3.4: Driver assignment conflict validation works (toast: 'Driver bentrok dengan booking aktif: BK-0003')",
+    "G4.1: Public booking form vehicle type dropdown opens with 5 options (none, hiace_premio, hiace_commuter, alphard, elf)",
+    "G4.2: Vehicle type 'Elf' selection updates trigger label to 'Elf / Microbus'",
+    "G4.3: Public booking form submission succeeds with vehicle type",
+    "G4.4: Redirect to /thank-you page with booking code BK-0016",
+    "G4.5: Booking BK-0016 saved with requested_vehicle_type='elf', source='public', status='pending' (verified via API)",
+    "G5.1: Dropdown heights (36px) match search input height (36px)",
+    "G5.2: Dropdown font size (13px) matches search input font size (13px)",
+    "G5.3: No error messages or red screen on calendar page",
+    "G6.1: Calendar menu ('Kalender Keberangkatan') NOT visible in driver sidebar",
+    "G6.2: Driver direct navigation to /app/calendar redirects to /app/driver-workspace",
+    "G6.3: Driver redirect shows toast 'Akses ditolak' in Bahasa Indonesia",
+    "G6.4: Driver sees only 3 bookings (BK-0001, BK-0005, BK-0007) on /app/bookings",
+    "G6.5: Driver GET /api/departures/attention -> 403 'Akses ditolak untuk modul ini'",
+    "G6.6: Driver GET /api/bookings/calendar -> 403 'Akses ditolak untuk modul ini'",
+    "G6.7: Driver GET /api/bookings/calendar/export -> 403 'Akses ditolak untuk modul ini'",
+    "G6.8: Owner GET /api/departures/attention -> 200 with summary (6 total, 5 high, 1 medium)",
+    "G6.9: Owner GET /api/bookings/calendar -> 200 with 9 bookings",
+    "G7.1: Attention chip 'Bentrok sopir' filters calendar and shows scope text 'Menampilkan 2 dari 6 keberangkatan · saringan Bentrok sopir'",
+    "G7.2: Clear filter button [dc-attention-clear] restores full list",
+    "G7.3: Export panel [dc-export-panel] opens with Excel and PDF buttons",
+    "KEYBOARD: Dropdowns can be focused (though Tab sequence starts at nav-dashboard, not filter directly)",
+    "VISUAL: All dropdowns uniform height (36px) and font (13px) with adjacent inputs"
+  ],
+  "test_report_links": [
+    "/root/.emergent/automation_output/20260810_184657/console_20260810_184657.log",
+    "/root/.emergent/automation_output/20260810_184757/console_20260810_184757.log",
+    "/root/.emergent/automation_output/20260810_184859/console_20260810_184859.log",
+    "/root/.emergent/automation_output/20260810_185001/console_20260810_185001.log"
+  ],
+  "success_percentage": {
+    "frontend": "100% (33/33 dropdown & RBAC tests passed)",
+    "backend_api": "100% (5/5 RBAC API tests passed)",
+    "overall": "100% (38/38 tests passed)"
+  },
+  "updated_files": [],
+  "action_item_for_main_agent": {
+    "critical": [],
+    "medium": [],
+    "low": [
+      "Optional: Export panel backdrop could dismiss with Escape key for better UX (currently requires clicking outside or close button)"
+    ],
+    "info": [
+      "All 4 dropdown replacements (dc-filter-status, dc-filter-vehicle, dc-assign-select, br-vehicle-type) working correctly with new SelectField component.",
+      "Dropdown interaction pattern changed from select_option() to click trigger → click option, as documented.",
+      "All options have correct data-testid format: <testId>-opt-<slug> where slug is lowercase value with non-alphanumeric → '-'.",
+      "Empty/none options correctly use slug 'none' (e.g., dc-assign-select-opt-none, br-vehicle-type-opt-none).",
+      "Visual consistency verified: all dropdowns have uniform height (36px) and font size (13px) matching adjacent inputs.",
+      "RBAC anti-regression from iteration 73 confirmed: driver blocked from calendar (403 API + redirect UI), sees only 3 bookings.",
+      "Public booking form correctly saves requested_vehicle_type to database (verified BK-0016 has requested_vehicle_type='elf').",
+      "All UI messages in Bahasa Indonesia as required.",
+      "No console errors or warnings found.",
+      "bash scripts/gate.sh already HIJAU 23/23 per main agent's report (no backend changes in this round)."
+    ]
+  },
+  "should_call_test_agent_after_fix": "false",
+  "should_main_agent_test_itself": "false",
+  "detailed_findings": {
+    "dropdown_replacements": {
+      "status": "VERIFIED_WORKING",
+      "dc_filter_status": "7 options, filtering works (9→6→9 keberangkatan), trigger label updates",
+      "dc_filter_vehicle": "6 options (all + 5 vehicles), filtering works (9→3→9 keberangkatan)",
+      "dc_assign_select": "3 options (none + 2 drivers), conflict validation works, toast in Bahasa Indonesia",
+      "br_vehicle_type": "5 options (none + 4 vehicle types), selection works, saves to DB as requested_vehicle_type",
+      "evidence": "All 4 dropdowns tested with click trigger → click option pattern. All options found with correct data-testid format."
+    },
+    "visual_consistency": {
+      "status": "VERIFIED_WORKING",
+      "height": "All dropdowns 36px (matches search input 36px)",
+      "font_size": "All dropdowns 13px (matches search input 13px)",
+      "evidence": "Computed styles checked via browser automation. Dropdowns visually uniform with adjacent inputs."
+    },
+    "rbac_anti_regression": {
+      "status": "VERIFIED_WORKING",
+      "driver_ui": "Calendar menu hidden, redirect to /app/driver-workspace with toast 'Akses ditolak', sees only 3 bookings",
+      "driver_api": "403 on /api/departures/attention, /api/bookings/calendar, /api/bookings/calendar/export",
+      "owner_api": "200 on /api/departures/attention (6 items), /api/bookings/calendar (9 items)",
+      "evidence": "UI tested via browser automation, API tested via curl. All RBAC checks from iteration 73 still working."
+    },
+    "public_booking_form": {
+      "status": "VERIFIED_WORKING",
+      "vehicle_type_dropdown": "5 options, selection works, trigger label updates",
+      "form_submission": "Succeeds, redirects to /thank-you with booking code",
+      "data_persistence": "BK-0016 saved with requested_vehicle_type='elf', source='public', status='pending'",
+      "evidence": "Form tested via browser automation, data verified via API GET /api/bookings."
+    },
+    "calendar_features_regression": {
+      "status": "VERIFIED_WORKING",
+      "attention_chip_filter": "Filters calendar, shows scope text, clear button works",
+      "export_panel": "Opens with Excel and PDF buttons (minor: backdrop doesn't dismiss with Escape)",
+      "evidence": "Tested via browser automation. All E27 features from iteration 73 still working."
+    }
+  },
+  "iteration_context": {
+    "previous_iteration": 73,
+    "previous_status": "100% (75/75 tests passed) - RBAC-CAL-01 & RBAC-SCOPE verified",
+    "current_change": "E28b: Replaced 4 native <select> dropdowns with unified SelectField component (shadcn/Radix Select)",
+    "files_changed": [
+      "frontend/src/components/shared/SelectField.jsx (new)",
+      "frontend/src/features/app/DepartureCalendar.jsx (dc-filter-status, dc-filter-vehicle)",
+      "frontend/src/components/app/calendar/DepartureDetailPanel.jsx (dc-assign-select)",
+      "frontend/src/features/public/BookingRequest.jsx (br-vehicle-type)"
+    ],
+    "verification_result": "ALL DROPDOWNS WORKING. NO REGRESSIONS. RBAC intact."
+  },
+  "testing_notes": {
+    "testing_pattern_change": "Dropdowns now <button> triggers (Radix), not <select>. Must use click trigger → click option pattern, not select_option().",
+    "data_testid_format": "Options have data-testid='<testId>-opt-<slug>' where slug = lowercase value with non-alphanumeric → '-'. Empty option = '-opt-none'.",
+    "hmr_note": "Main agent restarted frontend 7 minutes before testing to ensure HMR compiled new components (per agent_to_agent_context_note).",
+    "keyboard_accessibility": "Dropdowns can be focused, but Tab sequence starts at nav-dashboard. Enter key opens dropdown (tested but not primary interaction pattern).",
+    "conflict_validation": "Toast 'Driver bentrok dengan booking aktif: BK-0003' is CORRECT behavior (RC-07 validation), not a bug."
+  }
+}
